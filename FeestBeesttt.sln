@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FeestBeest.Web", "FeestBeest.Web\FeestBeest.Web.csproj", "{7617FB5E-60C4-4A44-A0FE-41E149DE2426}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FeestBeest.Data", "FeestBeest.Data\FeestBeest.Data.csproj", "{5B7C0D3C-A99E-44C1-9106-8995EF458945}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7617FB5E-60C4-4A44-A0FE-41E149DE2426}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7617FB5E-60C4-4A44-A0FE-41E149DE2426}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7617FB5E-60C4-4A44-A0FE-41E149DE2426}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7617FB5E-60C4-4A44-A0FE-41E149DE2426}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B7C0D3C-A99E-44C1-9106-8995EF458945}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B7C0D3C-A99E-44C1-9106-8995EF458945}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B7C0D3C-A99E-44C1-9106-8995EF458945}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B7C0D3C-A99E-44C1-9106-8995EF458945}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
