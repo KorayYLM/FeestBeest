@@ -1,19 +1,18 @@
 using FeestBeest.Data;
-using FeestBeest.Services;
+using FeestBeest.Data.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllersWithViews();
-
+// Add services to the container.
 builder.Services.AddDbContext<FeestBeestContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddDefaultIdentity<Account>(options => options.SignIn.RequireConfirmedAccount = true)
+builder.Services.AddDefaultIdentity<Account>()
     .AddEntityFrameworkStores<FeestBeestContext>();
 
-builder.Services.AddScoped<IAccountService, AccountService>();
+// Add other services
+builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 

@@ -1,7 +1,7 @@
 {
   "version": 2,
-  "dgSpecHash": "Yb7izgUy2ck=",
-  "success": false,
+  "dgSpecHash": "4fDIeirVEqw=",
+  "success": true,
   "projectFilePath": "C:\\Users\\pkyil\\RiderProjects\\FeestBeesttt\\FeestBeest.Web\\FeestBeest.Web.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\pkyil\\.nuget\\packages\\azure.core\\1.35.0\\azure.core.1.35.0.nupkg.sha512",
@@ -88,15 +88,5 @@
     "C:\\Users\\pkyil\\.nuget\\packages\\system.threading.tasks.extensions\\4.5.4\\system.threading.tasks.extensions.4.5.4.nupkg.sha512",
     "C:\\Users\\pkyil\\.nuget\\packages\\system.windows.extensions\\6.0.0\\system.windows.extensions.6.0.0.nupkg.sha512"
   ],
-  "logs": [
-    {
-      "code": "NU1104",
-      "level": "Error",
-      "message": "Unable to find project 'C:\\Users\\pkyil\\RiderProjects\\FeestBeesttt\\FeestBeest.Services\\FeestBeest.Services.csproj'. Check that the project reference is valid and that the project file exists.",
-      "libraryId": "C:\\Users\\pkyil\\RiderProjects\\FeestBeesttt\\FeestBeest.Services\\FeestBeest.Services.csproj",
-      "targetGraphs": [
-        "net8.0"
-      ]
-    }
-  ]
+  "logs": []
 }

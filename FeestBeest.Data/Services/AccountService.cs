@@ -1,5 +1,6 @@
 ﻿using FeestBeest.Data;
 using System.Threading.Tasks;
+using FeestBeest.Data.Models;
 
 namespace FeestBeest.Services
 {

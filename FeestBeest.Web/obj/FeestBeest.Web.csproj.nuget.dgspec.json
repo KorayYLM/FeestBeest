@@ -58,12 +58,6 @@
               "target": "Package",
               "version": "[8.0.10, )"
             },
-            "Microsoft.EntityFrameworkCore.Design": {
-              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
-              "suppressParent": "All",
-              "target": "Package",
-              "version": "[8.0.10, )"
-            },
             "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
               "version": "[8.0.10, )"
@@ -120,9 +114,6 @@
             "projectReferences": {
               "C:\\Users\\pkyil\\RiderProjects\\FeestBeesttt\\FeestBeest.Data\\FeestBeest.Data.csproj": {
                 "projectPath": "C:\\Users\\pkyil\\RiderProjects\\FeestBeesttt\\FeestBeest.Data\\FeestBeest.Data.csproj"
-              },
-              "C:\\Users\\pkyil\\RiderProjects\\FeestBeesttt\\FeestBeest.Services\\FeestBeest.Services.csproj": {
-                "projectPath": "C:\\Users\\pkyil\\RiderProjects\\FeestBeesttt\\FeestBeest.Services\\FeestBeest.Services.csproj"
               }
             }
           }
@@ -157,6 +148,10 @@
             "Microsoft.EntityFrameworkCore.Design": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
+              "target": "Package",
+              "version": "[8.0.10, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
               "version": "[8.0.10, )"
             }
