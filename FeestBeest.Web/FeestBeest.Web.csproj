@@ -19,7 +19,6 @@
 
     <ItemGroup>
         <ProjectReference Include="..\FeestBeest.Data\FeestBeest.Data.csproj" />
-        <ProjectReference Include="..\FeestBeest.Services\FeestBeest.Services.csproj" />
     </ItemGroup>
 
 </Project>
