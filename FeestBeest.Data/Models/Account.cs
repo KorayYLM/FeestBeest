@@ -1,12 +1,13 @@
-﻿public class Account
+﻿using Microsoft.AspNetCore.Identity;
+using System.Collections.Generic;
+
+public class Account : IdentityUser
 {
-    public int Id { get; set; }
     public string Naam { get; set; }
     public string Adres { get; set; }
-    public string Email { get; set; }
     public string Telefoonnummer { get; set; }
-    public string Wachtwoord { get; set; }
     public KlantenkaartType? Klantenkaart { get; set; }
+    public ICollection<Boeking> Boekingen { get; set; } = new List<Boeking>();
 }
 
 public enum KlantenkaartType
