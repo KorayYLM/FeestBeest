@@ -4447,6 +4447,7 @@
       "packagesPath": "C:\\Users\\pkyil\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\pkyil\\RiderProjects\\FeestBeesttt\\FeestBeest.Web\\obj\\",
       "projectStyle": "PackageReference",
+      "UsingMicrosoftNETSdk": false,
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],

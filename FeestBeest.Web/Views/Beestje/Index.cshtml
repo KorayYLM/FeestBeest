@@ -1,0 +1,30 @@
+﻿@model IEnumerable<BeestjeViewModel>
+
+<h2>Beestjes</h2>
+<a href="@Url.Action("Create")" class="uk-button uk-button-primary">Nieuw Beestje</a>
+<table class="uk-table uk-table-striped">
+    <thead>
+    <tr>
+        <th>Naam</th>
+        <th>Type</th>
+        <th>Prijs</th>
+        <th>Afbeelding</th>
+        <th>Acties</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Naam</td>
+            <td>@item.Type</td>
+            <td>@item.Prijs</td>
+            <td><img src="@item.Afbeelding" class="h-16 w-16 object-contain" /></td>
+            <td>
+                <a href="@Url.Action("Edit", new { id = item.Id })" class="uk-button uk-button-default">Bewerken</a>
+                <a href="@Url.Action("Delete", new { id = item.Id })" class="uk-button uk-button-danger">Verwijderen</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

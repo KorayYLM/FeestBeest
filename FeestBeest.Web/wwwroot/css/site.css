@@ -20,3 +20,10 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.uk-navbar-item.uk-logo img {
+  max-height: 50px; 
+  max-width: 50px;
+  height: auto;
+  width: auto;
+}

@@ -1,0 +1,36 @@
+﻿@model AccountViewModel
+
+<div class="flex items-center justify-center min-h-screen bg-gray-100">
+    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md mx-auto">
+        <h2 class="text-2xl font-bold mb-6 text-center">Nieuw Account</h2>
+        <form asp-action="Create" method="post" class="space-y-6">
+            <div>
+                <label asp-for="Naam" class="block text-sm font-medium text-gray-700"></label>
+                <div class="mt-1">
+                    <input asp-for="Naam" class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
+                </div>
+            </div>
+            <div>
+                <label asp-for="Adres" class="block text-sm font-medium text-gray-700"></label>
+                <div class="mt-1">
+                    <input asp-for="Adres" class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
+                </div>
+            </div>
+            <div>
+                <label asp-for="Email" class="block text-sm font-medium text-gray-700"></label>
+                <div class="mt-1">
+                    <input asp-for="Email" class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
+                </div>
+            </div>
+            <div>
+                <label asp-for="Telefoonnummer" class="block text-sm font-medium text-gray-700"></label>
+                <div class="mt-1">
+                    <input asp-for="Telefoonnummer" class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
+                </div>
+            </div>
+            <div>
+                <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Account Aanmaken</button>
+            </div>
+        </form>
+    </div>
+</div>
