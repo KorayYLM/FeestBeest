@@ -1,6 +1,8 @@
 ﻿using FeestBeest.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using System.Threading.Tasks;
 
 public class BeestjeController : Controller
 {
@@ -47,6 +49,7 @@ public class BeestjeController : Controller
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
         return View(viewModel);
     }
 
@@ -83,70 +86,75 @@ public class BeestjeController : Controller
             return NotFound();
         }
 
-        if (ModelState.IsValid)
+        if (!ModelState.IsValid)
         {
-            try
-            {
-                var beestje = await _context.Beestjes.FindAsync(id);
-                beestje.Naam = viewModel.Naam;
-                beestje.Type = viewModel.Type;
-                beestje.Prijs = viewModel.Prijs;
-                beestje.Afbeelding = viewModel.Afbeelding;
-
-                _context.Update(beestje);
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!BeestjeExists(viewModel.Id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-            return RedirectToAction(nameof(Index));
-        }
-        return View(viewModel);
-    }
-
-    public async Task<IActionResult> Delete(int? id)
-    {
-        if (id == null)
-        {
-            return NotFound();
+            return View(viewModel);
         }
 
-        var beestje = await _context.Beestjes
-            .FirstOrDefaultAsync(m => m.Id == id);
+        var beestje = await _context.Beestjes.FindAsync(id);
         if (beestje == null)
         {
             return NotFound();
         }
 
-        var viewModel = new BeestjeViewModel
+        beestje.Naam = viewModel.Naam;
+        beestje.Type = viewModel.Type;
+        beestje.Prijs = viewModel.Prijs;
+        beestje.Afbeelding = viewModel.Afbeelding;
+
+        try
         {
-            Id = beestje.Id,
-            Naam = beestje.Naam,
-            Type = beestje.Type,
-            Prijs = beestje.Prijs,
-            Afbeelding = beestje.Afbeelding
-        };
-        return View(viewModel);
+            _context.Update(beestje);
+            await _context.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!BeestjeExists(viewModel.Id))
+            {
+                return NotFound();
+            }
+            else
+            {
+                throw;
+            }
+        }
+
+        return RedirectToAction(nameof(Index));
     }
 
-    [HttpPost, ActionName("Delete")]
+    [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> DeleteConfirmed(int id)
+    public async Task<IActionResult> Delete(int id)
     {
         var beestje = await _context.Beestjes.FindAsync(id);
+        if (beestje == null)
+        {
+            return NotFound();
+        }
+
         _context.Beestjes.Remove(beestje);
         await _context.SaveChangesAsync();
         return RedirectToAction(nameof(Index));
     }
 
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    [ActionName("DeleteConfirmed")]
+    public async Task<IActionResult> DeleteConfirmed(int id)
+    {
+        var beestje = await _context.Beestjes.FindAsync(id);
+        if (beestje == null)
+        {
+            return NotFound();
+        }
+
+        _context.Beestjes.Remove(beestje);
+        await _context.SaveChangesAsync();
+        return RedirectToAction(nameof(Index));
+    }
+
+    
+    
     private bool BeestjeExists(int id)
     {
         return _context.Beestjes.Any(e => e.Id == id);

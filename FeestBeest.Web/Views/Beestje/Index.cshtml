@@ -24,7 +24,7 @@
                     <td class="px-4 py-2 border-b"><img src="@item.Afbeelding" class="h-16 w-16 object-contain" /></td>
                     <td class="px-4 py-2 border-b">
                         <a href="@Url.Action("Edit", new { id = item.Id })" class="uk-button uk-button-default uk-button-small bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600">Bewerken</a>
-                        <a href="@Url.Action("Delete", new { id = item.Id })" class="uk-button uk-button-danger uk-button-small bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 ml-2">Verwijderen</a>
+                        <button type="button" onclick="openModal('@item.Id')" class="uk-button uk-button-danger uk-button-small bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 ml-2">Verwijderen</button>
                     </td>
                 </tr>
             }
@@ -32,3 +32,26 @@
         </table>
     </div>
 </div>
+
+<div id="deleteModal" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 hidden">
+    <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+        <h2 class="text-xl font-bold mb-4">Weet je zeker dat je dit beestje wilt verwijderen?</h2>
+        <div class="flex justify-end space-x-4">
+            <button type="button" onclick="closeModal()" class="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600">Nee</button>
+            <form id="deleteForm" method="post" action="@Url.Action("Delete")">
+                <input type="hidden" name="id" id="deleteId" value="" />
+                <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600">Ja</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openModal(id) {
+        document.getElementById('deleteId').value = id;
+        document.getElementById('deleteModal').classList.remove('hidden');
+    }
+    function closeModal() {
+        document.getElementById('deleteModal').classList.add('hidden');
+    }
+</script>
