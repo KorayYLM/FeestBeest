@@ -1,5 +1,6 @@
 using FeestBeest.Data;
 using FeestBeest.Data.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,8 +9,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<FeestBeestContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddDefaultIdentity<Account>()
-    .AddEntityFrameworkStores<FeestBeestContext>();
+builder.Services.AddIdentity<Account, IdentityRole>()
+    .AddEntityFrameworkStores<FeestBeestContext>()
+    .AddDefaultTokenProviders();
 
 // Add other services
 builder.Services.AddControllersWithViews();
