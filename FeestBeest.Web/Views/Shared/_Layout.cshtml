@@ -11,25 +11,42 @@
     <script src="https://cdn.jsdelivr.net/npm/uikit@3.6.22/dist/js/uikit-icons.min.js"></script>
 </head>
 <body>
-<header>
-    <nav class="uk-navbar-container" uk-navbar>
-        <div class="uk-navbar-left">
-            <a class="uk-navbar-item uk-logo" href="@Url.Action("Index", "Home")">
-                <img src="/Img/Logo.png" class="h-16 w-16 object-contain" />
+<header class="bg-white shadow-md -mt-4">
+    <nav class="flex items-center justify-between p-4">
+        <div class="flex items-center">
+            <a class="flex items-center" href="@Url.Action("Index", "Home")">
+                <img src="/Img/Logo.png" class="h-20 w-20 object-contain" />
             </a>
         </div>
-        <div class="uk-navbar-center">
-            <ul class="uk-navbar-nav">
-                <li class="uk-active"><a href="@Url.Action("Index", "Home")">Home</a></li>
-                <li><a href="@Url.Action("Index", "Beestje")">Beestjes beheren</a></li>
-                <li><a href="@Url.Action("Index", "Extras")">Extras beheren</a></li>
+        <div class="hidden md:flex space-x-8">
+            <ul class="flex space-x-8">
+                <li class="uk-active">
+                    <a href="@Url.Action("Index", "Home")" class="text-gray-700 hover:text-blue-600 text-lg font-semibold">Home</a>
+                </li>
+                <li>
+                    <a href="@Url.Action("Index", "Beestje")" class="text-gray-700 hover:text-blue-600 text-lg font-semibold">Beestjes beheren</a>
+                </li>
+                <li>
+                    <a href="@Url.Action("Index", "Extras")" class="text-gray-700 hover:text-blue-600 text-lg font-semibold">Extras beheren</a>
+                </li>
             </ul>
         </div>
-        <div class="uk-navbar-right">
-            <ul class="uk-navbar-nav">
-                <li><a href="@Url.Action("Create", "Account")">Register</a></li>
-                <li><a href="@Url.Action("Login", "Account")">Login</a></li>
+        <div class="hidden md:flex space-x-8">
+            <ul class="flex space-x-8">
+                <li>
+                    <a href="@Url.Action("Create", "Account")" class="text-gray-700 hover:text-blue-600 text-lg font-semibold">Register</a>
+                </li>
+                <li>
+                    <a href="@Url.Action("Login", "Account")" class="text-gray-700 hover:text-blue-600 text-lg font-semibold">Login</a>
+                </li>
             </ul>
+        </div>
+        <div class="md:hidden">
+            <button class="text-gray-700 hover:text-blue-600 focus:outline-none" uk-toggle="target: #mobile-menu">
+                <svg class="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                </svg>
+            </button>
         </div>
     </nav>
 </header>
