@@ -1,4 +1,5 @@
-﻿using FeestBeest.Data.Models;
+﻿
+using FeestBeest.Data.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -70,21 +71,23 @@ namespace FeestBeest.Data
                 );
             });
 
-            var adminRoleId = "1";
-            var userRoleId = "2";
+            var adminRoleId = "1";  // Specifieke ID voor de admin rol
+            var userRoleId = "2";   // Specifieke ID voor de user rol
+
             modelBuilder.Entity<IdentityRole>().HasData(
                 new IdentityRole { Id = adminRoleId, Name = "Admin", NormalizedName = "ADMIN" },
                 new IdentityRole { Id = userRoleId, Name = "User", NormalizedName = "USER" }
             );
 
             var hasher = new PasswordHasher<Account>();
-            var adminId = "1";
-            var userId = "2";
+
+            var adminUserId = "1";
+            var userUserId = "2";
 
             modelBuilder.Entity<Account>().HasData(
                 new Account
                 {
-                    Id = adminId,
+                    Id = adminUserId,
                     UserName = "Boerderijadmin",
                     NormalizedUserName = "BOERDERIJADMIN",
                     Email = "admin@example.com",
@@ -92,11 +95,11 @@ namespace FeestBeest.Data
                     EmailConfirmed = true,
                     PasswordHash = hasher.HashPassword(null, "AdminPassword123"),
                     SecurityStamp = string.Empty,
-                    Naam = "Caron Schilders" 
+                    Naam = "Caron Schilders"
                 },
                 new Account
                 {
-                    Id = userId,
+                    Id = userUserId,
                     UserName = "KorayYilmaz",
                     NormalizedUserName = "KORAYYILMAZ",
                     Email = "koray@example.com",
@@ -104,13 +107,13 @@ namespace FeestBeest.Data
                     EmailConfirmed = true,
                     PasswordHash = hasher.HashPassword(null, "UserPassword123"),
                     SecurityStamp = string.Empty,
-                    Naam = "Koray Yilmaz" 
+                    Naam = "Koray Yilmaz"
                 }
             );
 
             modelBuilder.Entity<IdentityUserRole<string>>().HasData(
-                new IdentityUserRole<string> { RoleId = adminRoleId, UserId = adminId },
-                new IdentityUserRole<string> { RoleId = userRoleId, UserId = userId }
+                new IdentityUserRole<string> { RoleId = adminRoleId, UserId = adminUserId },
+                new IdentityUserRole<string> { RoleId = userRoleId, UserId = userUserId }
             );
         }
     }

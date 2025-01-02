@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using FeestBeest.Data.Models;
 using FeestBeest.Web.Models;
@@ -35,82 +36,100 @@ public class AccountController : Controller
         _logger.LogInformation("Navigated to Create view.");
         return View();
     }
+[HttpPost]
+public async Task<IActionResult> Create(AccountViewModel model)
+{
+    _logger.LogInformation("Create method called with model: {@Model}", model);
 
-    [HttpPost]
-    public async Task<IActionResult> Create(AccountViewModel model)
+    if (!ModelState.IsValid)
     {
-        _logger.LogInformation("Create method called with model: {@Model}", model);
-
-        if (!ModelState.IsValid)
+        _logger.LogWarning("Model state is invalid.");
+        foreach (var state in ModelState)
         {
-            _logger.LogWarning("Model state is invalid.");
-            foreach (var state in ModelState)
+            foreach (var error in state.Value.Errors)
             {
-                foreach (var error in state.Value.Errors)
-                {
-                    _logger.LogWarning("Property: {Property}, Error: {Error}", state.Key, error.ErrorMessage);
-                }
+                _logger.LogWarning("Property: {Property}, Error: {Error}", state.Key, error.ErrorMessage);
             }
-            return View(model);
         }
-
-        if (!Enum.TryParse<KlantenkaartType>(model.KlantType, out var klantType))
-        {
-            _logger.LogWarning("Invalid KlantType: {KlantType}", model.KlantType);
-            ModelState.AddModelError(string.Empty, "Ongeldig klanttype.");
-            return View(model);
-        }
-
-        var existingUser = await _userManager.FindByEmailAsync(model.Email);
-        if (existingUser != null)
-        {
-            _logger.LogWarning("User with email {Email} already exists.", model.Email);
-            ModelState.AddModelError(string.Empty, "Een gebruiker met dit emailadres bestaat al.");
-            return View(model);
-        }
-
-        var user = new Account
-        {
-            UserName = model.Email,
-            Email = model.Email,
-            Naam = model.Naam,
-            Adres = model.Adres,
-            Telefoonnummer = model.Telefoonnummer,
-            KlantType = klantType
-        };
-
-        _logger.LogInformation("Creating user: {@User}", user);
-
-        var password = GeneratePassword();
-        var result = await _userManager.CreateAsync(user, password);
-
-        if (!result.Succeeded)
-        {
-            _logger.LogWarning("User creation failed.");
-            foreach (var error in result.Errors)
-            {
-                _logger.LogWarning("Error: {Error}", error.Description);
-                ModelState.AddModelError(string.Empty, error.Description);
-            }
-            return View(model);
-        }
-
-        _logger.LogInformation("User created successfully.");
-
-        var klantTypeString = klantType.ToString();
-        if (!await _roleManager.RoleExistsAsync(klantTypeString))
-        {
-            _logger.LogInformation("Role {Role} does not exist. Creating role.", klantTypeString);
-            await _roleManager.CreateAsync(new IdentityRole(klantTypeString));
-        }
-
-        await _userManager.AddToRoleAsync(user, klantTypeString);
-        await _accountService.CreateAccount(user);
-
-        _logger.LogInformation("User added to role {Role} and account service called.", klantTypeString);
-
-        return RedirectToAction("ShowPassword", new { email = user.Email, password });
+        return View(model);
     }
+
+    if (!Enum.TryParse<KlantenkaartType>(model.KlantType, out var klantType))
+    {
+        _logger.LogWarning("Invalid KlantType: {KlantType}", model.KlantType);
+        ModelState.AddModelError(string.Empty, "Ongeldig klanttype.");
+        return View(model);
+    }
+
+    var existingUser = await _userManager.FindByEmailAsync(model.Email);
+    if (existingUser != null)
+    {
+        _logger.LogWarning("User with email {Email} already exists.", model.Email);
+        ModelState.AddModelError(string.Empty, "Een gebruiker met dit emailadres bestaat al.");
+        return View(model);
+    }
+
+    // Generate a new unique ID and check for duplicates
+    var users = await _userManager.Users.ToListAsync();
+    var maxId = users.Any() ? users.Max(u => int.TryParse(u.Id, out var id) ? id : 0) : 0;
+    var newId = (maxId + 1).ToString();
+
+    // Check if the ID already exists in the database
+    while (users.Any(u => u.Id == newId))
+    {
+        maxId++;
+        newId = (maxId + 1).ToString();
+    }
+
+    var user = new Account
+    {
+        Id = newId,
+        UserName = model.Email,
+        Email = model.Email,
+        Naam = model.Naam,
+        Adres = model.Adres,
+        Telefoonnummer = model.Telefoonnummer,
+        KlantType = klantType
+    };
+
+    _logger.LogInformation("Creating user: {@User}", user);
+
+    var password = GeneratePassword();
+    var result = await _userManager.CreateAsync(user, password);
+
+    if (!result.Succeeded)
+    {
+        _logger.LogWarning("User creation failed.");
+        foreach (var error in result.Errors)
+        {
+            _logger.LogWarning("Error: {Error}", error.Description);
+            ModelState.AddModelError(string.Empty, error.Description);
+        }
+        return View(model);
+    }
+
+    _logger.LogInformation("User created successfully.");
+
+    var klantTypeString = klantType.ToString();
+    if (!await _roleManager.RoleExistsAsync(klantTypeString))
+    {
+        _logger.LogInformation("Role {Role} does not exist. Creating role.", klantTypeString);
+        await _roleManager.CreateAsync(new IdentityRole(klantTypeString));
+    }
+
+    _logger.LogInformation("Adding user to role {Role}.", klantTypeString);
+    await _userManager.AddToRoleAsync(user, klantTypeString);
+
+    _logger.LogInformation("Calling account service to create account.");
+    await _accountService.CreateAccount(user);
+
+    _logger.LogInformation("User added to role {Role} and account service called.", klantTypeString);
+
+    return RedirectToAction("ShowPassword", new { email = user.Email, password });
+}
+
+
+
 
     [HttpGet]
     public IActionResult ShowPassword(string email, string password)

@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<FeestBeest.Data.Models.Account> SignInManager
+@inject UserManager<FeestBeest.Data.Models.Account> UserManager
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8"/>
@@ -36,9 +40,20 @@
                 <li>
                     <a href="@Url.Action("Create", "Account")" class="text-gray-700 hover:text-blue-600 text-lg font-semibold">Register</a>
                 </li>
-                <li>
-                    <a href="@Url.Action("Login", "Account")" class="text-gray-700 hover:text-blue-600 text-lg font-semibold">Login</a>
-                </li>
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    <li>
+                        <form asp-controller="Account" asp-action="Logout" method="post" id="logoutForm">
+                            <button type="submit" class="text-gray-700 hover:text-blue-600 text-lg font-semibold">Logout</button>
+                        </form>
+                    </li>
+                }
+                else
+                {
+                    <li>
+                        <a href="@Url.Action("Login", "Account")" class="text-gray-700 hover:text-blue-600 text-lg font-semibold">Login</a>
+                    </li>
+                }
             </ul>
         </div>
         <div class="md:hidden">
