@@ -4,9 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using FeestBeest.Data.Models;
 using FeestBeest.Web.Models;
 using FeestBeest.Services;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Threading.Tasks;
+
 
 public class AccountController : Controller
 {
@@ -41,6 +39,7 @@ public async Task<IActionResult> Create(AccountViewModel model)
 {
     _logger.LogInformation("Create method called with model: {@Model}", model);
 
+    // Validatie van de modelstatus
     if (!ModelState.IsValid)
     {
         _logger.LogWarning("Model state is invalid.");
@@ -54,6 +53,7 @@ public async Task<IActionResult> Create(AccountViewModel model)
         return View(model);
     }
 
+    // Klanttype validatie
     if (!Enum.TryParse<KlantenkaartType>(model.KlantType, out var klantType))
     {
         _logger.LogWarning("Invalid KlantType: {KlantType}", model.KlantType);
@@ -61,6 +61,7 @@ public async Task<IActionResult> Create(AccountViewModel model)
         return View(model);
     }
 
+    // Controle of de gebruiker al bestaat op basis van het emailadres
     var existingUser = await _userManager.FindByEmailAsync(model.Email);
     if (existingUser != null)
     {
@@ -69,21 +70,12 @@ public async Task<IActionResult> Create(AccountViewModel model)
         return View(model);
     }
 
-    // Generate a new unique ID and check for duplicates
-    var users = await _userManager.Users.ToListAsync();
-    var maxId = users.Any() ? users.Max(u => int.TryParse(u.Id, out var id) ? id : 0) : 0;
-    var newId = (maxId + 1).ToString();
-
-    // Check if the ID already exists in the database
-    while (users.Any(u => u.Id == newId))
-    {
-        maxId++;
-        newId = (maxId + 1).ToString();
-    }
+    // Genereer een nieuwe unieke ID voor de gebruiker (handmatig)
+    var newId = await GenerateUniqueId();
 
     var user = new Account
     {
-        Id = newId,
+        Id = newId,  // Handmatig gegenereerde ID
         UserName = model.Email,
         Email = model.Email,
         Naam = model.Naam,
@@ -94,9 +86,11 @@ public async Task<IActionResult> Create(AccountViewModel model)
 
     _logger.LogInformation("Creating user: {@User}", user);
 
+    // Genereer een wachtwoord voor de gebruiker
     var password = GeneratePassword();
     var result = await _userManager.CreateAsync(user, password);
 
+    // Foutafhandeling bij het aanmaken van de gebruiker
     if (!result.Succeeded)
     {
         _logger.LogWarning("User creation failed.");
@@ -110,6 +104,7 @@ public async Task<IActionResult> Create(AccountViewModel model)
 
     _logger.LogInformation("User created successfully.");
 
+    // Controleer of de rol bestaat, zo niet, maak deze aan
     var klantTypeString = klantType.ToString();
     if (!await _roleManager.RoleExistsAsync(klantTypeString))
     {
@@ -120,12 +115,35 @@ public async Task<IActionResult> Create(AccountViewModel model)
     _logger.LogInformation("Adding user to role {Role}.", klantTypeString);
     await _userManager.AddToRoleAsync(user, klantTypeString);
 
+    // Roep de accountservice aan om het account te maken
     _logger.LogInformation("Calling account service to create account.");
     await _accountService.CreateAccount(user);
 
     _logger.LogInformation("User added to role {Role} and account service called.", klantTypeString);
 
+    // Redirect naar de actie voor het tonen van het wachtwoord
     return RedirectToAction("ShowPassword", new { email = user.Email, password });
+}
+
+private async Task<string> GenerateUniqueId()
+{
+    var users = await _userManager.Users.ToListAsync();
+    var maxId = users.Any() ? users.Max(u => int.TryParse(u.Id, out var id) ? id : 0) : 0;
+    
+    _logger.LogInformation("Max existing ID: {MaxId}", maxId);
+
+    var newId = (maxId + 1).ToString();
+    
+    while (users.Any(u => u.Id == newId))
+    {
+        _logger.LogInformation("ID {NewId} already exists. Incrementing.", newId);
+        maxId++;
+        newId = (maxId + 1).ToString();
+    }
+
+    _logger.LogInformation("Generated unique ID: {NewId}", newId);
+
+    return newId;
 }
 
 
@@ -153,52 +171,19 @@ public async Task<IActionResult> Create(AccountViewModel model)
     [HttpPost]
     public async Task<IActionResult> Login(LoginViewModel model)
     {
-        _logger.LogInformation("Login method called with model: {@Model}", model);
-
         if (!ModelState.IsValid)
         {
-            _logger.LogWarning("Model state is invalid.");
-            foreach (var state in ModelState)
-            {
-                foreach (var error in state.Value.Errors)
-                {
-                    _logger.LogWarning("Property: {Property}, Error: {Error}", state.Key, error.ErrorMessage);
-                }
-            }
             return View(model);
         }
 
         var user = await _userManager.FindByEmailAsync(model.Email);
         if (user == null)
         {
-            _logger.LogWarning("User with email {Email} not found.", model.Email);
             ModelState.AddModelError(string.Empty, "Invalid login attempt.");
             return View(model);
         }
 
         var result = await _signInManager.PasswordSignInAsync(user.UserName, model.Password, model.RememberMe, lockoutOnFailure: false);
-
-        if (result.Succeeded)
-        {
-            _logger.LogInformation("User with email {Email} logged in successfully.", model.Email);
-            return RedirectToAction("Index", "Home");
-        }
-
-        if (result.IsLockedOut)
-        {
-            _logger.LogWarning("User with email {Email} is locked out.", model.Email);
-            ModelState.AddModelError(string.Empty, "Account is locked out.");
-        }
-        else if (result.IsNotAllowed)
-        {
-            _logger.LogWarning("Login not allowed for user with email {Email}.", model.Email);
-            ModelState.AddModelError(string.Empty, "Login is not allowed.");
-        }
-        else
-        {
-            _logger.LogWarning("Invalid login attempt for user with email {Email}.", model.Email);
-            ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-        }
 
         return View(model);
     }
