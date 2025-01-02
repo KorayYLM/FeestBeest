@@ -1,39 +1,50 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿@model BoekingViewModel
 
-<div class="min-h-screen  w-screen bg-gray-100 flex items-center justify-center px-6">
-    <div class="flex flex-col md:flex-row bg-white shadow-lg rounded-lg overflow-hidden max-w-4xl w-full">
-        <div class="flex-1 p-6">
-            <!-- Header  -->
-            <h1 class="text-4xl font-extrabold text-gray-800">Boek een beestje</h1>
-            <p class="mt-4 text-lg text-gray-600 leading-relaxed">
-                Welkom bij <span class="font-semibold text-blue-600">FeestBeest</span>! Hier kun je een of meerdere van onze dieren boeken voor jouw feestje. Kies de dag van je feestje en volg de stappen om je beestje te boeken.
+<div class="uk-container uk-margin-large-top">
+    <div class="uk-card uk-card-default uk-card-body uk-width-2-3@m uk-align-center uk-box-shadow-medium">
+        <div class="uk-text-center uk-margin-medium">
+            <h1 class="uk-heading-line uk-text-bold"><span>Boek een beestje</span></h1>
+            <p class="uk-text-large">
+                Welkom bij <span class="uk-text-primary">FeestBeest</span>! Hier kun je een of meerdere van onze dieren boeken voor jouw feestje. 
+                Kies de dag van je feestje en volg de stappen om je beestje te boeken.
             </p>
-            
-            <!-- Formulier  -->
-            <div class="mt-6">
-                <label for="date" class="block text-gray-700 text-sm font-medium mb-2">Kies een datum:</label>
-                <input 
-                    type="date" 
-                    id="date" 
-                    class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                />
-                <button 
-                    type="submit" 
-                    class="mt-6 w-full py-2 bg-blue-500 text-white font-bold rounded-md shadow-md hover:bg-blue-600 focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
-                >
-                    Boeken
-                </button>
-            </div>
         </div>
-        
-       
-        <div class="flex-1 flex items-center justify-center bg-gray-100 p-6">
-            <img 
-                src="/Img/farm.jpg" 
-                alt="Illustratie van een boerderij met dieren" 
-                class="rounded-lg shadow-lg max-w-xs md:max-w-sm"
+
+        <!-- Formulier -->
+        <div class="uk-margin-medium">
+            <form asp-action="BoekBeestje" method="post" novalidate class="uk-form-stacked">
+                <!-- Datum veld -->
+                <div class="uk-margin">
+                    <label asp-for="Datum" class="uk-form-label">Kies een datum:</label>
+                    <div class="uk-form-controls">
+                        <input
+                            asp-for="Datum"
+                            type="date"
+                            class="uk-input uk-border-rounded"
+                            min="@DateTime.Now.ToString("yyyy-MM-dd")"
+                        />
+                    </div>
+                    <span asp-validation-for="Datum" class="uk-text-danger uk-text-small"></span>
+                </div>
+
+                <!-- Verzend knop -->
+                <div class="uk-margin">
+                    <button
+                        type="submit"
+                        class="w-full py-2 bg-blue-500 text-white font-bold rounded-md shadow-md hover:bg-blue-600 focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
+                    >
+                        Boeken
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Afbeelding -->
+        <div class="uk-margin-large-top uk-flex uk-flex-center">
+            <img
+                src="/Img/farm.jpg"
+                alt="Illustratie van een boerderij met dieren"
+                class="uk-border-rounded uk-box-shadow-large uk-width-medium"
             />
         </div>
     </div>
