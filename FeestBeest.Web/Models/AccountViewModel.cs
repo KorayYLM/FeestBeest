@@ -3,6 +3,9 @@ using FeestBeest.Data.Models;
 
 public class AccountViewModel
 {
+    
+    public string Id { get; set; }  
+    
     [Required(ErrorMessage = "Naam is verplicht.")]
     public string Naam { get; set; }
 

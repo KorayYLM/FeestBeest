@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FeestBeest.Data
 {
-    public class FeestBeestContext : IdentityDbContext<Account>
+    public class FeestBeestContext : IdentityDbContext<Account,IdentityRole<int>,int>
     {
         public FeestBeestContext(DbContextOptions<FeestBeestContext> options)
             : base(options)
@@ -71,25 +71,21 @@ namespace FeestBeest.Data
                 );
             });
 
-            var adminRoleId = "1";  // Specifieke ID voor de admin rol
-            var userRoleId = "2";   // Specifieke ID voor de user rol
+     
 
-            modelBuilder.Entity<IdentityRole>().HasData(
-                new IdentityRole { Id = adminRoleId, Name = "Admin", NormalizedName = "ADMIN" },
-                new IdentityRole { Id = userRoleId, Name = "User", NormalizedName = "USER" }
+            modelBuilder.Entity<IdentityRole<int>>().HasData(
+                new IdentityRole<int> { Id = 1, Name = "Admin", NormalizedName = "ADMIN" },
+                new IdentityRole<int> { Id = 2, Name = "User", NormalizedName = "USER" }
             );
 
             var hasher = new PasswordHasher<Account>();
 
-            var adminUserId = "1";
-            var userUserId = "2";
-
             modelBuilder.Entity<Account>().HasData(
                 new Account
                 {
-                    Id = adminUserId,
-                    UserName = "Boerderijadmin",
-                    NormalizedUserName = "BOERDERIJADMIN",
+                    Id = 1,
+                    UserName = "admin@example.com",
+                    NormalizedUserName = "admin@example.com",
                     Email = "admin@example.com",
                     NormalizedEmail = "ADMIN@EXAMPLE.COM",
                     EmailConfirmed = true,
@@ -99,9 +95,9 @@ namespace FeestBeest.Data
                 },
                 new Account
                 {
-                    Id = userUserId,
-                    UserName = "KorayYilmaz",
-                    NormalizedUserName = "KORAYYILMAZ",
+                    Id = 2,
+                    UserName = "koray@example.com",
+                    NormalizedUserName = "koray@example.com",
                     Email = "koray@example.com",
                     NormalizedEmail = "KORAY@EXAMPLE.COM",
                     EmailConfirmed = true,
@@ -110,11 +106,7 @@ namespace FeestBeest.Data
                     Naam = "Koray Yilmaz"
                 }
             );
-
-            modelBuilder.Entity<IdentityUserRole<string>>().HasData(
-                new IdentityUserRole<string> { RoleId = adminRoleId, UserId = adminUserId },
-                new IdentityUserRole<string> { RoleId = userRoleId, UserId = userUserId }
-            );
+            
         }
     }
 }

@@ -24,7 +24,7 @@ public class Boeking
     [Range(0, 9999.99)]
     public decimal TotaalPrijs { get; set; }
 
-    public string? AccountId { get; set; }
+    public int? AccountId { get; set; }
     public Account? Account { get; set; }
 
     public int? BeestjeId { get; set; } // Add this property to reference Beestje

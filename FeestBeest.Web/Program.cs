@@ -10,7 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<FeestBeestContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddIdentity<Account, IdentityRole>()
+builder.Services.AddIdentity<Account, IdentityRole<int>>()
     .AddEntityFrameworkStores<FeestBeestContext>()
     .AddDefaultTokenProviders();
 

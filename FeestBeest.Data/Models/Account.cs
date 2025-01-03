@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace FeestBeest.Data.Models
 {
-    public class Account : IdentityUser
+    public class Account : IdentityUser<int>
     {
         [Required(ErrorMessage = "Naam is verplicht.")]
         [StringLength(100, ErrorMessage = "Naam mag niet langer zijn dan 100 tekens.")]
