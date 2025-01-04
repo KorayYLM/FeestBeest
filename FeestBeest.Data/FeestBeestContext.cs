@@ -48,10 +48,10 @@ namespace FeestBeest.Data
                 entity.Property(e => e.Type).IsRequired();
 
                 entity.HasData(
-                    new Beestje { Id = 1, Naam = "Aap", Type = "Jungle", Prijs = 100.00m, Afbeelding = "https://e7.pngegg.com/pngimages/712/791/png-clipart-graphics-drawing-cartoon-monkey-mammal-cat-like-mammal-thumbnail.png" },
-                    new Beestje { Id = 2, Naam = "Olifant", Type = "Jungle", Prijs = 300.00m, Afbeelding = "olifant.jpg" },
-                    new Beestje { Id = 3, Naam = "Zebra", Type = "Jungle", Prijs = 220.00m, Afbeelding = "zebra.jpg" },
-                    new Beestje { Id = 4, Naam = "Leeuw", Type = "Jungle", Prijs = 250.00m, Afbeelding = "leeuw.jpg" },
+                    new Beestje { Id = 1, Naam = "Aap", Type = "Jungle", Prijs = 100.00m, Afbeelding = "/feestbeest/beestjes/monkey.png"},
+                    new Beestje { Id = 2, Naam = "Olifant", Type = "Jungle", Prijs = 300.00m, Afbeelding = "/beestje/elephant.jpg" },
+                    new Beestje { Id = 3, Naam = "Zebra", Type = "Jungle", Prijs = 220.00m, Afbeelding = "/beestje/zebra.jpg" },
+                    new Beestje { Id = 4, Naam = "Leeuw", Type = "Jungle", Prijs = 250.00m, Afbeelding = "/beestje/lion.jpg" },
                     new Beestje { Id = 5, Naam = "Hond", Type = "Boerderij", Prijs = 80.00m, Afbeelding = "hond.jpg" },
                     new Beestje { Id = 6, Naam = "Ezel", Type = "Boerderij", Prijs = 150.00m, Afbeelding = "ezel.jpg" },
                     new Beestje { Id = 7, Naam = "Koe", Type = "Boerderij", Prijs = 180.00m, Afbeelding = "koe.jpg" },
@@ -63,11 +63,7 @@ namespace FeestBeest.Data
                     new Beestje { Id = 13, Naam = "Kameel", Type = "Woestijn", Prijs = 160.00m, Afbeelding = "kameel.jpg" },
                     new Beestje { Id = 14, Naam = "Slang", Type = "Woestijn", Prijs = 70.00m, Afbeelding = "slang.jpg" },
                     new Beestje { Id = 15, Naam = "T-Rex", Type = "VIP", Prijs = 1000.00m, Afbeelding = "trex.jpg" },
-                    new Beestje { Id = 16, Naam = "Unicorn", Type = "VIP", Prijs = 1500.00m, Afbeelding = "unicorn.jpg" },
-                    new Beestje { Id = 17, Naam = "Papegaai", Type = "Tropisch", Prijs = 120.00m, Afbeelding = "papegaai.jpg" },
-                    new Beestje { Id = 18, Naam = "Krokodil", Type = "Tropisch", Prijs = 200.00m, Afbeelding = "krokodil.jpg" },
-                    new Beestje { Id = 19, Naam = "Kangoeroe", Type = "Australisch", Prijs = 180.00m, Afbeelding = "kangoeroe.jpg" },
-                    new Beestje { Id = 20, Naam = "Koala", Type = "Australisch", Prijs = 150.00m, Afbeelding = "koala.jpg" }
+                    new Beestje { Id = 16, Naam = "Unicorn", Type = "VIP", Prijs = 1500.00m, Afbeelding = "unicorn.jpg" }
                 );
             });
 

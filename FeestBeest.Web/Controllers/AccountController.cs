@@ -57,7 +57,7 @@ public class AccountController : Controller
         {
             var password = await _accountService.CreateAccount(user);
             ViewBag.NewAccountAlert = $"Een account is aangemaakt. \nDit zijn de gegevens:\nEmail: {model.Email}\nWachtwoord: {password}";
-            return RedirectToAction("Extras", "Extra");
+            return RedirectToAction("ShowPassword", new { email = model.Email, password });
         }
         catch (Exception ex)
         {

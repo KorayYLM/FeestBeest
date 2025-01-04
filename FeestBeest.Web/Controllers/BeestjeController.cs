@@ -129,13 +129,14 @@ public class BeestjeController : Controller
         var beestje = await _context.Beestjes.FindAsync(id);
         if (beestje == null)
         {
-            return NotFound();
+            return RedirectToAction(nameof(Index)); // Bij geen beestje, keer terug naar Index
         }
 
         _context.Beestjes.Remove(beestje);
         await _context.SaveChangesAsync();
-        return RedirectToAction(nameof(Index));
+        return RedirectToAction(nameof(Index)); // Na verwijderen, keer terug naar Index
     }
+
 
     [HttpPost]
     [ValidateAntiForgeryToken]

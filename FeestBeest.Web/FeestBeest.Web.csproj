@@ -21,4 +21,23 @@
         <ProjectReference Include="..\FeestBeest.Data\FeestBeest.Data.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="wwwroot\Img\Beestjes\animal.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\Img\Beestjes\camel.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\Img\Beestjes\chicken.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\Img\Beestjes\cow.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\Img\Beestjes\dinosaur.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\Img\Beestjes\dog.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\Img\Beestjes\donkey.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\Img\Beestjes\duck.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\Img\Beestjes\elephant.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\Img\Beestjes\lion.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\Img\Beestjes\monkey.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\Img\Beestjes\polar-bear.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\Img\Beestjes\seal.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\Img\Beestjes\snake.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\Img\Beestjes\unicorn.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\Img\Beestjes\zebra.png" />
+    </ItemGroup>
+
 </Project>
