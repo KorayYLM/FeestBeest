@@ -1,4 +1,5 @@
-﻿@model BeestjeViewModel
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model FeestBeest.Web.ViewModels.BeestjeViewModel
 
 <!DOCTYPE html>
 <html>
@@ -22,7 +23,8 @@
             </div>
             <div>
                 <label class="block text-sm font-medium text-gray-700" for="Prijs">Prijs</label>
-                <input class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2" type="number" step="0.01" id="Prijs" name="Prijs" value="@Model.Prijs" required>
+                <input class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                       type="number" step="0.01" id="Prijs" name="Prijs" value="@Model.Prijs" required>
             </div>
             <div>
                 <label class="block text-sm font-medium text-gray-700" for="Afbeelding">Afbeelding URL</label>

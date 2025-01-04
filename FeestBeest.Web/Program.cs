@@ -16,6 +16,7 @@ builder.Services.AddIdentity<Account, IdentityRole<int>>()
 
 // Register application services
 builder.Services.AddScoped<IAccountService, AccountService>();
+builder.Services.AddScoped<IBeestjeService, BeestjeService>(); // Register BeestjeService
 
 // Add MVC services
 builder.Services.AddControllersWithViews();

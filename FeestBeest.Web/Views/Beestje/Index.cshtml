@@ -1,5 +1,5 @@
 ﻿@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
-@model IEnumerable<BeestjeViewModel>
+@model IEnumerable<FeestBeest.Web.ViewModels.BeestjeViewModel>
 
 <div class="container mx-auto px-4 w-screen">
     <h2 class="text-2xl font-bold mb-4">Beestjes</h2>
@@ -47,7 +47,7 @@
   document.getElementById('confirmDelete').addEventListener('click', async () => {
     if (deleteId !== null) {
         try {
-            const response = await fetch(`@Url.Action("Delete")/${deleteId}`, { // Gebruik de juiste API-URL
+            const response = await fetch(`@Url.Action("Delete")/${deleteId}`, { 
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -56,7 +56,7 @@
             });
 
             if (response.ok) {
-                document.getElementById(`beestje-${deleteId}`).remove(); // Verwijder de kaart uit de view
+                document.getElementById(`beestje-${deleteId}`).remove(); 
                 closeModal();
             } else {
                 console.error('Verwijderen mislukt', response.status);
