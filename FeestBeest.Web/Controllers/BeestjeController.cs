@@ -1,8 +1,8 @@
-﻿using FeestBeest.Data;
+﻿
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 using FeestBeest.Data.Services;
 using FeestBeest.Web.ViewModels;
+using FeestBeest.Web.Models;
 
 public class BeestjeController : Controller
 {
@@ -15,8 +15,12 @@ public class BeestjeController : Controller
 
     public async Task<IActionResult> Index()
     {
-        var beestjes = await _beestjeService.GetAllBeestjesAsync();
-        return View(beestjes);
+        var beestjesDto = await _beestjeService.GetAllBeestjesAsync();
+        var viewModel = new IndexViewModel
+        {
+            Beestjes = beestjesDto.Select(BeestjeViewModel.FromDto)
+        };
+        return View(viewModel);
     }
 
     public IActionResult Create()
@@ -44,13 +48,14 @@ public class BeestjeController : Controller
             return NotFound();
         }
 
-        var viewModel = await _beestjeService.GetBeestjeByIdAsync(id.Value);
-        if (viewModel == null)
+        var beestjeDto = await _beestjeService.GetBeestjeByIdAsync(id.Value);
+        if (beestjeDto == null)
         {
             return NotFound();
         }
 
-        return View(BeestjeViewModel.FromDto(viewModel));   
+        var viewModel = BeestjeViewModel.FromDto(beestjeDto);
+        return View(viewModel);
     }
 
     [HttpPost]

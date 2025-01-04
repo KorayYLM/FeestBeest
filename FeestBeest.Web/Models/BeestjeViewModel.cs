@@ -1,6 +1,4 @@
-﻿// File: FeestBeest.Web/ViewModels/BeestjeViewModel.cs
-
-using FeestBeest.Data.Dto;
+﻿using FeestBeest.Data.Dto;
 
 namespace FeestBeest.Web.ViewModels
 {
@@ -11,9 +9,9 @@ namespace FeestBeest.Web.ViewModels
         public string Type { get; set; }
         public decimal Prijs { get; set; }
         public string Afbeelding { get; set; }
-        
-        public BeestjeDto ToDto() {
-            
+
+        public BeestjeDto ToDto()
+        {
             return new BeestjeDto
             {
                 Id = this.Id,
@@ -21,7 +19,19 @@ namespace FeestBeest.Web.ViewModels
                 Type = this.Type,
                 Prijs = this.Prijs,
                 Afbeelding = this.Afbeelding
-            };  
-        }   
+            };
+        }
+
+        public static BeestjeViewModel FromDto(BeestjeDto dto)
+        {
+            return new BeestjeViewModel
+            {
+                Id = dto.Id,
+                Naam = dto.Naam,
+                Type = dto.Type,
+                Prijs = dto.Prijs,
+                Afbeelding = dto.Afbeelding
+            };
+        }
     }
 }

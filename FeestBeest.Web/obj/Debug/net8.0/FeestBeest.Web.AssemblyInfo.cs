@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("FeestBeest.Web")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0c32f096085298524f9d03dca01d4f6fc0e95523")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+87f768a797a2258e2832dee0521ced416ff9c3b9")]
 [assembly: System.Reflection.AssemblyProductAttribute("FeestBeest.Web")]
 [assembly: System.Reflection.AssemblyTitleAttribute("FeestBeest.Web")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
