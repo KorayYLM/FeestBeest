@@ -44,27 +44,27 @@
         deleteId = null;
     }
 
-    document.getElementById('confirmDelete').addEventListener('click', async () => {
-        if (deleteId !== null) {
-            try {
-                const response = await fetch(`@Url.Action("Delete")`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'RequestVerificationToken': '@Antiforgery.GetAndStoreTokens(Context).RequestToken'
-                    },
-                    body: JSON.stringify({ id: deleteId })
-                });
-
-                if (response.ok) {
-                    document.getElementById(`beestje-${deleteId}`).remove();
-                    closeModal();
-                } else {
-                    console.error('Verwijderen mislukt', response.status);
+  document.getElementById('confirmDelete').addEventListener('click', async () => {
+    if (deleteId !== null) {
+        try {
+            const response = await fetch(`@Url.Action("Delete")/${deleteId}`, { // Gebruik de juiste API-URL
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': '@Antiforgery.GetAndStoreTokens(Context).RequestToken'
                 }
-            } catch (error) {
-                console.error('Fout bij verwijderen', error);
+            });
+
+            if (response.ok) {
+                document.getElementById(`beestje-${deleteId}`).remove(); // Verwijder de kaart uit de view
+                closeModal();
+            } else {
+                console.error('Verwijderen mislukt', response.status);
             }
+        } catch (error) {
+            console.error('Fout bij verwijderen', error);
         }
-    });
+    }
+});
+
 </script>

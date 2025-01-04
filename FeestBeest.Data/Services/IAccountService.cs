@@ -1,13 +1,13 @@
 ﻿using System.Threading.Tasks;
 using FeestBeest.Data.Models;
+using Microsoft.AspNetCore.Identity;
 
-namespace FeestBeest.Services
+namespace FeestBeest.Data.Services
 {
     public interface IAccountService
     {
-        Task<Account> CreateAccount(Account account);
-        Task<Account> GetAccountById(string id);
-        Task<Account> UpdateAccount(Account account);
-        Task DeleteAccount(string id);
+        Task<string> CreateAccount(Account account);
+        // Task<SignInResult> Login(string email, string password, bool rememberMe);
+        
     }
 }

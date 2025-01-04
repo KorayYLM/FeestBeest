@@ -1,6 +1,6 @@
 using FeestBeest.Data;
 using FeestBeest.Data.Models;
-using FeestBeest.Services;
+using FeestBeest.Data.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,6 +19,8 @@ builder.Services.AddScoped<IAccountService, AccountService>();
 
 // Add MVC services
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddHttpContextAccessor(); // For IHttpContextAccessor
 
 var app = builder.Build();
 

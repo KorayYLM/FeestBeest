@@ -129,13 +129,14 @@ public class BeestjeController : Controller
         var beestje = await _context.Beestjes.FindAsync(id);
         if (beestje == null)
         {
-            return RedirectToAction(nameof(Index)); // Bij geen beestje, keer terug naar Index
+            return NotFound();
         }
 
         _context.Beestjes.Remove(beestje);
         await _context.SaveChangesAsync();
-        return RedirectToAction(nameof(Index)); // Na verwijderen, keer terug naar Index
+        return Ok(); // Retourneer een 200-status bij succes
     }
+
 
 
     [HttpPost]
@@ -154,7 +155,6 @@ public class BeestjeController : Controller
         return RedirectToAction(nameof(Index));
     }
 
-    
     
     private bool BeestjeExists(int id)
     {

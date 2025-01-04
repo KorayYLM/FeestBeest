@@ -2,35 +2,27 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using FeestBeest.Data.Models;
+using FeestBeest.Data.Services;
 using FeestBeest.Web.Models;
-using FeestBeest.Services;
 
 public class AccountController : Controller
 {
-    private readonly IAccountService _accountService;
-    private readonly UserManager<Account> _userManager;
     private readonly SignInManager<Account> _signInManager;
-    private readonly RoleManager<IdentityRole<int>> _roleManager;
+    private readonly UserManager<Account> _userManager;
+    private readonly IAccountService _accountService;
     private readonly ILogger<AccountController> _logger;
 
-    public AccountController(
-        IAccountService accountService,
-        UserManager<Account> userManager,
-        SignInManager<Account> signInManager,
-        RoleManager<IdentityRole<int>> roleManager,
-        ILogger<AccountController> logger)
+    public AccountController(SignInManager<Account> signInManager, UserManager<Account> userManager, IAccountService accountService, ILogger<AccountController> logger)
     {
-        _accountService = accountService;
-        _userManager = userManager;
         _signInManager = signInManager;
-        _roleManager = roleManager;
+        _userManager = userManager;
+        _accountService = accountService;
         _logger = logger;
     }
 
     [HttpGet]
     public IActionResult Create()
     {
-        _logger.LogInformation("Navigated to Create view.");
         return View();
     }
 
@@ -71,7 +63,6 @@ public class AccountController : Controller
     [HttpGet]
     public IActionResult ShowPassword(string email, string password)
     {
-        _logger.LogInformation("Navigated to ShowPassword view for email: {Email}", email);
         var model = new ShowPasswordViewModel
         {
             Email = email,
@@ -83,7 +74,6 @@ public class AccountController : Controller
     [HttpGet]
     public IActionResult Login()
     {
-        _logger.LogInformation("Navigated to Login view.");
         return View(new LoginViewModel());
     }
 
@@ -102,16 +92,24 @@ public class AccountController : Controller
             return View(model);
         }
 
-        var result = await _signInManager.PasswordSignInAsync(user.UserName, model.Password, model.RememberMe, lockoutOnFailure: false);
+        var passwordHasher = new PasswordHasher<Account>();
+        var verificationResult = passwordHasher.VerifyHashedPassword(user, user.PasswordHash, model.Password);
+        if (verificationResult == PasswordVerificationResult.Failed)
+        {
+            ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+            return View(model);
+        }
 
-        return View(model);
+        await _signInManager.SignInAsync(user, model.RememberMe);
+        _logger.LogInformation("User logged in with email: {Email}", model.Email);
+        return RedirectToAction("Index", "Home");
     }
 
     [HttpPost]
     public async Task<IActionResult> Logout()
     {
-        _logger.LogInformation("User logged out.");
         await _signInManager.SignOutAsync();
+        _logger.LogInformation("User logged out.");
         return RedirectToAction("Index", "Home");
     }
 }
