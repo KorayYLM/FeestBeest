@@ -1,8 +1,6 @@
 using System.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
 using FeestBeest.Web.Models;
-
-namespace FeestBeest.Web.Controllers;
+using Microsoft.AspNetCore.Mvc;
 
 public class HomeController : Controller
 {
@@ -15,7 +13,7 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
-        return RedirectToAction();
+        return View(); 
     }
 
     public IActionResult Privacy()
