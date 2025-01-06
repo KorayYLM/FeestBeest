@@ -18,7 +18,6 @@ public class Beestje
     public decimal Prijs { get; set; }
 
     [Required]
-    [Url]
     public string Afbeelding { get; set; } 
 
     public ICollection<Boeking> Boekingen { get; set; } = new List<Boeking>();

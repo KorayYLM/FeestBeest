@@ -1,13 +1,13 @@
 ﻿@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
 
-<div class="container mx-auto px-4 w-screen">
+<div class="container mx-auto px-4 min-h-screen w-screen">
     <h2 class="text-2xl font-bold mb-4">Beestjes</h2>
     <a href="@Url.Action("Create")" class="uk-button uk-button-primary bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Nieuw Beestje</a>
     <div class="flex flex-wrap mt-4">
         @foreach (var item in Model.Beestjes)
         {
             <div class="bg-white border border-gray-200 rounded-lg shadow-lg m-4 p-4 w-64" id="beestje-@item.Id">
-                <img src="@item.Afbeelding" class="h-32 w-full object-contain mb-4" />
+                <img src="~/Img/Beestjes/@item.Afbeelding" class="h-32 w-full object-contain mb-4" />
                 <div class="text-lg font-bold mb-2">@item.Naam</div>
                 <div class="text-gray-700 mb-4">@item.Type</div>
                 <div class="text-gray-900 font-semibold mb-4">€@item.Prijs</div>

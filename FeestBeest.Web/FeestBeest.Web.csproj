@@ -38,6 +38,22 @@
       <_ContentIncludedByDefault Remove="wwwroot\Img\Beestjes\snake.png" />
       <_ContentIncludedByDefault Remove="wwwroot\Img\Beestjes\unicorn.png" />
       <_ContentIncludedByDefault Remove="wwwroot\Img\Beestjes\zebra.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\Beestjes\animal.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\Beestjes\camel.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\Beestjes\chicken.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\Beestjes\cow.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\Beestjes\dinosaur.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\Beestjes\dog.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\Beestjes\donkey.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\Beestjes\duck.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\Beestjes\elephant.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\Beestjes\lion.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\Beestjes\monkey.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\Beestjes\polar-bear.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\Beestjes\seal.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\Beestjes\snake.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\Beestjes\unicorn.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\Beestjes\zebra.png" />
     </ItemGroup>
 
 </Project>

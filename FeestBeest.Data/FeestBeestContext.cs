@@ -48,22 +48,22 @@ namespace FeestBeest.Data
                 entity.Property(e => e.Type).IsRequired();
 
                 entity.HasData(
-                    new Beestje { Id = 1, Naam = "Aap", Type = "Jungle", Prijs = 100.00m, Afbeelding = "/feestbeest/beestjes/monkey.png"},
-                    new Beestje { Id = 2, Naam = "Olifant", Type = "Jungle", Prijs = 300.00m, Afbeelding = "/beestje/elephant.jpg" },
-                    new Beestje { Id = 3, Naam = "Zebra", Type = "Jungle", Prijs = 220.00m, Afbeelding = "/beestje/zebra.jpg" },
-                    new Beestje { Id = 4, Naam = "Leeuw", Type = "Jungle", Prijs = 250.00m, Afbeelding = "/beestje/lion.jpg" },
-                    new Beestje { Id = 5, Naam = "Hond", Type = "Boerderij", Prijs = 80.00m, Afbeelding = "hond.jpg" },
-                    new Beestje { Id = 6, Naam = "Ezel", Type = "Boerderij", Prijs = 150.00m, Afbeelding = "ezel.jpg" },
-                    new Beestje { Id = 7, Naam = "Koe", Type = "Boerderij", Prijs = 180.00m, Afbeelding = "koe.jpg" },
-                    new Beestje { Id = 8, Naam = "Eend", Type = "Boerderij", Prijs = 50.00m, Afbeelding = "eend.jpg" },
-                    new Beestje { Id = 9, Naam = "Kuiken", Type = "Boerderij", Prijs = 20.00m, Afbeelding = "kuiken.jpg" },
-                    new Beestje { Id = 10, Naam = "Pinguïn", Type = "Sneeuw", Prijs = 90.00m, Afbeelding = "pinguin.jpg" },
-                    new Beestje { Id = 11, Naam = "IJsbeer", Type = "Sneeuw", Prijs = 200.00m, Afbeelding = "ijsbeer.jpg" },
-                    new Beestje { Id = 12, Naam = "Zeehond", Type = "Sneeuw", Prijs = 130.00m, Afbeelding = "zeehond.jpg" },
-                    new Beestje { Id = 13, Naam = "Kameel", Type = "Woestijn", Prijs = 160.00m, Afbeelding = "kameel.jpg" },
-                    new Beestje { Id = 14, Naam = "Slang", Type = "Woestijn", Prijs = 70.00m, Afbeelding = "slang.jpg" },
-                    new Beestje { Id = 15, Naam = "T-Rex", Type = "VIP", Prijs = 1000.00m, Afbeelding = "trex.jpg" },
-                    new Beestje { Id = 16, Naam = "Unicorn", Type = "VIP", Prijs = 1500.00m, Afbeelding = "unicorn.jpg" }
+                    new Beestje { Id = 1, Naam = "Aap", Type = "Jungle", Prijs = 100.00m, Afbeelding = "monkey.png"}, 
+                    new Beestje { Id = 2, Naam = "Olifant", Type = "Jungle", Prijs = 300.00m, Afbeelding = "elephant.png" },
+                    new Beestje { Id = 3, Naam = "Zebra", Type = "Jungle", Prijs = 220.00m, Afbeelding = "zebra.png" },
+                    new Beestje { Id = 4, Naam = "Leeuw", Type = "Jungle", Prijs = 250.00m, Afbeelding = "lion.png" },
+                    new Beestje { Id = 5, Naam = "Hond", Type = "Boerderij", Prijs = 80.00m, Afbeelding = "dog.png" },
+                    new Beestje { Id = 6, Naam = "Ezel", Type = "Boerderij", Prijs = 150.00m, Afbeelding = "donkey.png" },
+                    new Beestje { Id = 7, Naam = "Koe", Type = "Boerderij", Prijs = 180.00m, Afbeelding = "cow.png" },
+                    new Beestje { Id = 8, Naam = "Eend", Type = "Boerderij", Prijs = 50.00m, Afbeelding = "duck.png" },
+                    new Beestje { Id = 9, Naam = "Kuiken", Type = "Boerderij", Prijs = 20.00m, Afbeelding = "chicken.png" },
+                    new Beestje { Id = 10, Naam = "Pinguïn", Type = "Sneeuw", Prijs = 90.00m, Afbeelding = "animal.png" },
+                    new Beestje { Id = 11, Naam = "IJsbeer", Type = "Sneeuw", Prijs = 200.00m, Afbeelding = "polar-bear.png" },
+                    new Beestje { Id = 12, Naam = "Zeehond", Type = "Sneeuw", Prijs = 130.00m, Afbeelding = "seal.png" },
+                    new Beestje { Id = 13, Naam = "Kameel", Type = "Woestijn", Prijs = 160.00m, Afbeelding = "camel.png" },
+                    new Beestje { Id = 14, Naam = "Slang", Type = "Woestijn", Prijs = 70.00m, Afbeelding = "snake.png" },
+                    new Beestje { Id = 15, Naam = "T-Rex", Type = "VIP", Prijs = 1000.00m, Afbeelding = "dinosaur.png" },
+                    new Beestje { Id = 16, Naam = "Unicorn", Type = "VIP", Prijs = 1500.00m, Afbeelding = "unicorn.png" }
                 );
             });
 

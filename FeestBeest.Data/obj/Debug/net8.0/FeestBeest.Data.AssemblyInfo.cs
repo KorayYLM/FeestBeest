@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("FeestBeest.Data")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0c32f096085298524f9d03dca01d4f6fc0e95523")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6431b5adf04f31ac1feeee44e8a43be2eeabf6e2")]
 [assembly: System.Reflection.AssemblyProductAttribute("FeestBeest.Data")]
 [assembly: System.Reflection.AssemblyTitleAttribute("FeestBeest.Data")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
