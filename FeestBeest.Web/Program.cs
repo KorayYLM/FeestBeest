@@ -16,12 +16,13 @@ builder.Services.AddIdentity<Account, IdentityRole<int>>()
 
 // Register application services
 builder.Services.AddScoped<IAccountService, AccountService>();
-builder.Services.AddScoped<IBeestjeService, BeestjeService>(); // Register BeestjeService
+builder.Services.AddScoped<IBeestjeService, BeestjeService>(); 
+builder.Services.AddScoped<IBoekingService, BoekingService>(); 
 
 // Add MVC services
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddHttpContextAccessor(); // For IHttpContextAccessor
+builder.Services.AddHttpContextAccessor(); 
 
 var app = builder.Build();
 
@@ -42,6 +43,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Home}/{action=Index}/{id?}"); // Update default route to Home/Index
 
 app.Run();

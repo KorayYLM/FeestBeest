@@ -1,0 +1,30 @@
+﻿@model IEnumerable<BoekingViewModel>
+
+<h2>Boekingen</h2>
+<a href="/boekingen/create">Nieuwe Boeking</a>
+<table>
+    <thead>
+    <tr>
+        <th>Datum</th>
+        <th>ContactNaam</th>
+        <th>TotaalPrijs</th>
+        <th>Acties</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var boeking in Model)
+    {
+        <tr>
+            <td>@boeking.Datum.ToShortDateString()</td>
+            <td>@boeking.ContactNaam</td>
+            <td>@boeking.TotaalPrijs</td>
+            <td>
+                <a href="/boekingen/details/@boeking.Id">Details</a>
+                <form method="post" action="/boekingen/delete/@boeking.Id" style="display:inline;">
+                    <button type="submit">Verwijderen</button>
+                </form>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

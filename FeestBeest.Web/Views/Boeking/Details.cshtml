@@ -1,0 +1,37 @@
+﻿@model BoekingViewModel
+
+<h2>Boeking Details</h2>
+<div>
+    <label>Datum:</label>
+    <span>@Model.Datum.ToShortDateString()</span>
+</div>
+<div>
+    <label>ContactNaam:</label>
+    <span>@Model.ContactNaam</span>
+</div>
+<div>
+    <label>ContactAdres:</label>
+    <span>@Model.ContactAdres</span>
+</div>
+<div>
+    <label>ContactEmail:</label>
+    <span>@Model.ContactEmail</span>
+</div>
+<div>
+    <label>ContactTelefoonnummer:</label>
+    <span>@Model.ContactTelefoonnummer</span>
+</div>
+<div>
+    <label>TotaalPrijs:</label>
+    <span>@Model.TotaalPrijs</span>
+</div>
+<div>
+    <label>Beestjes:</label>
+    <ul>
+        @foreach (var beestje in Model.Beestjes)
+        {
+            <li>@beestje.Naam (@beestje.Type) - €@beestje.Prijs</li>
+        }
+    </ul>
+</div>
+<a href="/boekingen">Terug naar overzicht</a>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using FeestBeest.Data.Models;
 
@@ -27,6 +28,5 @@ public class Boeking
     public int? AccountId { get; set; }
     public Account? Account { get; set; }
 
-    public int? BeestjeId { get; set; } // Add this property to reference Beestje
-    public Beestje? Beestje { get; set; } // Add this property to reference Beestje
+    public List<Beestje> Beestjes { get; set; } = new List<Beestje>(); // Use a collection to reference multiple Beestjes
 }

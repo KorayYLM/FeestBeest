@@ -1,12 +1,11 @@
-﻿
-using FeestBeest.Data.Models;
+﻿using FeestBeest.Data.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace FeestBeest.Data
 {
-    public class FeestBeestContext : IdentityDbContext<Account,IdentityRole<int>,int>
+    public class FeestBeestContext : IdentityDbContext<Account, IdentityRole<int>, int>
     {
         public FeestBeestContext(DbContextOptions<FeestBeestContext> options)
             : base(options)
@@ -34,9 +33,12 @@ namespace FeestBeest.Data
                     .WithMany(a => a.Boekingen)
                     .HasForeignKey(e => e.AccountId);
 
-                entity.HasOne(e => e.Beestje)
+                entity.HasMany(e => e.Beestjes)
                     .WithMany(b => b.Boekingen)
-                    .HasForeignKey(e => e.BeestjeId);
+                    .UsingEntity<Dictionary<string, object>>(
+                        "BoekingBeestje",
+                        j => j.HasOne<Beestje>().WithMany().HasForeignKey("BeestjeId"),
+                        j => j.HasOne<Boeking>().WithMany().HasForeignKey("BoekingId"));
             });
 
             modelBuilder.Entity<Beestje>(entity =>
@@ -48,7 +50,7 @@ namespace FeestBeest.Data
                 entity.Property(e => e.Type).IsRequired();
 
                 entity.HasData(
-                    new Beestje { Id = 1, Naam = "Aap", Type = "Jungle", Prijs = 100.00m, Afbeelding = "monkey.png"}, 
+                    new Beestje { Id = 1, Naam = "Aap", Type = "Jungle", Prijs = 100.00m, Afbeelding = "monkey.png" },
                     new Beestje { Id = 2, Naam = "Olifant", Type = "Jungle", Prijs = 300.00m, Afbeelding = "elephant.png" },
                     new Beestje { Id = 3, Naam = "Zebra", Type = "Jungle", Prijs = 220.00m, Afbeelding = "zebra.png" },
                     new Beestje { Id = 4, Naam = "Leeuw", Type = "Jungle", Prijs = 250.00m, Afbeelding = "lion.png" },
@@ -66,8 +68,6 @@ namespace FeestBeest.Data
                     new Beestje { Id = 16, Naam = "Unicorn", Type = "VIP", Prijs = 1500.00m, Afbeelding = "unicorn.png" }
                 );
             });
-
-     
 
             modelBuilder.Entity<IdentityRole<int>>().HasData(
                 new IdentityRole<int> { Id = 1, Name = "Admin", NormalizedName = "ADMIN" },
@@ -102,7 +102,6 @@ namespace FeestBeest.Data
                     Naam = "Koray Yilmaz"
                 }
             );
-            
         }
     }
 }
