@@ -5,16 +5,18 @@
     <div class="flex justify-center items-center space-x-32 mb-4">
         @foreach (var step in new[] { "Beestjes", "Gegevens", "Bevestig" })
         {
-            var isCurrent = step == "Beestjes" || step == "Gegevens";
-            var isCompleted = step == "Beestjes";
+            var currentIndex = Array.IndexOf(new[] { "Beestjes", "Gegevens", "Bevestig" }, step);
+            var isCompleted = currentIndex < 1; // Alleen "Beestjes" voltooid
+            var isCurrent = currentIndex == 1; // "Gegevens" is huidig
+
             <div class="relative flex flex-col items-center">
-                <div class="w-8 h-8 @((isCompleted || isCurrent) ? "bg-blue-500" : "bg-gray-300") rounded-full flex items-center justify-center text-white font-bold">
-                    @(Array.IndexOf(new[] { "Beestjes", "Gegevens", "Bevestig" }, step) + 1)
+                <div class="w-8 h-8 @(isCompleted || isCurrent ? "bg-blue-500" : "bg-gray-300") rounded-full flex items-center justify-center text-white font-bold">
+                    @(currentIndex + 1)
                 </div>
                 <span class="text-sm mt-2">@step</span>
                 @if (step != "Bevestig")
                 {
-                    <div class="absolute top-1/2 transform -translate-y-1/2 w-full h-1 @((isCompleted || isCurrent) ? "bg-blue-500" : "bg-gray-300")"></div>
+                    <div class="absolute top-1/2 transform -translate-y-1/2 w-full h-1 @(isCompleted || isCurrent ? "bg-blue-500" : "bg-gray-300")"></div>
                 }
             </div>
         }
@@ -23,21 +25,21 @@
     <div class="flex justify-between items-start mt-4">
         <!-- Linkerzijde: Beestjes selecteren -->
         <div class="w-3/4">
-            <h3>Stap 1: Selecteer de beestjes die je wilt boeken:</h3>
-            <form asp-controller="Boeking" asp-action="Create" method="post">
-                <input type="hidden" name="SelectedDate" value="@Model.SelectedDate.ToString("yyyy-MM-dd")" />
+            <h3 class="text-xl font-bold mb-4">Stap 1: Selecteer de beestjes die je wilt boeken:</h3>
+            <form asp-controller="Boeking" asp-action="Gegevensinvullen" method="post">
+                <input type="hidden" name="SelectedDate" value="@Model.SelectedDate.ToString("yyyy-MM-dd")"/>
                 <div class="grid grid-cols-6 gap-4">
                     @foreach (var beestje in Model.Beestjes)
                     {
                         <div class="bg-white border border-gray-200 rounded-lg shadow-lg p-4">
-                            <img src="~/Img/Beestjes/@beestje.Afbeelding" class="h-32 w-full object-contain mb-4" />
+                            <img src="~/Img/Beestjes/@beestje.Afbeelding" class="h-32 w-full object-contain mb-4" alt="Afbeelding van @beestje.Naam"/>
                             <div class="text-lg font-bold mb-2">@beestje.Naam</div>
-                            <div class="text-gray-700 mb-4">@beestje.Type</div>
+                            <div class="text-gray-700 mb-2">@beestje.Type</div>
                             <div class="text-gray-900 font-semibold mb-4">€@beestje.Prijs</div>
                             <div class="flex justify-center">
                                 <label class="flex items-center cursor-pointer">
                                     <input type="checkbox" name="SelectedBeestjesIds" value="@beestje.Id" class="form-checkbox h-5 w-5 text-blue-600 mr-2"
-                                           data-id="@beestje.Id" data-naam="@beestje.Naam" data-prijs="@beestje.Prijs" data-afbeelding="@Url.Content("~/Img/Beestjes/" + beestje.Afbeelding)" />
+                                           data-id="@beestje.Id" data-naam="@beestje.Naam" data-prijs="@beestje.Prijs" data-afbeelding="@Url.Content("~/Img/Beestjes/" + beestje.Afbeelding)"/>
                                     <span>Selecteer</span>
                                 </label>
                             </div>
@@ -69,10 +71,10 @@
 
         checkboxes.forEach(checkbox => {
             checkbox.addEventListener("change", () => {
-                const beestjeId = checkbox.getAttribute("data-id");
-                const naam = checkbox.getAttribute("data-naam");
-                const prijs = checkbox.getAttribute("data-prijs");
-                const afbeelding = checkbox.getAttribute("data-afbeelding");
+                const beestjeId = checkbox.dataset.id;
+                const naam = checkbox.dataset.naam;
+                const prijs = checkbox.dataset.prijs;
+                const afbeelding = checkbox.dataset.afbeelding;
 
                 if (checkbox.checked) {
                     // Beestje toevoegen aan de lijst
@@ -80,7 +82,7 @@
                     listItem.setAttribute("data-id", beestjeId);
                     listItem.className = "flex items-center mb-2";
                     listItem.innerHTML = `
-                        <img src="${afbeelding}" class="h-10 w-10 object-contain mr-2" />
+                        <img src="${afbeelding}" class="h-10 w-10 object-contain mr-2" alt="${naam}" />
                         <span>${naam} - €${prijs}</span>
                     `;
                     selectedBeestjesList.appendChild(listItem);

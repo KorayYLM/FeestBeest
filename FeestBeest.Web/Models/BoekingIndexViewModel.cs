@@ -12,7 +12,7 @@ namespace FeestBeest.Web.Models
         public List<BoekingViewModel> Boekingen { get; set; }
         public List<Beestje> Beestjes { get; set; }
         
-        
+        public int Id { get; set; }
         public string ContactNaam { get; set; }
         public string ContactAdres { get; set; }
         public string ContactEmail { get; set; }

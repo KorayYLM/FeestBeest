@@ -1,35 +1,55 @@
 ﻿@model GegevensInvullenViewModel
 
+<div class="container mx-auto p-6">
+    <!-- Titel -->
+    <h2 class="text-2xl font-bold mb-6">Gegevens Invullen</h2>
 
-<h2>Gegevens Invullen</h2>
-<form asp-action="GegevensInvullen" method="post">
-    <!-- Add form fields for additional details here -->
-    <div>
-        <label>ContactNaam</label>
-        <input asp-for="ContactNaam" />
-    </div>
-    <div>
-        <label>ContactAdres</label>
-        <input asp-for="ContactAdres" />
-    </div>
-    <div>
-        <label>ContactEmail</label>
-        <input asp-for="ContactEmail" />
-    </div>
-    <div>
-        <label>ContactTelefoonnummer</label>
-        <input asp-for="ContactTelefoonnummer" />
-    </div>
-    <button type="submit">Volgende stap</button>
-</form>
+    <!-- Formulier -->
+    <form asp-action="GegevensInvullen" method="post" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <div class="mb-4">
+            <label for="ContactNaam" class="block text-gray-700 text-sm font-bold mb-2">Naam</label>
+            <input asp-for="ContactNaam" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Voer uw naam in" />
+            <span asp-validation-for="ContactNaam" class="text-red-500 text-xs"></span>
+        </div>
 
+        <div class="mb-4">
+            <label for="ContactAdres" class="block text-gray-700 text-sm font-bold mb-2">Adres</label>
+            <input asp-for="ContactAdres" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Voer uw adres in" />
+            <span asp-validation-for="ContactAdres" class="text-red-500 text-xs"></span>
+        </div>
 
+        <div class="mb-4">
+            <label for="ContactEmail" class="block text-gray-700 text-sm font-bold mb-2">E-mail</label>
+            <input asp-for="ContactEmail" type="email" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Voer uw e-mailadres in" />
+            <span asp-validation-for="ContactEmail" class="text-red-500 text-xs"></span>
+        </div>
 
-<!-- Rechterzijde: Geselecteerde details -->
-<div class="w-1/4 bg-white border border-gray-200 rounded-lg shadow-lg p-4 ml-12">
-    <h3 class="text-lg font-bold mb-4">Geselecteerde Gegevens</h3>
-    <p><strong>Datum:</strong> @Model.SelectedDate.ToShortDateString()</p>
-    <h4 class="text-md font-semibold mt-4">Geselecteerde Beestjes:</h4>
-    <ul id="selected-beestjes-list" class="list-disc list-inside"></ul>
+        <div class="mb-4">
+            <label for="ContactTelefoonnummer" class="block text-gray-700 text-sm font-bold mb-2">Telefoonnummer</label>
+            <input asp-for="ContactTelefoonnummer" type="tel" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Voer uw telefoonnummer in" />
+            <span asp-validation-for="ContactTelefoonnummer" class="text-red-500 text-xs"></span>
+        </div>
+
+        <div class="flex items-center justify-between">
+            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                Volgende stap
+            </button>
+        </div>
+    </form>
+
+    <!-- Rechterzijde: Geselecteerde details -->
+    <div class="w-full lg:w-1/4 bg-white border border-gray-200 rounded-lg shadow-lg p-6 mt-8 lg:mt-0 lg:ml-12">
+        <h3 class="text-lg font-bold mb-4">Geselecteerde Gegevens</h3>
+        <p><strong>Datum:</strong> @Model.SelectedDate.ToShortDateString()</p>
+        <h4 class="text-md font-semibold mt-4">Geselecteerde Beestjes:</h4>
+        <ul class="list-disc list-inside">
+            @foreach (var beestje in Model.SelectedBeestjes)
+            {
+                <li class="flex items-center mb-2">
+                    <img src="~/Img/Beestjes/@beestje.Afbeelding" class="h-10 w-10 object-contain mr-2" alt="@beestje.Naam" />
+                    <span>@beestje.Naam - &euro;@beestje.Prijs</span>
+                </li>
+            }
+        </ul>
+    </div>
 </div>
-\

@@ -59,10 +59,7 @@ public class BoekingController : Controller
             };
             var createdBoeking = await _boekingService.MaakBoekingAsync(boeking);
 
-            // Store the booking ID in TempData
-            TempData["BoekingId"] = createdBoeking.Id;
-
-            return RedirectToAction("GegevensInvullen");
+            return RedirectToAction("GegevensInvullen", new { id = createdBoeking.Id });
         }
         else
         {
@@ -72,23 +69,17 @@ public class BoekingController : Controller
         return View(model);
     }
 
-    [HttpGet("gegevensinvullen")]
-    public async Task<IActionResult> GegevensInvullen()
+   // Gegevens invullen
+    [HttpGet("gegevensinvullen/{id}")]
+    public async Task<IActionResult> GegevensInvullen(int id)
     {
-        // Haal data uit TempData
-        var boekingId = TempData["BoekingId"] as int?;
-        if (!boekingId.HasValue)
-        {
-            return RedirectToAction("Index"); // Terug naar stap 1 als data ontbreekt
-        }
-
-        var boeking = await _boekingService.GetBoekingByIdAsync(boekingId.Value);
+        var boeking = await _boekingService.GetBoekingByIdAsync(id);
         if (boeking == null)
         {
+            _logger.LogWarning("Boeking niet gevonden: {Id}", id);
             return RedirectToAction("Index");
         }
 
-        // Maak het model aan
         var model = new GegevensInvullenViewModel
         {
             SelectedDate = boeking.Datum,
@@ -105,54 +96,52 @@ public class BoekingController : Controller
         return View(model);
     }
 
-    [HttpPost("gegevensinvullen")]
+    [HttpPost("gegevensinvullen/{id}")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> GegevensInvullen(GegevensInvullenViewModel model)
+    public async Task<IActionResult> GegevensInvullen(int id, GegevensInvullenViewModel model)
     {
+        var boeking = await _boekingService.GetBoekingByIdAsync(id);
+        if (boeking == null)
+        {
+            _logger.LogWarning("Boeking niet gevonden: {Id}", id);
+            return RedirectToAction("Index");
+        }
+
         if (ModelState.IsValid)
         {
-            var boekingId = TempData["BoekingId"] as int?;
-            if (!boekingId.HasValue)
-            {
-                return RedirectToAction("Index");
-            }
-
-            var boeking = await _boekingService.GetBoekingByIdAsync(boekingId.Value);
-            if (boeking == null)
-            {
-                return RedirectToAction("Index");
-            }
-
-            // Update the booking with additional information
             boeking.ContactNaam = model.ContactNaam;
             boeking.ContactAdres = model.ContactAdres;
             boeking.ContactEmail = model.ContactEmail;
             boeking.ContactTelefoonnummer = model.ContactTelefoonnummer;
 
             await _boekingService.UpdateBoekingAsync(boeking);
-
-            return RedirectToAction("Bevestigen");
+            return RedirectToAction("Bevestigen", new { id = boeking.Id });
         }
+
+        model.SelectedDate = boeking.Datum;
+        model.SelectedBeestjes = boeking.Beestjes.Select(b => new Beestje
+        {
+            Id = b.Id,
+            Naam = b.Naam,
+            Type = b.Type,
+            Prijs = b.Prijs,
+            Afbeelding = b.Afbeelding
+        }).ToList();
 
         return View(model);
     }
 
-    [HttpGet("bevestigen")]
-    public async Task<IActionResult> Bevestigen()
+    // Bevestiging
+    [HttpGet("bevestigen/{id}")]
+    public async Task<IActionResult> Bevestigen(int id)
     {
-        var boekingId = TempData["BoekingId"] as int?;
-        if (!boekingId.HasValue)
-        {
-            return RedirectToAction("Index");
-        }
-
-        var boeking = await _boekingService.GetBoekingByIdAsync(boekingId.Value);
+        var boeking = await _boekingService.GetBoekingByIdAsync(id);
         if (boeking == null)
         {
+            _logger.LogWarning("Boeking niet gevonden: {Id}", id);
             return RedirectToAction("Index");
         }
 
-        // Maak het model aan
         var model = new BevestigenViewModel
         {
             Boeking = boeking
@@ -161,53 +150,34 @@ public class BoekingController : Controller
         return View(model);
     }
 
-    [HttpPost("bevestigen")]
+    [HttpPost("bevestigen/{id}")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Bevestigen(BevestigenViewModel model)
+    public async Task<IActionResult> ConfirmBevestigen(int id)
     {
-        var boekingId = TempData["BoekingId"] as int?;
-        if (!boekingId.HasValue)
-        {
-            return RedirectToAction("Index");
-        }
-
-        var boeking = await _boekingService.GetBoekingByIdAsync(boekingId.Value);
+        var boeking = await _boekingService.GetBoekingByIdAsync(id);
         if (boeking == null)
         {
+            _logger.LogWarning("Boeking niet gevonden: {Id}", id);
             return RedirectToAction("Index");
         }
 
-        // Mark the booking as confirmed
         boeking.IsBevestigd = true;
         await _boekingService.UpdateBoekingAsync(boeking);
-
         return RedirectToAction("Details", new { id = boeking.Id });
     }
 
-    [HttpGet("create")]
-    public IActionResult Create()
-    {
-        return View(new BoekingViewModel());
-    }
-
+    // Details van een boeking
     [HttpGet("details/{id}")]
     public async Task<IActionResult> Details(int id)
     {
         var boeking = await _boekingService.GetBoekingByIdAsync(id);
         if (boeking == null)
         {
+            _logger.LogWarning("Boeking niet gevonden: {Id}", id);
             return NotFound();
         }
 
         var viewModel = BoekingViewModel.FromDto(boeking);
         return View(viewModel);
-    }
-
-    [HttpPost("delete/{id}")]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Delete(int id)
-    {
-        await _boekingService.VerwijderBoekingAsync(id);
-        return RedirectToAction(nameof(Index));
     }
 }
