@@ -28,6 +28,7 @@ namespace FeestBeest.Data
                 entity.Property(e => e.ContactEmail).HasMaxLength(100);
                 entity.Property(e => e.ContactTelefoonnummer).HasMaxLength(15);
                 entity.Property(e => e.TotaalPrijs).HasColumnType("decimal(18,2)");
+                entity.Property(e => e.IsBevestigd).IsRequired(); // Add this line
 
                 entity.HasOne(e => e.Account)
                     .WithMany(a => a.Boekingen)

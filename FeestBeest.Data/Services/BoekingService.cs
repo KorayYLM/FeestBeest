@@ -1,5 +1,4 @@
-﻿// File: FeestBeest.Data/Services/BoekingService.cs
-using FeestBeest.Data;
+﻿using FeestBeest.Data;
 using FeestBeest.Data.Dto;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -47,6 +46,7 @@ public class BoekingService : IBoekingService
             ContactEmail = boekingDto.ContactEmail,
             ContactTelefoonnummer = boekingDto.ContactTelefoonnummer,
             TotaalPrijs = boekingDto.TotaalPrijs,
+            IsBevestigd = boekingDto.IsBevestigd,
             Beestjes = boekingDto.Beestjes.Select(b => new Beestje
             {
                 Id = b.Id,
@@ -69,6 +69,7 @@ public class BoekingService : IBoekingService
             ContactEmail = boeking.ContactEmail,
             ContactTelefoonnummer = boeking.ContactTelefoonnummer,
             TotaalPrijs = boeking.TotaalPrijs,
+            IsBevestigd = boeking.IsBevestigd,
             Beestjes = boeking.Beestjes.Select(b => new BeestjeDto
             {
                 Id = b.Id,
@@ -79,7 +80,59 @@ public class BoekingService : IBoekingService
             }).ToList()
         };
     }
-    
+
+    public async Task<BoekingDto> UpdateBoekingAsync(BoekingDto boekingDto)
+    {
+        var boeking = await _context.Boekingen
+            .Include(b => b.Beestjes)
+            .FirstOrDefaultAsync(b => b.Id == boekingDto.Id);
+
+        if (boeking == null)
+        {
+            return null;
+        }
+
+        boeking.Datum = boekingDto.Datum;
+        boeking.ContactNaam = boekingDto.ContactNaam;
+        boeking.ContactAdres = boekingDto.ContactAdres;
+        boeking.ContactEmail = boekingDto.ContactEmail;
+        boeking.ContactTelefoonnummer = boekingDto.ContactTelefoonnummer;
+        boeking.TotaalPrijs = boekingDto.TotaalPrijs;
+        boeking.IsBevestigd = boekingDto.IsBevestigd;
+
+        boeking.Beestjes.Clear();
+        boeking.Beestjes.AddRange(boekingDto.Beestjes.Select(b => new Beestje
+        {
+            Id = b.Id,
+            Naam = b.Naam,
+            Type = b.Type,
+            Prijs = b.Prijs,
+            Afbeelding = b.Afbeelding
+        }));
+
+        await _context.SaveChangesAsync();
+
+        return new BoekingDto
+        {
+            Id = boeking.Id,
+            Datum = boeking.Datum,
+            ContactNaam = boeking.ContactNaam,
+            ContactAdres = boeking.ContactAdres,
+            ContactEmail = boeking.ContactEmail,
+            ContactTelefoonnummer = boeking.ContactTelefoonnummer,
+            TotaalPrijs = boeking.TotaalPrijs,
+            IsBevestigd = boeking.IsBevestigd,
+            Beestjes = boeking.Beestjes.Select(b => new BeestjeDto
+            {
+                Id = b.Id,
+                Naam = b.Naam,
+                Type = b.Type,
+                Prijs = b.Prijs,
+                Afbeelding = b.Afbeelding
+            }).ToList()
+        };
+    }
+
     public async Task<List<Beestje>> GetBeschikbareBeestjesMappedAsync(DateTime selectedDate)
     {
         var beestjesDto = await GetBeschikbareBeestjesAsync(selectedDate);
@@ -113,6 +166,7 @@ public class BoekingService : IBoekingService
             ContactEmail = boeking.ContactEmail,
             ContactTelefoonnummer = boeking.ContactTelefoonnummer,
             TotaalPrijs = boeking.TotaalPrijs,
+            IsBevestigd = boeking.IsBevestigd,
             Beestjes = boeking.Beestjes.Select(b => new BeestjeDto
             {
                 Id = b.Id,
@@ -139,6 +193,7 @@ public class BoekingService : IBoekingService
             ContactEmail = b.ContactEmail,
             ContactTelefoonnummer = b.ContactTelefoonnummer,
             TotaalPrijs = b.TotaalPrijs,
+            IsBevestigd = b.IsBevestigd,
             Beestjes = b.Beestjes.Select(be => new BeestjeDto
             {
                 Id = be.Id,

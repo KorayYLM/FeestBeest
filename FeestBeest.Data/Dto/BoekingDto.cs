@@ -9,5 +9,6 @@ public class BoekingDto
     public string ContactEmail { get; set; }
     public string ContactTelefoonnummer { get; set; }
     public decimal TotaalPrijs { get; set; }
+    public bool IsBevestigd { get; set; } // Add this property
     public List<BeestjeDto> Beestjes { get; set; }
 }

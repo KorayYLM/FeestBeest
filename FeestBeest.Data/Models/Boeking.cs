@@ -25,8 +25,10 @@ public class Boeking
     [Range(0, 9999.99)]
     public decimal TotaalPrijs { get; set; }
 
+    public bool IsBevestigd { get; set; } 
+
     public int? AccountId { get; set; }
     public Account? Account { get; set; }
 
-    public List<Beestje> Beestjes { get; set; } = new List<Beestje>(); // Use a collection to reference multiple Beestjes
+    public List<Beestje> Beestjes { get; set; } = new List<Beestje>(); 
 }

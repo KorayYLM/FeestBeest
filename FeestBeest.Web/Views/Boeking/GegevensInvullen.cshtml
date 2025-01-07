@@ -1,0 +1,35 @@
+﻿@model GegevensInvullenViewModel
+
+
+<h2>Gegevens Invullen</h2>
+<form asp-action="GegevensInvullen" method="post">
+    <!-- Add form fields for additional details here -->
+    <div>
+        <label>ContactNaam</label>
+        <input asp-for="ContactNaam" />
+    </div>
+    <div>
+        <label>ContactAdres</label>
+        <input asp-for="ContactAdres" />
+    </div>
+    <div>
+        <label>ContactEmail</label>
+        <input asp-for="ContactEmail" />
+    </div>
+    <div>
+        <label>ContactTelefoonnummer</label>
+        <input asp-for="ContactTelefoonnummer" />
+    </div>
+    <button type="submit">Volgende stap</button>
+</form>
+
+
+
+<!-- Rechterzijde: Geselecteerde details -->
+<div class="w-1/4 bg-white border border-gray-200 rounded-lg shadow-lg p-4 ml-12">
+    <h3 class="text-lg font-bold mb-4">Geselecteerde Gegevens</h3>
+    <p><strong>Datum:</strong> @Model.SelectedDate.ToShortDateString()</p>
+    <h4 class="text-md font-semibold mt-4">Geselecteerde Beestjes:</h4>
+    <ul id="selected-beestjes-list" class="list-disc list-inside"></ul>
+</div>
+\
