@@ -2,15 +2,22 @@
 using FeestBeest.Data.Services;
 using FeestBeest.Web.Models;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 [Route("boekingen")]
 public class BoekingController : Controller
 {
     private readonly IBoekingService _boekingService;
+    private readonly ILogger<BoekingController> _logger;
 
-    public BoekingController(IBoekingService boekingService)
+
+    public BoekingController(IBoekingService boekingService, ILogger<BoekingController> logger)
     {
         _boekingService = boekingService;
+        _logger = logger;
+
     }
 
     [HttpGet]
@@ -21,15 +28,7 @@ public class BoekingController : Controller
         var viewModel = boekingen.Select(BoekingViewModel.FromDto).ToList();
 
         // Get all available beestjes for the selected date
-        var beestjesDto = await _boekingService.GetBeschikbareBeestjesAsync(selectedDate ?? DateTime.Now);
-        var beestjes = beestjesDto.Select(dto => new Beestje
-        {
-            Id = dto.Id,
-            Naam = dto.Naam,
-            Type = dto.Type,
-            Prijs = dto.Prijs,
-            Afbeelding = dto.Afbeelding
-        }).ToList();
+        var beestjes = await _boekingService.GetBeschikbareBeestjesMappedAsync(selectedDate ?? DateTime.Now);
 
         // Create the view model
         var model = new BoekingIndexViewModel
@@ -47,11 +46,16 @@ public class BoekingController : Controller
     {
         if (ModelState.IsValid)
         {
-            // Process the selected beestjes
-            var selectedBeestjes = model.Beestjes.Where(b => model.SelectedBeestjes.Any(sb => sb.Id == b.Id)).ToList();
-            model.SelectedBeestjes = selectedBeestjes;
+            // Get all available beestjes for the selected date
+            var allBeestjes = await _boekingService.GetBeschikbareBeestjesMappedAsync(model.SelectedDate);
 
-            // Continue with your logic
+            // Map selected IDs to Beestjes
+            model.SelectedBeestjes = allBeestjes
+                .Where(b => model.SelectedBeestjesIds.Contains(b.Id))
+                .ToList();
+
+            // Update the model with all beestjes
+            model.Beestjes = allBeestjes;
         }
 
         return View(model);

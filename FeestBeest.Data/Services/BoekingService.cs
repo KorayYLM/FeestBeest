@@ -79,6 +79,19 @@ public class BoekingService : IBoekingService
             }).ToList()
         };
     }
+    
+    public async Task<List<Beestje>> GetBeschikbareBeestjesMappedAsync(DateTime selectedDate)
+    {
+        var beestjesDto = await GetBeschikbareBeestjesAsync(selectedDate);
+        return beestjesDto.Select(dto => new Beestje
+        {
+            Id = dto.Id,
+            Naam = dto.Naam,
+            Type = dto.Type,
+            Prijs = dto.Prijs,
+            Afbeelding = dto.Afbeelding
+        }).ToList();
+    }
 
     public async Task<BoekingDto> GetBoekingByIdAsync(int id)
     {
