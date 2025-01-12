@@ -13,7 +13,9 @@ public class BoekingViewModel
     public string ContactEmail { get; set; }
     public string ContactTelefoonnummer { get; set; }
     public decimal TotaalPrijs { get; set; }
-    public bool IsBevestigd { get; set; } // Add this property
+    public decimal Korting { get; set; } // Add this property
+    public decimal TeBetalen { get; set; } // Add this property
+    public bool IsBevestigd { get; set; }
     public List<BeestjeViewModel> Beestjes { get; set; }
 
     public static BoekingViewModel FromDto(BoekingDto dto)
@@ -27,7 +29,9 @@ public class BoekingViewModel
             ContactEmail = dto.ContactEmail,
             ContactTelefoonnummer = dto.ContactTelefoonnummer,
             TotaalPrijs = dto.TotaalPrijs,
-            IsBevestigd = dto.IsBevestigd, // Add this line
+            Korting = dto.Korting, // Add this line
+            TeBetalen = dto.TeBetalen, // Add this line
+            IsBevestigd = dto.IsBevestigd,
             Beestjes = dto.Beestjes.Select(BeestjeViewModel.FromDto).ToList()
         };
     }
@@ -43,7 +47,9 @@ public class BoekingViewModel
             ContactEmail = this.ContactEmail,
             ContactTelefoonnummer = this.ContactTelefoonnummer,
             TotaalPrijs = this.TotaalPrijs,
-            IsBevestigd = this.IsBevestigd, // Add this line
+            Korting = this.Korting, // Add this line
+            TeBetalen = this.TeBetalen, // Add this line
+            IsBevestigd = this.IsBevestigd,
             Beestjes = this.Beestjes.Select(b => b.ToDto()).ToList()
         };
     }

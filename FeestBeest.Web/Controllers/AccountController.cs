@@ -72,37 +72,39 @@ public class AccountController : Controller
     }
 
     [HttpGet]
-    public IActionResult Login()
+    public IActionResult Login(string returnUrl = null)
     {
-        return View(new LoginViewModel());
+        ViewData["ReturnUrl"] = returnUrl;
+        return View();
     }
 
     [HttpPost]
-    public async Task<IActionResult> Login(LoginViewModel model)
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null)
     {
-        if (!ModelState.IsValid)
+        ViewData["ReturnUrl"] = returnUrl;
+        if (ModelState.IsValid)
         {
-            return View(model);
+            var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
+            if (result.Succeeded)
+            {
+                if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+                {
+                    return Redirect(returnUrl);
+                }
+                else
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+            }
         }
 
-        var user = await _userManager.FindByEmailAsync(model.Email);
-        if (user == null)
-        {
-            ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-            return View(model);
-        }
-
-        var passwordHasher = new PasswordHasher<Account>();
-        var verificationResult = passwordHasher.VerifyHashedPassword(user, user.PasswordHash, model.Password);
-        if (verificationResult == PasswordVerificationResult.Failed)
-        {
-            ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-            return View(model);
-        }
-
-        await _signInManager.SignInAsync(user, model.RememberMe);
-        _logger.LogInformation("User logged in with email: {Email}", model.Email);
-        return RedirectToAction("Index", "Home");
+        // If we got this far, something failed, redisplay form
+        return View(model);
     }
 
     [HttpPost]

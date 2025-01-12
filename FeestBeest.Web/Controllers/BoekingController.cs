@@ -61,16 +61,13 @@ public class BoekingController : Controller
 
             return RedirectToAction("GegevensInvullen", new { id = createdBoeking.Id });
         }
-        else
-        {
-            model.Beestjes = new List<Beestje>();
-        }
 
+        model.Beestjes = new List<Beestje>();
         return View(model);
     }
 
     [HttpGet("gegevensinvullen")]
-    public async Task<IActionResult> Gegevensinvullen(DateTime selectedDate, List<int> selectedBeestjesIds)
+    public async Task<IActionResult> GegevensInvullen(DateTime selectedDate, List<int> selectedBeestjesIds)
     {
         var beestjes = await _boekingService.GetBeschikbareBeestjesMappedAsync(selectedDate);
         var selectedBeestjes = beestjes.Where(b => selectedBeestjesIds.Contains(b.Id)).ToList();
@@ -119,7 +116,6 @@ public class BoekingController : Controller
         return View(model);
     }
 
-    // Bevestiging
     [HttpGet("bevestigen/{id}")]
     public async Task<IActionResult> Bevestigen(int id)
     {
@@ -154,7 +150,6 @@ public class BoekingController : Controller
         return RedirectToAction("Details", new { id = boeking.Id });
     }
 
-    // Details van een boeking
     [HttpGet("details/{id}")]
     public async Task<IActionResult> Details(int id)
     {
@@ -162,7 +157,7 @@ public class BoekingController : Controller
         if (boeking == null)
         {
             _logger.LogWarning("Boeking niet gevonden: {Id}", id);
-            return NotFound();
+            return RedirectToAction("Index");
         }
 
         var viewModel = BoekingViewModel.FromDto(boeking);
