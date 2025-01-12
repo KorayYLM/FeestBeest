@@ -26,7 +26,7 @@
         <!-- Linkerzijde: Beestjes selecteren -->
         <div class="w-3/4">
             <h3 class="text-xl font-bold mb-4">Stap 1: Selecteer de beestjes die je wilt boeken:</h3>
-            <form asp-controller="Boeking" asp-action="Gegevensinvullen" method="post">
+            <form asp-controller="Boeking" asp-action="Gegevensinvullen" method="get">
                 <input type="hidden" name="SelectedDate" value="@Model.SelectedDate.ToString("yyyy-MM-dd")"/>
                 <div class="grid grid-cols-6 gap-4">
                     @foreach (var beestje in Model.Beestjes)

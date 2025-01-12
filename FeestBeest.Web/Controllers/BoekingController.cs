@@ -69,28 +69,16 @@ public class BoekingController : Controller
         return View(model);
     }
 
-   // Gegevens invullen
-    [HttpGet("gegevensinvullen/{id}")]
-    public async Task<IActionResult> GegevensInvullen(int id)
+    [HttpGet("gegevensinvullen")]
+    public async Task<IActionResult> Gegevensinvullen(DateTime selectedDate, List<int> selectedBeestjesIds)
     {
-        var boeking = await _boekingService.GetBoekingByIdAsync(id);
-        if (boeking == null)
-        {
-            _logger.LogWarning("Boeking niet gevonden: {Id}", id);
-            return RedirectToAction("Index");
-        }
+        var beestjes = await _boekingService.GetBeschikbareBeestjesMappedAsync(selectedDate);
+        var selectedBeestjes = beestjes.Where(b => selectedBeestjesIds.Contains(b.Id)).ToList();
 
         var model = new GegevensInvullenViewModel
         {
-            SelectedDate = boeking.Datum,
-            SelectedBeestjes = boeking.Beestjes.Select(b => new Beestje
-            {
-                Id = b.Id,
-                Naam = b.Naam,
-                Type = b.Type,
-                Prijs = b.Prijs,
-                Afbeelding = b.Afbeelding
-            }).ToList()
+            SelectedDate = selectedDate,
+            SelectedBeestjes = selectedBeestjes
         };
 
         return View(model);

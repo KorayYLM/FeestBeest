@@ -1,8 +1,9 @@
 ﻿public class GegevensInvullenViewModel
 {
-    public DateTime SelectedDate { get; set; } 
     
-    public List<Beestje> SelectedBeestjes { get; set; } = new List<Beestje>();
+        public DateTime SelectedDate { get; set; }
+        public List<Beestje> SelectedBeestjes { get; set; }
+    
     
     public string ContactNaam { get; set; }
     
