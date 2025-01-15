@@ -3,8 +3,6 @@ using FeestBeest.Data.Dto;
 using FeestBeest.Data.Dtos;
 using FeestBeest.Web.Models;
 
-namespace FeestBeest.Web.Models;        
-
 public class OrderViewModel
 {
     public int Id { get; set; }
@@ -33,9 +31,11 @@ public class OrderViewModel
 
     [Required]
     [DataType(DataType.Date)]
-    public DateTime Datum { get; set; }
+    public DateTime Date { get; set; }
 
     public ProductsOverViewModel ProductsOverViewModel { get; set; } = new();
+    public List<Product> Products { get; set; } = new(); // Initialize the Products property
+
     public int TotalPrice { get; set; }
     public int DiscountAmount { get; set; }
 

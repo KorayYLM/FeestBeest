@@ -17,11 +17,16 @@ public class ProductService
     public ProductDto GetProductById(int id)
     {
         var product = _context.Products.Find(id);
+        if (product == null)
+        {
+            return null;
+        }
+
         return new ProductDto
         {
             Id = product.Id,
             Name = product.Name,
-            Type = product.Type, // Use the enum directly
+            Type = product.Type, 
             Price = product.Price,
             Img = product.Img
         };
@@ -34,7 +39,7 @@ public class ProductService
             {
                 Id = product.Id,
                 Name = product.Name,
-                Type = product.Type, // Use the enum directly
+                Type = product.Type, 
                 Price = product.Price,
                 Img = product.Img
             }).ToList();
@@ -64,7 +69,7 @@ public class ProductService
         var product = new Product
         {
             Name = productDto.Name,
-            Type = productDto.Type, // Use the enum directly
+            Type = productDto.Type, 
             Price = productDto.Price,
             Img = productDto.Img
         };

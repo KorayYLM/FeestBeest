@@ -1,20 +1,21 @@
-﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+﻿<!-- Views/Order/Index.cshtml -->
+@using Microsoft.AspNetCore.Mvc.TagHelpers
 @model OrderViewModel
 
 <div class="flex items-center justify-center min-h-screen bg-gray-100">
-    <form asp-controller="Boeking" asp-action="SelectBeestje" method="get" novalidate class="w-full max-w-md p-6 bg-white rounded-lg shadow-md">
+    <form asp-controller="Order" asp-action="AddToBasket" method="post" novalidate class="w-full max-w-md p-6 bg-white rounded-lg shadow-md">
         <div class="mb-4">
-            <label asp-for="Datum" class="block text-gray-700 font-bold mb-2">Kies een datum:</label>
+            <label asp-for="Date" class="block text-gray-700 font-bold mb-2">Choose a date:</label>
             <div class="relative">
                 <input
-                    asp-for="Datum"
+                    asp-for="Date"
                     type="date"
                     class="block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
                     min="@DateTime.Now.ToString("yyyy-MM-dd")"
-                    value="@Model.Datum.ToString("yyyy-MM-dd")"
+                    value="@Model.Date.ToString("yyyy-MM-dd")"
                 />
             </div>
-            <span asp-validation-for="Datum" class="text-red-500 text-sm mt-1"></span>
+            <span asp-validation-for="Date" class="text-red-500 text-sm mt-1"></span>
         </div>
 
         <div class="mt-6">
@@ -22,7 +23,7 @@
                 type="submit"
                 class="w-full py-3 bg-blue-500 text-white font-bold rounded-md shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
             >
-                Boeken
+                Order
             </button>
         </div>
     </form>

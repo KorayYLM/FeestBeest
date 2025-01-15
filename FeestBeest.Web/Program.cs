@@ -18,6 +18,8 @@ builder.Services.AddIdentity<User, IdentityRole<int>>()
 builder.Services.AddScoped< AccountService>();
 builder.Services.AddScoped< ProductService>(); 
 builder.Services.AddScoped< OrderService>(); 
+builder.Services.AddScoped< BasketService>(); 
+
 
 // Add MVC services
 builder.Services.AddControllersWithViews();

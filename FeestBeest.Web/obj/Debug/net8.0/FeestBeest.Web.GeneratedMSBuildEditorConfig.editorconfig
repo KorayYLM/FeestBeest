@@ -30,32 +30,32 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxTaG93UGFzc3dvcmQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/pkyil/RiderProjects/FeestBeesttt/FeestBeest.Web/Views/Boeking/Confirm.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQm9la2luZ1xDb25maXJtLmNzaHRtbA==
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/pkyil/RiderProjects/FeestBeesttt/FeestBeest.Web/Views/Boeking/Details.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQm9la2luZ1xEZXRhaWxzLmNzaHRtbA==
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/pkyil/RiderProjects/FeestBeesttt/FeestBeest.Web/Views/Boeking/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQm9la2luZ1xJbmRleC5jc2h0bWw=
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/pkyil/RiderProjects/FeestBeesttt/FeestBeest.Web/Views/Boeking/Information.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQm9la2luZ1xJbmZvcm1hdGlvbi5jc2h0bWw=
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/pkyil/RiderProjects/FeestBeesttt/FeestBeest.Web/Views/Boeking/SelectProduct.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQm9la2luZ1xTZWxlY3RQcm9kdWN0LmNzaHRtbA==
-build_metadata.AdditionalFiles.CssScope = 
-
 [C:/Users/pkyil/RiderProjects/FeestBeesttt/FeestBeest.Web/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/pkyil/RiderProjects/FeestBeesttt/FeestBeest.Web/Views/Home/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/pkyil/RiderProjects/FeestBeesttt/FeestBeest.Web/Views/Order/Confirm.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcT3JkZXJcQ29uZmlybS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/pkyil/RiderProjects/FeestBeesttt/FeestBeest.Web/Views/Order/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcT3JkZXJcRGV0YWlscy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/pkyil/RiderProjects/FeestBeesttt/FeestBeest.Web/Views/Order/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcT3JkZXJcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/pkyil/RiderProjects/FeestBeesttt/FeestBeest.Web/Views/Order/Information.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcT3JkZXJcSW5mb3JtYXRpb24uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/pkyil/RiderProjects/FeestBeesttt/FeestBeest.Web/Views/Order/SelectProduct.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcT3JkZXJcU2VsZWN0UHJvZHVjdC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/pkyil/RiderProjects/FeestBeesttt/FeestBeest.Web/Views/Product/Create.cshtml]

@@ -8,14 +8,33 @@ using FeestBeest.Data.Models;
 namespace FeestBeest.Web.Controllers;
 
 [Route("/shop")]
-public class OrderController(ProductService productService, BasketService basketService, OrderService orderService, AccountService accountService) : Controller
+public class OrderController : Controller
 {
+    private readonly ProductService productService;
+    private readonly BasketService basketService;
+    private readonly OrderService orderService;
+    private readonly AccountService accountService;
+
+    public OrderController(ProductService productService, BasketService basketService, OrderService orderService, AccountService accountService)
+    {
+        this.productService = productService;
+        this.basketService = basketService;
+        this.orderService = orderService;
+        this.accountService = accountService;
+    }
+
     [HttpGet]
     public IActionResult Index(string? message = "")
     {
         ViewBag.Message = message;
         basketService.ClearBasket();
-        return View();
+
+        var model = new OrderViewModel
+        {
+            Date = DateTime.Now 
+        };
+
+        return View(model);
     }
 
     [HttpPost]
@@ -23,8 +42,7 @@ public class OrderController(ProductService productService, BasketService basket
     {
         if (date < DateOnly.FromDateTime(DateTime.Now))
         {
-            ViewBag.Message = "You can't order for a date in the past";
-            return View("Index");
+            return View("Index", new OrderViewModel { Date = DateTime.Now });
         }
         return RedirectToAction("Shop", new { date, selectedTypes = new List<ProductType>() });
     }
@@ -38,7 +56,7 @@ public class OrderController(ProductService productService, BasketService basket
             Id = dto.Id,
             Name = dto.Name,
             Price = dto.Price,
-            Type = dto.Type, // Use the enum directly
+            Type = dto.Type, 
             Img = dto.Img,
             IsInBasket = basketService.GetBasketProducts().Any(bp => bp.Id == dto.Id)
         }).ToList();
@@ -64,9 +82,9 @@ public class OrderController(ProductService productService, BasketService basket
             Id = dto.Id,
             Name = dto.Name,
             Price = dto.Price,
-            Type = dto.Type, // Use the enum directly
+            Type = dto.Type,
             Img = dto.Img,
-            IsInBasket = true // Set IsInBasket to true for basket products
+            IsInBasket = true
         }).ToList();
 
         var model = new OrderViewModel()
@@ -87,7 +105,7 @@ public class OrderController(ProductService productService, BasketService basket
     {
         if (skip)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? null;
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId != null)
             {
                 var parsedId = int.Parse(userId);
@@ -108,9 +126,9 @@ public class OrderController(ProductService productService, BasketService basket
             Id = dto.Id,
             Name = dto.Name,
             Price = dto.Price,
-            Type = dto.Type, // Use the enum directly
+            Type = dto.Type,
             Img = dto.Img,
-            IsInBasket = true // Set IsInBasket to true for basket products
+            IsInBasket = true
         }).ToList();
 
         model.ProductsOverViewModel = new ProductsOverViewModel
@@ -129,9 +147,9 @@ public class OrderController(ProductService productService, BasketService basket
             Id = dto.Id,
             Name = dto.Name,
             Price = dto.Price,
-            Type = dto.Type, // Use the enum directly
+            Type = dto.Type,
             Img = dto.Img,
-            IsInBasket = true // Set IsInBasket to true for basket products
+            IsInBasket = true
         }).ToList();
 
         model.ProductsOverViewModel = new ProductsOverViewModel
@@ -140,7 +158,7 @@ public class OrderController(ProductService productService, BasketService basket
         };
         model.TotalPrice = model.ProductsOverViewModel.Products.Sum(p => p.Price);
 
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? null;
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         var parsedId = userId != null ? int.Parse(userId) : (int?)null;
         model.DiscountAmount = model.TotalPrice * (100 - orderService.DiscountCheckRules(parsedId, model.ToDto())) / 100;
 
@@ -155,9 +173,9 @@ public class OrderController(ProductService productService, BasketService basket
             Id = dto.Id,
             Name = dto.Name,
             Price = dto.Price,
-            Type = dto.Type, // Use the enum directly
+            Type = dto.Type,
             Img = dto.Img,
-            IsInBasket = true // Set IsInBasket to true for basket products
+            IsInBasket = true
         }).ToList();
 
         model.ProductsOverViewModel = new ProductsOverViewModel
@@ -166,7 +184,7 @@ public class OrderController(ProductService productService, BasketService basket
         };
         model.TotalPrice = model.ProductsOverViewModel.Products.Sum(p => p.Price);
 
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? null;
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         var parsedId = userId != null ? int.Parse(userId) : (int?)null;
 
         var (check, result) = orderService.CreateOrder(model.ToDto(), parsedId);
@@ -188,7 +206,7 @@ public class OrderController(ProductService productService, BasketService basket
         {
             basketService.AddToBasket(product);
         }
-        return RedirectToAction("Shop", new { date, selectedTypes = new List<ProductType>() });
+        return RedirectToAction("SelectProduct", new { date, selectedTypes = new List<ProductType>() });
     }
 
     [HttpPost]
@@ -196,6 +214,34 @@ public class OrderController(ProductService productService, BasketService basket
     public IActionResult RemoveFromBasket(int productId, DateOnly date)
     {
         basketService.RemoveFromBasket(productId);
-        return RedirectToAction("Shop", new { date, selectedTypes = new List<ProductType>() });
+        return RedirectToAction("SelectProduct", new { date, selectedTypes = new List<ProductType>() });
+    }
+
+    [HttpGet("SelectProduct")]
+    public IActionResult SelectProduct(DateOnly date, List<ProductType>? selectedTypes)
+    {
+        var productDtos = productService.GetProducts(date, selectedTypes);
+        var products = productDtos.Select(dto => new Product
+        {
+            Id = dto.Id,
+            Name = dto.Name,
+            Price = dto.Price,
+            Type = dto.Type,
+            Img = dto.Img,
+            IsInBasket = basketService.GetBasketProducts().Any(bp => bp.Id == dto.Id)
+        }).ToList();
+
+        var model = new OrderViewModel()
+        {
+            OrderFor = date,
+            ProductsOverViewModel = new ProductsOverViewModel
+            {
+                Products = products,
+                SelectedTypes = selectedTypes ?? new List<ProductType>(),
+                BasketCount = basketService.GetBasketItemCount()
+            },
+            Products = products // Populate the Products property
+        };
+        return View(model);
     }
 }
