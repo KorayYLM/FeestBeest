@@ -29,38 +29,43 @@ namespace FeestBeest.Web.Controllers
             return RedirectToAction("Login");
         }
 
+        [HttpGet]
         [Route("/login")]
         public IActionResult Login()
         {
             return View();
         }
 
-        [HttpPost("/login/check")]
-        public async Task<IActionResult> LoginCheck(string loginInput, string password)
+        [HttpPost("/login")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login(LoginViewModel model)
         {
-            var user = await _userManager.FindByEmailAsync(loginInput);
-            if (user != null)
+            if (ModelState.IsValid)
             {
-                var result =
-                    await _signInManager.PasswordSignInAsync(user, password, isPersistent: false,
-                        lockoutOnFailure: false);
-                if (result.Succeeded)
+                var user = await _userManager.FindByEmailAsync(model.Email);
+                if (user != null)
                 {
-                    if (await _userManager.IsInRoleAsync(user, "Customer"))
+                    var result = await _signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, lockoutOnFailure: false);
+                    if (result.Succeeded)
                     {
-                        return RedirectToAction("Index", "Order");
-                    }
+                        if (await _userManager.IsInRoleAsync(user, "Customer"))
+                        {
+                            return RedirectToAction("Index", "Order");
+                        }
 
-                    if (await _userManager.IsInRoleAsync(user, "Admin"))
-                    {
-                        return RedirectToAction("Index", "User");
-                    }
+                        if (await _userManager.IsInRoleAsync(user, "Admin"))
+                        {
+                            return RedirectToAction("Index", "home");
+                        }
 
-                    throw new InvalidOperationException("Invalid account role");
+                        throw new InvalidOperationException("Invalid account role");
+                    }
                 }
+
+                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
             }
 
-            return RedirectToAction("Login", "Account");
+            return View(model);
         }
 
         [HttpPost]

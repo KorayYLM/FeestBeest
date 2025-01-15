@@ -60,12 +60,14 @@ namespace FeestBeest.Data
 
         private static void SeedData(ModelBuilder builder)
         {
+            var passwordHasher = new PasswordHasher<User>();
+
             var user1 = new User
             {
                 Id = 1,
                 Rank = Rank.NONE,
-                UserName = "admin",
-                NormalizedUserName = "ADMIN",
+                UserName = "Carron",
+                NormalizedUserName = "Carron",
                 Email = "admin@example.com",
                 NormalizedEmail = "ADMIN@EXAMPLE.COM",
                 EmailConfirmed = true,
@@ -80,8 +82,8 @@ namespace FeestBeest.Data
             {
                 Id = 2,
                 Rank = Rank.NONE,
-                UserName = "customer",
-                NormalizedUserName = "CUSTOMER",
+                UserName = "TestUser",
+                NormalizedUserName = "TestUser",
                 Email = "customer@example.com",
                 NormalizedEmail = "CUSTOMER@EXAMPLE.COM",
                 EmailConfirmed = true,
@@ -90,8 +92,11 @@ namespace FeestBeest.Data
                 ZipCode = "1234AB",
                 SecurityStamp = Guid.NewGuid().ToString(),
                 PasswordHash = "AQAAAAIAAYagAAAAEPS3HVgGwreh2VogbGYNNcFZeVOJgO8bLRs+04f5Iucpgy+P86IRXTI4/1xQcPFG2w=="
-            };
 
+            };
+            user1.PasswordHash = passwordHasher.HashPassword(user1, "Admin123");
+            user2.PasswordHash = passwordHasher.HashPassword(user2, "User123");
+            
             builder.Entity<User>().HasData(user1, user2);
 
             builder.Entity<IdentityRole<int>>().HasData(
