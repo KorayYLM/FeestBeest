@@ -1,68 +1,44 @@
-﻿@model AccountViewModel
+﻿@model FeestBeest.Web.Models.AccountViewModel
 
-<div class="flex items-center justify-center min-h-screen w-screen bg-gray-100">
-    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-4xl mx-auto">
-        <h2 class="text-2xl font-bold mb-6 text-center">Nieuw Account</h2>
-        <form asp-action="Create" method="post" class="grid grid-cols-2 gap-16">
-            <div class="space-y-6">
-                <div>
-                    <label asp-for="Naam" class="block text-sm font-medium text-gray-700">Naam</label>
-                    <input asp-for="Naam" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"/>
-                </div>
-                <div>
-                    <label asp-for="Adres" class="block text-sm font-medium text-gray-700">Adres</label>
-                    <input asp-for="Adres" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"/>
-                </div>
-                <div>
-                    <label asp-for="Email" class="block text-sm font-medium text-gray-700">Email</label>
-                    <input asp-for="Email" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"/>
-                </div>
-                <div>
-                    <label asp-for="Telefoonnummer" class="block text-sm font-medium text-gray-700">Telefoonnummer</label>
-                    <input asp-for="Telefoonnummer" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" inputmode="numeric" maxlength="10"/>
-                </div>
+<div class="d-flex align-items-center justify-content-center min-vh-100 bg-light">
+    <div class="bg-white p-4 rounded shadow w-100" style="max-width: 30rem;">
+        <h2 class="text-center mb-4">New Account</h2>
+        <form asp-action="Create" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+            <div class="mb-3">
+                <label asp-for="Name" class="form-label">Name *</label>
+                <input asp-for="Name" class="form-control" placeholder="Name"/>
+                <span asp-validation-for="Name" class="text-danger"></span>
             </div>
-
-            <div class="space-y-4">
-                <h3 class="text-lg font-semibold">Klanttype</h3>
-                <div class="space-y-3">
-                    <!-- Geen  -->
-                    <div class="border p-4 rounded-md shadow-sm flex items-center gap-4 cursor-pointer klanttype-option" data-value="Geen">
-                        <label for="geen" class="text-sm">Geen klantenkaart</label>
-                    </div>
-                    <!-- Zilver  -->
-                    <div class="border p-4 rounded-md shadow-sm flex items-center gap-4 cursor-pointer klanttype-option" data-value="Zilver">
-                        <img src="/Img/silver.png" alt="Zilver Badge" class="w-6 h-6"/>
-                        <label for="zilver" class="text-sm">Zilver - De kaart biedt korting op niveau 2.</label>
-                    </div>
-                    <!-- Goud  -->
-                    <div class="border p-4 rounded-md shadow-sm flex items-center gap-4 cursor-pointer klanttype-option" data-value="Goud">
-                        <img src="/Img/coin.png" alt="Goud Coin" class="w-6 h-6"/>
-                        <label for="goud" class="text-sm">Goud - De kaart biedt extra diensten en 15% korting.</label>
-                    </div>
-                    <!-- Platina  -->
-                    <div class="border p-4 rounded-md shadow-sm flex items-center gap-4 cursor-pointer klanttype-option" data-value="Platina">
-                        <img src="/Img/platinum.png" alt="Platina Badge" class="w-6 h-6"/>
-                        <label for="platina" class="text-sm">Platina - Biedt toegang tot VIP-services.</label>
-                    </div>
-                </div>
-                <input type="hidden" name="KlantType" id="KlantType"/>
+            <div class="mb-3">
+                <label asp-for="Email" class="form-label">Email *</label>
+                <input asp-for="Email" class="form-control" placeholder="Email"/>
+                <span asp-validation-for="Email" class="text-danger"></span>
             </div>
-
-            <div class="col-span-2 flex justify-end space-x-4">
-                <a href="/" class="py-2 px-4 bg-gray-500 text-white font-semibold rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">Annuleren</a>
-                <button type="submit" class="py-2 px-4 bg-indigo-600 text-white font-semibold rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Account Aanmaken</button>
+            <div class="mb-3">
+                <label asp-for="ZipCode" class="form-label">ZipCode *</label>
+                <input asp-for="ZipCode" class="form-control" placeholder="ZipCode"/>
+                <span asp-validation-for="ZipCode" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="HouseNumber" class="form-label">HouseNumber *</label>
+                <input asp-for="HouseNumber" class="form-control" placeholder="HouseNumber"/>
+                <span asp-validation-for="HouseNumber" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="PhoneNumber" class="form-label">PhoneNumber *</label>
+                <input asp-for="PhoneNumber" class="form-control" placeholder="PhoneNumber"/>
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Rank" class="form-label">Rank *</label>
+                <select asp-for="Rank" class="form-select" asp-items="Html.GetEnumSelectList<FeestBeest.Data.Models.Rank>()"></select>
+                <span asp-validation-for="Rank" class="text-danger"></span>
+            </div>
+            <div class="d-flex justify-content-between pt-2">
+                <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+                <button class="btn btn-primary ms-1" type="submit">Create</button>
             </div>
         </form>
     </div>
 </div>
-
-<script>
-    document.querySelectorAll('.klanttype-option').forEach(option => {
-        option.addEventListener('click', function() {
-            document.querySelectorAll('.klanttype-option').forEach(opt => opt.classList.remove('border-green-500'));
-            this.classList.add('border-green-500');
-            document.getElementById('KlantType').value = this.getAttribute('data-value');
-        });
-    });
-</script>

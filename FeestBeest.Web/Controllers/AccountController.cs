@@ -1,5 +1,7 @@
-﻿using FeestBeest.Data.Services;
+﻿using FeestBeest.Data.Dto;
+using FeestBeest.Data.Services;
 using FeestBeest.Data.Models;
+using FeestBeest.Web.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -77,8 +79,41 @@ namespace FeestBeest.Web.Controllers
 
             return false;
         }
+
+        // Add the Create action methods
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(AccountViewModel accountViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                var userDto = new UserDto
+                {
+                    Name = accountViewModel.Name,
+                    Email = accountViewModel.Email,
+                    Rank = accountViewModel.Rank,
+                    HouseNumber = accountViewModel.HouseNumber,
+                    PhoneNumber = accountViewModel.PhoneNumber,
+                    ZipCode = accountViewModel.ZipCode
+                };
+
+                var (success, message) = await _accountService.CreateUser(userDto);
+                if (success)
+                {
+                    // Redirect to a success page or the login page
+                    return RedirectToAction("Login");
+                }
+
+                ModelState.AddModelError(string.Empty, message);
+            }
+
+            return View(accountViewModel);
+        }
     }
 }
-    
-    
-    
