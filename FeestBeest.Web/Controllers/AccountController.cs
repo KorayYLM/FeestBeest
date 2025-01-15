@@ -108,12 +108,20 @@ namespace FeestBeest.Web.Controllers
                 var (success, message) = await _accountService.CreateUser(userDto);
                 if (success)
                 {
-                    // Redirect to a success page or the login page
-                    return RedirectToAction("Login");
+                    // Redirect to ShowPassword view with the generated password
+                    return RedirectToAction("ShowPassword", new { password = message });
                 }
                 ModelState.AddModelError(string.Empty, message);
             }
             return View(accountViewModel);
         }
+        
+        public IActionResult ShowPassword(string password)
+        {
+            ViewBag.Password = password;
+            return View();
+        }
     }
+    
+    
 }
