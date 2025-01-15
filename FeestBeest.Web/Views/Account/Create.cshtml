@@ -1,43 +1,43 @@
 ﻿@model FeestBeest.Web.Models.AccountViewModel
 
-<div class="d-flex align-items-center justify-content-center min-vh-100 bg-light">
-    <div class="bg-white p-4 rounded shadow w-100" style="max-width: 30rem;">
-        <h2 class="text-center mb-4">New Account</h2>
+<div class="flex items-center justify-center min-h-screen bg-gray-100">
+    <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+        <h2 class="text-center text-2xl font-bold mb-6">New Account</h2>
         <form asp-action="Create" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
-            <div class="mb-3">
-                <label asp-for="Name" class="form-label">Name *</label>
-                <input asp-for="Name" class="form-control" placeholder="Name"/>
-                <span asp-validation-for="Name" class="text-danger"></span>
+            <div asp-validation-summary="ModelOnly" class="text-red-500 mb-4"></div>
+            <div class="mb-4">
+                <label asp-for="Name" class="block text-sm font-medium text-gray-700">Name *</label>
+                <input asp-for="Name" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" placeholder="Name"/>
+                <span asp-validation-for="Name" class="text-red-500 text-sm"></span>
             </div>
-            <div class="mb-3">
-                <label asp-for="Email" class="form-label">Email *</label>
-                <input asp-for="Email" class="form-control" placeholder="Email"/>
-                <span asp-validation-for="Email" class="text-danger"></span>
+            <div class="mb-4">
+                <label asp-for="Email" class="block text-sm font-medium text-gray-700">Email *</label>
+                <input asp-for="Email" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" placeholder="Email"/>
+                <span asp-validation-for="Email" class="text-red-500 text-sm"></span>
             </div>
-            <div class="mb-3">
-                <label asp-for="ZipCode" class="form-label">ZipCode *</label>
-                <input asp-for="ZipCode" class="form-control" placeholder="ZipCode"/>
-                <span asp-validation-for="ZipCode" class="text-danger"></span>
+            <div class="mb-4">
+                <label asp-for="ZipCode" class="block text-sm font-medium text-gray-700">ZipCode *</label>
+                <input asp-for="ZipCode" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" placeholder="ZipCode"/>
+                <span asp-validation-for="ZipCode" class="text-red-500 text-sm"></span>
             </div>
-            <div class="mb-3">
-                <label asp-for="HouseNumber" class="form-label">HouseNumber *</label>
-                <input asp-for="HouseNumber" class="form-control" placeholder="HouseNumber"/>
-                <span asp-validation-for="HouseNumber" class="text-danger"></span>
+            <div class="mb-4">
+                <label asp-for="HouseNumber" class="block text-sm font-medium text-gray-700">HouseNumber *</label>
+                <input asp-for="HouseNumber" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" placeholder="HouseNumber"/>
+                <span asp-validation-for="HouseNumber" class="text-red-500 text-sm"></span>
             </div>
-            <div class="mb-3">
-                <label asp-for="PhoneNumber" class="form-label">PhoneNumber *</label>
-                <input asp-for="PhoneNumber" class="form-control" placeholder="PhoneNumber"/>
-                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+            <div class="mb-4">
+                <label asp-for="PhoneNumber" class="block text-sm font-medium text-gray-700">PhoneNumber *</label>
+                <input asp-for="PhoneNumber" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" placeholder="PhoneNumber"/>
+                <span asp-validation-for="PhoneNumber" class="text-red-500 text-sm"></span>
             </div>
-            <div class="mb-3">
-                <label asp-for="Rank" class="form-label">Rank *</label>
-                <select asp-for="Rank" class="form-select" asp-items="Html.GetEnumSelectList<FeestBeest.Data.Models.Rank>()"></select>
-                <span asp-validation-for="Rank" class="text-danger"></span>
+            <div class="mb-4">
+                <label asp-for="Rank" class="block text-sm font-medium text-gray-700">Rank *</label>
+                <select asp-for="Rank" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" asp-items="Html.GetEnumSelectList<FeestBeest.Data.Models.Rank>()"></select>
+                <span asp-validation-for="Rank" class="text-red-500 text-sm"></span>
             </div>
-            <div class="d-flex justify-content-between pt-2">
-                <a asp-action="Index" class="btn btn-secondary">Cancel</a>
-                <button class="btn btn-primary ms-1" type="submit">Create</button>
+            <div class="flex justify-between pt-4">
+                <a asp-action="Index" class="btn btn-secondary text-gray-700 bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-md">Cancel</a>
+                <button class="btn btn-primary text-white bg-indigo-600 hover:bg-indigo-700 px-4 py-2 rounded-md" type="submit">Create</button>
             </div>
         </form>
     </div>

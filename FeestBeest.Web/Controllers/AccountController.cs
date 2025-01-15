@@ -4,6 +4,7 @@ using FeestBeest.Data.Models;
 using FeestBeest.Web.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace FeestBeest.Web.Controllers
 {
@@ -12,13 +13,15 @@ namespace FeestBeest.Web.Controllers
         private readonly AccountService _accountService;
         private readonly SignInManager<User> _signInManager;
         private readonly UserManager<User> _userManager;
+        private readonly ILogger<AccountController> _logger;
 
         public AccountController(AccountService accountService, SignInManager<User> signInManager,
-            UserManager<User> userManager)
+            UserManager<User> userManager, ILogger<AccountController> logger)
         {
             _accountService = accountService;
             _signInManager = signInManager;
             _userManager = userManager;
+            _logger = logger;
         }
 
         public IActionResult Index()
@@ -102,17 +105,14 @@ namespace FeestBeest.Web.Controllers
                     PhoneNumber = accountViewModel.PhoneNumber,
                     ZipCode = accountViewModel.ZipCode
                 };
-
                 var (success, message) = await _accountService.CreateUser(userDto);
                 if (success)
                 {
                     // Redirect to a success page or the login page
                     return RedirectToAction("Login");
                 }
-
                 ModelState.AddModelError(string.Empty, message);
             }
-
             return View(accountViewModel);
         }
     }
