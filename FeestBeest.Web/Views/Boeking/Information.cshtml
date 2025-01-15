@@ -1,0 +1,81 @@
+﻿@using FeestBeest.Data.Models
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Microsoft.EntityFrameworkCore
+@model OrderViewModel
+
+@{
+    ViewData["Title"] = "Products";
+    ViewData["date"] = Model.OrderFor; 
+    ViewData["step"] = "Contact";
+}
+
+<div class="container mx-auto p-6">
+    <partial name="~/Views/Shared/navigation.cshtml"/>
+
+    <div class="flex flex-wrap -mx-3">
+        <div class="w-full lg:w-3/4 px-3">
+            @if (User.Identity.IsAuthenticated)
+            {
+                <form asp-action="ContactPost" method="post" class="max-w-lg mx-auto">
+                    <input type="hidden" asp-for="ProductsOverViewModel.BasketCount"/>
+                    <input type="hidden" asp-for="ProductsOverViewModel.Products"/>
+                    <input type="hidden" asp-for="OrderFor"/>
+                    <input type="hidden" name="skip" value="true"/>
+                    <div class="pt-2">
+                        <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Skip step</button>
+                    </div>
+                </form>
+                <p class="mt-4">Or add different details</p>
+            }
+
+            <h3 class="text-2xl font-bold mb-6">Enter Your Details</h3>
+            <form asp-action="ContactPost" method="post" class="max-w-lg mx-auto">
+                <input type="hidden" asp-for="ProductsOverViewModel.BasketCount"/>
+                <input type="hidden" asp-for="ProductsOverViewModel.Products"/>
+                <input type="hidden" asp-for="OrderFor"/>
+                <input type="hidden" name="skip" value="false"/>
+                <div asp-validation-summary="ModelOnly" class="text-red-500 mb-4"></div>
+                <div class="mb-4">
+                    <label asp-for="Name" class="block text-gray-700">Name *</label>
+                    <input asp-for="Name" class="mt-1 block w-full border border-gray-300 rounded-md p-2" placeholder="Name" required/>
+                    <span asp-validation-for="Name" class="text-red-500 text-sm"></span>
+                </div>
+                <div class="mb-4">
+                    <label asp-for="Email" class="block text-gray-700">Email *</label>
+                    <input asp-for="Email" class="mt-1 block w-full border border-gray-300 rounded-md p-2" placeholder="Email" required/>
+                    <span asp-validation-for="Email" class="text-red-500 text-sm"></span>
+                </div>
+                <div class="mb-4">
+                    <label asp-for="ZipCode" class="block text-gray-700">ZipCode *</label>
+                    <input asp-for="ZipCode" class="mt-1 block w-full border border-gray-300 rounded-md p-2" placeholder="ZipCode" required/>
+                    <span asp-validation-for="ZipCode" class="text-red-500 text-sm"></span>
+                </div>
+                <div class="mb-4">
+                    <label asp-for="HouseNumber" class="block text-gray-700">HouseNumber *</label>
+                    <input asp-for="HouseNumber" class="mt-1 block w-full border border-gray-300 rounded-md p-2" placeholder="HouseNumber" required/>
+                    <span asp-validation-for="HouseNumber" class="text-red-500 text-sm"></span>
+                </div>
+                <div class="mb-4">
+                    <label asp-for="PhoneNumber" class="block text-gray-700">PhoneNumber *</label>
+                    <input asp-for="PhoneNumber" class="mt-1 block w-full border border-gray-300 rounded-md p-2" placeholder="PhoneNumber" required/>
+                    <span asp-validation-for="PhoneNumber" class="text-red-500 text-sm"></span>
+                </div>
+                <div class="flex justify-between pt-2">
+                    <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" type="submit">Next step</button>
+                </div>
+            </form>
+        </div>
+        <div class="w-full lg:w-1/4 px-3 mt-6 lg:mt-0">
+            @foreach(var product in Model.ProductsOverViewModel.Products)
+            {
+                <div class="flex items-center mb-4">
+                    <img src="~/Images/Icons/@product.Type/@product.Img" alt="@product.Name" class="w-16 h-16 object-cover mr-4"/>
+                    <div>
+                        <p class="text-gray-700">@product.Name</p>
+                        <p class="text-gray-700">@product.Price</p>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

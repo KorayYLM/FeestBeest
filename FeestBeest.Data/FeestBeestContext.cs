@@ -5,103 +5,125 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FeestBeest.Data
 {
-    public class FeestBeestContext : IdentityDbContext<Account, IdentityRole<int>, int>
+    public class FeestBeestContext : IdentityDbContext<User, IdentityRole<int>, int>
     {
         public FeestBeestContext(DbContextOptions<FeestBeestContext> options)
             : base(options)
         {
         }
 
-        public DbSet<Boeking> Boekingen { get; set; }
-        public DbSet<Beestje> Beestjes { get; set; }
-        public DbSet<Account> Accounts { get; set; }
+        public virtual DbSet<Product> Products { get; set; } = null!;
+        public virtual DbSet<Order> Orders { get; set; } = null!;
+        public virtual DbSet<OrderDetail> OrderDetails { get; set; } = null!;
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder builder)
         {
-            base.OnModelCreating(modelBuilder);
+            base.OnModelCreating(builder);
 
-            modelBuilder.Entity<Boeking>(entity =>
+            builder.Entity<User>()
+                .Property(u => u.Rank)
+                .HasConversion<string>();
+
+            CreateRelations(builder);
+            SeedData(builder);
+        }
+
+        private static void CreateRelations(ModelBuilder builder)
+        {
+            builder.Entity<Order>()
+                .HasMany(o => o.OrderDetails)
+                .WithOne()
+                .HasForeignKey(od => od.OrderId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<Order>()
+                .HasOne<User>()
+                .WithMany()
+                .HasForeignKey(o => o.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<OrderDetail>()
+                .HasKey(od => new { od.OrderId, od.ProductId });
+
+            // builder.Entity<OrderDetail>()
+            //     .HasOne<Product>()
+            //     .WithMany()
+            //     .HasForeignKey(od => od.ProductId)
+            //     .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<OrderDetail>()
+                .HasOne(od => od.Product)
+                .WithMany()
+                .HasForeignKey(od => od.ProductId)
+                .OnDelete(DeleteBehavior.NoAction);
+        }
+
+        private static void SeedData(ModelBuilder builder)
+        {
+            var user1 = new User
             {
-                entity.HasKey(e => e.Id);
-                entity.Property(e => e.ContactNaam).IsRequired().HasMaxLength(100);
-                entity.Property(e => e.ContactAdres).HasMaxLength(200);
-                entity.Property(e => e.ContactEmail).HasMaxLength(100);
-                entity.Property(e => e.ContactTelefoonnummer).HasMaxLength(15);
-                entity.Property(e => e.TotaalPrijs).HasColumnType("decimal(18,2)");
-                entity.Property(e => e.IsBevestigd).IsRequired(); // Add this line
+                Id = 1,
+                Rank = Rank.NONE,
+                UserName = "admin",
+                NormalizedUserName = "ADMIN",
+                Email = "admin@example.com",
+                NormalizedEmail = "ADMIN@EXAMPLE.COM",
+                EmailConfirmed = true,
+                PhoneNumber = "0612345678",
+                HouseNumber = "123",
+                ZipCode = "1234AB",
+                SecurityStamp = Guid.NewGuid().ToString(),
+                PasswordHash = "AQAAAAIAAYagAAAAEPS3HVgGwreh2VogbGYNNcFZeVOJgO8bLRs+04f5Iucpgy+P86IRXTI4/1xQcPFG2w=="
+            };
 
-                entity.HasOne(e => e.Account)
-                    .WithMany(a => a.Boekingen)
-                    .HasForeignKey(e => e.AccountId);
-
-                entity.HasMany(e => e.Beestjes)
-                    .WithMany(b => b.Boekingen)
-                    .UsingEntity<Dictionary<string, object>>(
-                        "BoekingBeestje",
-                        j => j.HasOne<Beestje>().WithMany().HasForeignKey("BeestjeId"),
-                        j => j.HasOne<Boeking>().WithMany().HasForeignKey("BoekingId"));
-            });
-
-            modelBuilder.Entity<Beestje>(entity =>
+            var user2 = new User
             {
-                entity.HasKey(e => e.Id);
-                entity.Property(e => e.Naam).IsRequired().HasMaxLength(100);
-                entity.Property(e => e.Afbeelding).IsRequired();
-                entity.Property(e => e.Prijs).HasColumnType("decimal(18,2)");
-                entity.Property(e => e.Type).IsRequired();
+                Id = 2,
+                Rank = Rank.NONE,
+                UserName = "customer",
+                NormalizedUserName = "CUSTOMER",
+                Email = "customer@example.com",
+                NormalizedEmail = "CUSTOMER@EXAMPLE.COM",
+                EmailConfirmed = true,
+                PhoneNumber = "0612345678",
+                HouseNumber = "123",
+                ZipCode = "1234AB",
+                SecurityStamp = Guid.NewGuid().ToString(),
+                PasswordHash = "AQAAAAIAAYagAAAAEPS3HVgGwreh2VogbGYNNcFZeVOJgO8bLRs+04f5Iucpgy+P86IRXTI4/1xQcPFG2w=="
+            };
 
-                entity.HasData(
-                    new Beestje { Id = 1, Naam = "Aap", Type = "Jungle", Prijs = 100.00m, Afbeelding = "monkey.png" },
-                    new Beestje { Id = 2, Naam = "Olifant", Type = "Jungle", Prijs = 300.00m, Afbeelding = "elephant.png" },
-                    new Beestje { Id = 3, Naam = "Zebra", Type = "Jungle", Prijs = 220.00m, Afbeelding = "zebra.png" },
-                    new Beestje { Id = 4, Naam = "Leeuw", Type = "Jungle", Prijs = 250.00m, Afbeelding = "lion.png" },
-                    new Beestje { Id = 5, Naam = "Hond", Type = "Boerderij", Prijs = 80.00m, Afbeelding = "dog.png" },
-                    new Beestje { Id = 6, Naam = "Ezel", Type = "Boerderij", Prijs = 150.00m, Afbeelding = "donkey.png" },
-                    new Beestje { Id = 7, Naam = "Koe", Type = "Boerderij", Prijs = 180.00m, Afbeelding = "cow.png" },
-                    new Beestje { Id = 8, Naam = "Eend", Type = "Boerderij", Prijs = 50.00m, Afbeelding = "duck.png" },
-                    new Beestje { Id = 9, Naam = "Kuiken", Type = "Boerderij", Prijs = 20.00m, Afbeelding = "chicken.png" },
-                    new Beestje { Id = 10, Naam = "Pinguïn", Type = "Sneeuw", Prijs = 90.00m, Afbeelding = "animal.png" },
-                    new Beestje { Id = 11, Naam = "IJsbeer", Type = "Sneeuw", Prijs = 200.00m, Afbeelding = "polar-bear.png" },
-                    new Beestje { Id = 12, Naam = "Zeehond", Type = "Sneeuw", Prijs = 130.00m, Afbeelding = "seal.png" },
-                    new Beestje { Id = 13, Naam = "Kameel", Type = "Woestijn", Prijs = 160.00m, Afbeelding = "camel.png" },
-                    new Beestje { Id = 14, Naam = "Slang", Type = "Woestijn", Prijs = 70.00m, Afbeelding = "snake.png" },
-                    new Beestje { Id = 15, Naam = "T-Rex", Type = "VIP", Prijs = 1000.00m, Afbeelding = "dinosaur.png" },
-                    new Beestje { Id = 16, Naam = "Unicorn", Type = "VIP", Prijs = 1500.00m, Afbeelding = "unicorn.png" }
-                );
-            });
+            builder.Entity<User>().HasData(user1, user2);
 
-            modelBuilder.Entity<IdentityRole<int>>().HasData(
+            builder.Entity<IdentityRole<int>>().HasData(
                 new IdentityRole<int> { Id = 1, Name = "Admin", NormalizedName = "ADMIN" },
-                new IdentityRole<int> { Id = 2, Name = "User", NormalizedName = "USER" }
+                new IdentityRole<int> { Id = 2, Name = "Customer", NormalizedName = "CUSTOMER" }
             );
 
-            var hasher = new PasswordHasher<Account>();
+            builder.Entity<IdentityUserRole<int>>().HasData(
+                new IdentityUserRole<int> { UserId = 1, RoleId = 1 },
+                new IdentityUserRole<int> { UserId = 2, RoleId = 2 }
+            );
 
-            modelBuilder.Entity<Account>().HasData(
-                new Account
+            builder.Entity<Product>().HasData(
+                new Product { Id = 1, Name = "Aap", Type = ProductType.JUNGLE, Price = 2000, Img = "monkey.png" },
+                new Product { Id = 2, Name = "Olifant", Type = ProductType.JUNGLE, Price = 3000, Img = "elephant.png" },
+                new Product { Id = 3, Name = "Zebra", Type = ProductType.JUNGLE, Price = 2500, Img = "zebra.png" },
+                new Product { Id = 4, Name = "Leeuw", Type = ProductType.JUNGLE, Price = 3500, Img = "lion.png" },
+                new Product { Id = 5, Name = "Hond", Type = ProductType.FARM, Price = 1000, Img = "dog.png" },
+                new Product { Id = 6, Name = "Ezel", Type = ProductType.FARM, Price = 1500, Img = "donkey.png" },
+                new Product { Id = 7, Name = "Koe", Type = ProductType.FARM, Price = 2000, Img = "cow.png" },
+                new Product { Id = 8, Name = "Eend", Type = ProductType.FARM, Price = 500, Img = "duck.png" },
+                new Product { Id = 9, Name = "Kuiken", Type = ProductType.FARM, Price = 250, Img = "chicken.png" },
+                new Product { Id = 10, Name = "Pinguïn", Type = ProductType.SNOW, Price = 2000, Img = "animal.png" },
+                new Product
                 {
-                    Id = 1,
-                    UserName = "admin@example.com",
-                    NormalizedUserName = "admin@example.com",
-                    Email = "admin@example.com",
-                    NormalizedEmail = "ADMIN@EXAMPLE.COM",
-                    EmailConfirmed = true,
-                    PasswordHash = hasher.HashPassword(null, "AdminPassword123"),
-                    SecurityStamp = string.Empty,
-                    Naam = "Caron Schilders"
+                    Id = 11, Name = "IJsbeer", Type = ProductType.SNOW, Price = 3000, Img = "polar-bear.png"
                 },
-                new Account
-                {
-                    Id = 2,
-                    UserName = "koray@example.com",
-                    NormalizedUserName = "koray@example.com",
-                    Email = "koray@example.com",
-                    NormalizedEmail = "KORAY@EXAMPLE.COM",
-                    EmailConfirmed = true,
-                    PasswordHash = hasher.HashPassword(null, "UserPassword123"),
-                    SecurityStamp = string.Empty,
-                    Naam = "Koray Yilmaz"
-                }
+                new Product { Id = 12, Name = "Zeehond", Type = ProductType.SNOW, Price = 2500, Img = "seal.png" },
+                new Product { Id = 13, Name = "Kameel", Type = ProductType.DESERT, Price = 2000, Img = "camel.png" },
+                new Product { Id = 14, Name = "Slang", Type = ProductType.DESERT, Price = 1500, Img = "snake.png" },
+                new Product { Id = 15, Name = "T-Rex", Type = ProductType.VIP, Price = 5000, Img = "dinosaur.png" },
+                new Product { Id = 16, Name = "Unicorn", Type = ProductType.VIP, Price = 5000, Img = "unicorn.png" }
             );
         }
     }

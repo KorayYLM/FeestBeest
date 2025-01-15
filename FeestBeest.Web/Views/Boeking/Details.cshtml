@@ -1,73 +1,30 @@
-﻿@model BoekingViewModel
-
-<div class="container mt-5">
-    <!-- Stappenindicator -->
-    <div class="row justify-content-center mb-4">
-        @foreach (var step in new[] { "Beestjes", "Gegevens", "Bevestig" })
-        {
-            var currentIndex = Array.IndexOf(new[] { "Beestjes", "Gegevens", "Bevestig" }, step);
-            var isCompleted = currentIndex < 2; // All steps before "Bevestig" are completed
-            var isCurrent = currentIndex == 2; // "Bevestig" is current
-
-            <div class="col-auto text-center">
-                <div class="rounded-circle bg-@(isCompleted || isCurrent ? "primary" : "secondary") text-white d-inline-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
-                    @(currentIndex + 1)
-                </div>
-                <div>@step</div>
-                @if (step != "Bevestig")
-                {
-                    <div class="d-inline-block w-100 border-top border-@(isCompleted || isCurrent ? "primary" : "secondary")" style="height: 2px; margin-top: -20px;"></div>
-                }
-            </div>
-        }
-    </div>
-
-    <div class="row">
-        <!-- Linkerzijde: Boeking Details -->
-        <div class="col-md-8">
-            <h2 class="mb-4">Boeking Details</h2>
-            <div class="card mb-4">
-                <div class="card-body">
-                    <p><strong>Datum:</strong> @Model.Datum.ToShortDateString()</p>
-                    <p><strong>Naam:</strong> @Model.ContactNaam</p>
-                    <p><strong>Adres:</strong> @Model.ContactAdres</p>
-                    <p><strong>E-mail:</strong> @Model.ContactEmail</p>
-                    <p><strong>Telefoonnummer:</strong> @Model.ContactTelefoonnummer</p>
-                    <h4 class="mt-4">Geselecteerde Beestjes:</h4>
-                    <ul class="list-group">
-                        @foreach (var beestje in Model.Beestjes)
-                        {
-                            <li class="list-group-item d-flex align-items-center">
-                                <img src="~/Img/Beestjes/@beestje.Afbeelding" class="img-thumbnail mr-3" style="width: 50px; height: 50px;" alt="@beestje.Naam" />
-                                <span>@beestje.Naam - &euro;@beestje.Prijs</span>
-                            </li>
-                        }
-                    </ul>
-                    <p class="mt-4"><strong>Totaalprijs:</strong> &euro;@Model.TotaalPrijs</p>
-                    <p><strong>Korting:</strong> &euro;@Model.Korting</p>
-                    <p><strong>Te betalen:</strong> &euro;@Model.TeBetalen</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Rechterzijde: Geselecteerde details -->
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">Geselecteerde Gegevens</h4>
-                    <p><strong>Datum:</strong> @Model.Datum.ToShortDateString()</p>
-                    <h5 class="mt-4">Geselecteerde Beestjes:</h5>
-                    <ul class="list-group">
-                        @foreach (var beestje in Model.Beestjes)
-                        {
-                            <li class="list-group-item d-flex align-items-center">
-                                <img src="~/Img/Beestjes/@beestje.Afbeelding" class="img-thumbnail mr-3" style="width: 50px; height: 50px;" alt="@beestje.Naam" />
-                                <span>@beestje.Naam - &euro;@beestje.Prijs</span>
-                            </li>
-                        }
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+﻿@* @model BoekingViewModel *@
+@* *@
+@* <div class="flex items-center justify-center min-h-screen bg-gray-100"> *@
+@*     <div class="w-full max-w-2xl p-6 bg-white rounded-lg shadow-md"> *@
+@*         <h2 class="text-2xl font-bold mb-4">Overzicht van je boeking</h2> *@
+@*         <p><strong>Datum:</strong> @Model.SelectedDate.ToShortDateString()</p> *@
+@*         <p><strong>Naam:</strong> @Model.ContactNaam</p> *@
+@*         <p><strong>Adres:</strong> @Model.ContactAdres</p> *@
+@*         <p><strong>E-mail:</strong> @Model.ContactEmail</p> *@
+@*         <p><strong>Telefoonnummer:</strong> @Model.ContactTelefoonnummer</p> *@
+@*         <h3 class="text-xl font-semibold mt-4">Geselecteerde Beestjes:</h3> *@
+@*         <ul class="list-disc list-inside"> *@
+@*             @foreach (var beestje in Model.SelectedBeestjes) *@
+@*             { *@
+@*                 <li>@beestje.Naam - &euro;@beestje.Prijs</li> *@
+@*             } *@
+@*         </ul> *@
+@*         <p class="mt-4"><strong>Totaalprijs:</strong> &euro;@Model.TotaalPrijs</p> *@
+@*         <p><strong>Korting:</strong> &euro;@Model.Korting</p> *@
+@*         <p><strong>Te betalen:</strong> &euro;@(Model.TotaalPrijs - Model.Korting)</p> *@
+@*         <div class="mt-6"> *@
+@*             <form asp-controller="Boeking" asp-action="Bevestigen" method="post"> *@
+@*                 <input type="hidden" name="Id" value="@Model.Id"/> *@
+@*                 <button type="submit" class="w-full py-3 bg-blue-500 text-white font-bold rounded-md shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"> *@
+@*                     Bevestigen *@
+@*                 </button> *@
+@*             </form> *@
+@*         </div> *@
+@*     </div> *@
+@* </div> *@

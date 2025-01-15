@@ -1,5 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
-@model FeestBeest.Web.ViewModels.BeestjeViewModel
+@model FeestBeest.Web.Models.OneProductViewModel
 
 <!DOCTYPE html>
 <html>
@@ -15,7 +15,7 @@
         <form method="post" class="space-y-4">
             <div>
                 <label class="block text-sm font-medium text-gray-700" for="Naam">Naam</label>
-                <input class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2" type="text" id="Naam" name="Naam" value="@Model.Naam" required>
+                <input class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2" type="text" id="Naam" name="Naam" value="@Model.Name" required>
             </div>
             <div>
                 <label class="block text-sm font-medium text-gray-700" for="Type">Type</label>
@@ -24,11 +24,11 @@
             <div>
                 <label class="block text-sm font-medium text-gray-700" for="Prijs">Prijs</label>
                 <input class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-                       type="number" step="0.01" id="Prijs" name="Prijs" value="@Model.Prijs" required>
+                       type="number" step="0.01" id="Prijs" name="Prijs" value="@Model.Price" required>
             </div>
             <div>
                 <label class="block text-sm font-medium text-gray-700" for="Afbeelding">Afbeelding URL</label>
-                <input class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2" type="text" id="Afbeelding" name="Afbeelding" value="@Model.Afbeelding" required>
+                <input class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2" type="text" id="Afbeelding" name="Afbeelding" value="@Model.Img" required>
             </div>
             <div class="flex justify-between items-center">
                 <a href="@Url.Action("Index")" class="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600">Cancel</a>

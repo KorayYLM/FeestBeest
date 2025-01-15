@@ -1,117 +1,84 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using FeestBeest.Data.Services;
+using FeestBeest.Data.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using FeestBeest.Data.Models;
-using FeestBeest.Data.Services;
-using FeestBeest.Web.Models;
 
-public class AccountController : Controller
+namespace FeestBeest.Web.Controllers
 {
-    private readonly SignInManager<Account> _signInManager;
-    private readonly UserManager<Account> _userManager;
-    private readonly IAccountService _accountService;
-    private readonly ILogger<AccountController> _logger;
-
-    public AccountController(SignInManager<Account> signInManager, UserManager<Account> userManager, IAccountService accountService, ILogger<AccountController> logger)
+    public class AccountController : Controller
     {
-        _signInManager = signInManager;
-        _userManager = userManager;
-        _accountService = accountService;
-        _logger = logger;
-    }
+        private readonly AccountService _accountService;
+        private readonly SignInManager<User> _signInManager;
+        private readonly UserManager<User> _userManager;
 
-    [HttpGet]
-    public IActionResult Create()
-    {
-        return View();
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> Create(AccountViewModel model)
-    {
-        if (!Enum.TryParse<KlantenkaartType>(model.KlantType, out var klantType))
+        public AccountController(AccountService accountService, SignInManager<User> signInManager,
+            UserManager<User> userManager)
         {
-            ModelState.AddModelError(string.Empty, "Ongeldig klanttype.");
-            return View(model);
+            _accountService = accountService;
+            _signInManager = signInManager;
+            _userManager = userManager;
         }
 
-        var user = new Account
+        public IActionResult Index()
         {
-            UserName = model.Email,
-            Email = model.Email,
-            Naam = model.Naam,
-            Adres = model.Adres,
-            Telefoonnummer = model.Telefoonnummer,
-            KlantType = klantType,
-        };
-
-        try
-        {
-            var password = await _accountService.CreateAccount(user);
-            ViewBag.NewAccountAlert = $"Een account is aangemaakt. \nDit zijn de gegevens:\nEmail: {model.Email}\nWachtwoord: {password}";
-            return RedirectToAction("ShowPassword", new { email = model.Email, password });
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "An error occurred while creating the account.");
-            ModelState.AddModelError(string.Empty, ex.Message);
+            return RedirectToAction("Login");
         }
 
-        return View(model);
-    }
-
-    [HttpGet]
-    public IActionResult ShowPassword(string email, string password)
-    {
-        var model = new ShowPasswordViewModel
+        [Route("/login")]
+        public IActionResult Login()
         {
-            Email = email,
-            Password = password
-        };
-        return View(model);
-    }
+            return View();
+        }
 
-    [HttpGet]
-    public IActionResult Login(string returnUrl = null)
-    {
-        ViewData["ReturnUrl"] = returnUrl;
-        return View();
-    }
-
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null)
-    {
-        ViewData["ReturnUrl"] = returnUrl;
-        if (ModelState.IsValid)
+        [HttpPost("/login/check")]
+        public async Task<IActionResult> LoginCheck(string loginInput, string password)
         {
-            var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
-            if (result.Succeeded)
+            var user = await _userManager.FindByEmailAsync(loginInput);
+            if (user != null)
             {
-                if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+                var result =
+                    await _signInManager.PasswordSignInAsync(user, password, isPersistent: false,
+                        lockoutOnFailure: false);
+                if (result.Succeeded)
                 {
-                    return Redirect(returnUrl);
-                }
-                else
-                {
-                    return RedirectToAction("Index", "Home");
+                    if (await _userManager.IsInRoleAsync(user, "Customer"))
+                    {
+                        return RedirectToAction("Index", "Order");
+                    }
+
+                    if (await _userManager.IsInRoleAsync(user, "Admin"))
+                    {
+                        return RedirectToAction("Index", "User");
+                    }
+
+                    throw new InvalidOperationException("Invalid account role");
                 }
             }
-            else
-            {
-                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-            }
+
+            return RedirectToAction("Login", "Account");
         }
 
-        // If we got this far, something failed, redisplay form
-        return View(model);
-    }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            return RedirectToAction("Index", "Home");
+        }
 
-    [HttpPost]
-    public async Task<IActionResult> Logout()
-    {
-        await _signInManager.SignOutAsync();
-        _logger.LogInformation("User logged out.");
-        return RedirectToAction("Index", "Home");
+        public async Task<bool> DeleteUserAsync(int userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId.ToString());
+            if (user != null)
+            {
+                var result = await _userManager.DeleteAsync(user);
+                return result.Succeeded;
+            }
+
+            return false;
+        }
     }
 }
+    
+    
+    

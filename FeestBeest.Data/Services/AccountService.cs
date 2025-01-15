@@ -1,77 +1,118 @@
-﻿using System.Security.Cryptography;
+﻿using System.Text;
+using FeestBeest.Data.Dto;
 using FeestBeest.Data.Models;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Logging;
 
 namespace FeestBeest.Data.Services
 {
-    public class AccountService : IAccountService
+    public class AccountService
     {
-        private readonly FeestBeestContext _context;
-        private readonly UserManager<Account> _userManager;
-        private readonly ILogger<AccountService> _logger;
+        private readonly UserManager<User> _userManager;
 
-        public AccountService(FeestBeestContext context, UserManager<Account> userManager, ILogger<AccountService> logger)
+        public AccountService(UserManager<User> userManager)
         {
-            _context = context;
             _userManager = userManager;
-            _logger = logger;
         }
 
-        public async Task<string> CreateAccount(Account account)
+        public IEnumerable<UserDto> GetAllUsers()
         {
-            if (await _userManager.FindByEmailAsync(account.Email) != null)
+            var users = _userManager.Users
+                .OrderBy(user => user.UserName)
+                .ToList();
+
+            var customers = users
+                .Where(user => _userManager.IsInRoleAsync(user, "customer").Result)
+                .Select(ConvertCustomerDto)
+                .ToList();
+            return customers;
+        }
+
+        private UserDto ConvertCustomerDto(User user)
+        {
+            return new UserDto
             {
-                throw new Exception("Email already in use");
+                Id = user.Id,
+                Name = user.UserName,
+                Email = user.Email,
+                Rank = user.Rank,
+                HouseNumber = user.HouseNumber,
+                ZipCode = user.ZipCode,
+                PhoneNumber = user.PhoneNumber
+            };
+        }
+
+        public async Task<(bool, string)> CreateUser(UserDto user)
+        {
+            if (await _userManager.FindByEmailAsync(user.Email) != null)
+            {
+                return (false, "Email already in use");
             }
+
+            var newUser = new User
+            {
+                UserName = user.Name,
+                Email = user.Email,
+                Rank = user.Rank,
+                HouseNumber = user.HouseNumber,
+                PhoneNumber = user.PhoneNumber,
+                ZipCode = user.ZipCode
+            };
 
             var password = PasswordGenerator();
-            var result = await _userManager.CreateAsync(account, password);
+            var result = await _userManager.CreateAsync(newUser, password);
             if (!result.Succeeded)
             {
-                throw new Exception("Something went wrong, please try again.");
+                return (false, "Something went wrong, please try again.");
             }
 
-            await _userManager.AddToRoleAsync(account, "User");
-            _logger.LogInformation("Account created successfully with email: {Email}", account.Email);
-            return password;
+            await _userManager.AddToRoleAsync(newUser, "customer");
+            return (true, password);
         }
 
-        // public async Task<SignInResult> Login(string email, string password, bool rememberMe)
-        // {
-        //     var user = await _userManager.FindByEmailAsync(email);
-        //     if (user == null)
-        //     {
-        //         throw new Exception("Invalid login attempt.");
-        //     }
-        //
-        //     var passwordHasher = new PasswordHasher<Account>();
-        //     var verificationResult = passwordHasher.VerifyHashedPassword(user, user.PasswordHash, password);
-        //     if (verificationResult == PasswordVerificationResult.Failed)
-        //     {
-        //         throw new Exception("Invalid login attempt.");
-        //     }
-        //
-        //     _logger.LogInformation("User logged in with email: {Email}", email);
-        //     return SignInResult.Success;
-        // }
-        
-        private string PasswordGenerator()
+        private static string PasswordGenerator()
         {
-            const int length = 12;
-            const string validChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()_+";
-
-            using (var rng = new RNGCryptoServiceProvider())
+            var password = new StringBuilder();
+            var random = new Random();
+            for (var i = 0; i < 8; i++)
             {
-                var buffer = new byte[length];
-                rng.GetBytes(buffer);
-                var password = new char[length];
-                for (int i = 0; i < length; i++)
-                {
-                    password[i] = validChars[buffer[i] % validChars.Length];
-                }
-                return new string(password);
+                password.Append((char)random.Next(33, 126));
             }
+
+            return password.ToString();
+        }
+
+        public UserDto GetUserById(int id)
+        {
+            var user = _userManager.FindByIdAsync(id.ToString()).Result;
+            return ConvertCustomerDto(user!);
+        }
+
+        public async Task<(bool check, string result)> UpdateUser(int id, UserDto userDto)
+        {
+            var user = await _userManager.FindByIdAsync(id.ToString());
+            if (user == null) return (false, "User not found");
+
+            user.UserName = userDto.Name;
+            user.Email = userDto.Email;
+            user.ZipCode = userDto.ZipCode;
+            user.HouseNumber = userDto.HouseNumber;
+            user.PhoneNumber = userDto.PhoneNumber;
+            user.Rank = userDto.Rank;
+
+            var result = await _userManager.UpdateAsync(user);
+            return result.Succeeded ? (true, "User updated") : (false, "Something went wrong, please try again.");
+        }
+
+        public async Task<bool> DeleteUserAsync(int userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId.ToString());
+            if (user != null)
+            {
+                var result = await _userManager.DeleteAsync(user);
+                return result.Succeeded;
+            }
+
+            return false;
         }
     }
 }

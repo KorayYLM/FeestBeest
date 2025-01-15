@@ -30,28 +30,24 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxTaG93UGFzc3dvcmQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/pkyil/RiderProjects/FeestBeesttt/FeestBeest.Web/Views/Beestje/Create.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQmVlc3RqZVxDcmVhdGUuY3NodG1s
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/pkyil/RiderProjects/FeestBeesttt/FeestBeest.Web/Views/Beestje/Edit.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQmVlc3RqZVxFZGl0LmNzaHRtbA==
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/pkyil/RiderProjects/FeestBeesttt/FeestBeest.Web/Views/Beestje/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQmVlc3RqZVxJbmRleC5jc2h0bWw=
+[C:/Users/pkyil/RiderProjects/FeestBeesttt/FeestBeest.Web/Views/Boeking/Confirm.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQm9la2luZ1xDb25maXJtLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/pkyil/RiderProjects/FeestBeesttt/FeestBeest.Web/Views/Boeking/Details.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQm9la2luZ1xEZXRhaWxzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/pkyil/RiderProjects/FeestBeesttt/FeestBeest.Web/Views/Boeking/GegevensInvullen.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQm9la2luZ1xHZWdldmVuc0ludnVsbGVuLmNzaHRtbA==
-build_metadata.AdditionalFiles.CssScope = 
-
 [C:/Users/pkyil/RiderProjects/FeestBeesttt/FeestBeest.Web/Views/Boeking/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQm9la2luZ1xJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/pkyil/RiderProjects/FeestBeesttt/FeestBeest.Web/Views/Boeking/Information.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQm9la2luZ1xJbmZvcm1hdGlvbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/pkyil/RiderProjects/FeestBeesttt/FeestBeest.Web/Views/Boeking/SelectProduct.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQm9la2luZ1xTZWxlY3RQcm9kdWN0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/pkyil/RiderProjects/FeestBeesttt/FeestBeest.Web/Views/Home/Index.cshtml]
@@ -60,6 +56,18 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/pkyil/RiderProjects/FeestBeesttt/FeestBeest.Web/Views/Home/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/pkyil/RiderProjects/FeestBeesttt/FeestBeest.Web/Views/Product/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHJvZHVjdFxDcmVhdGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/pkyil/RiderProjects/FeestBeesttt/FeestBeest.Web/Views/Product/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHJvZHVjdFxFZGl0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/pkyil/RiderProjects/FeestBeesttt/FeestBeest.Web/Views/Product/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHJvZHVjdFxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/pkyil/RiderProjects/FeestBeesttt/FeestBeest.Web/Views/Shared/Error.cshtml]

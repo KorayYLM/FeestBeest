@@ -1,9 +1,9 @@
-﻿using FeestBeest.Web.ViewModels;
+﻿using FeestBeest.Web.Models;
 
 namespace FeestBeest.Web.Models
 {
     public class IndexViewModel
     {
-        public IEnumerable<BeestjeViewModel> Beestjes { get; set; }
+        public IEnumerable<ProductViewModel> Beestjes { get; set; }
     }
 }

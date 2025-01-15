@@ -8,9 +8,9 @@ namespace FeestBeest.Web.Models
     {
         public DateTime SelectedDate { get; set; }
         public List<int> SelectedBeestjesIds { get; set; } = new List<int>();
-        public List<Beestje> SelectedBeestjes { get; set; } = new List<Beestje>();
-        public List<BoekingViewModel> Boekingen { get; set; }
-        public List<Beestje> Beestjes { get; set; }
+        public List<Product> SelectedBeestjes { get; set; } = new List<Product>();
+        public List<OrderViewModel> Boekingen { get; set; }
+        public List<Product> Beestjes { get; set; }
         
         public int Id { get; set; }
         public string ContactNaam { get; set; }

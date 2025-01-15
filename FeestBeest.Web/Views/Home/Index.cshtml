@@ -1,5 +1,4 @@
-﻿@model BoekingViewModel
-
+﻿
 <div class="w-full py-4 min-h-screen">
     <div class="uk-card uk-card-default uk-card-body uk-width-2-3@m uk-align-center uk-box-shadow-medium">
         <div class="uk-text-center uk-margin-medium">
@@ -9,32 +8,7 @@
                 Kies de dag van je feestje en volg de stappen om je beestje te boeken.
             </p>
         </div>
-
-        <form asp-controller="Boeking" asp-action="Index" method="get" novalidate class="uk-form-stacked">
-            <div class="uk-margin">
-                <label asp-for="Datum" class="uk-form-label">Kies een datum:</label>
-                <div class="uk-form-controls">
-                    <input
-                        asp-for="Datum"
-                        type="date"
-                        class="uk-input uk-border-rounded"
-                        min="@DateTime.Now.ToString("yyyy-MM-dd")"
-                    />
-                </div>
-                <span asp-validation-for="Datum" class="uk-text-danger uk-text-small"></span>
-            </div>
-
-            <div class="uk-margin">
-                <button
-                    type="submit"
-                    class="w-full py-2 bg-blue-500 text-white font-bold rounded-md shadow-md hover:bg-blue-600 focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
-                >
-                    Boeken
-                </button>
-            </div>
-        </form>
-
-
+        
         <div class="uk-margin-large-top uk-flex uk-flex-center">
             <img
                 src="/Img/farm.jpg"

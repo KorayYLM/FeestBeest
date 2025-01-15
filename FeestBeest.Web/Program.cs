@@ -10,14 +10,14 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<FeestBeestContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddIdentity<Account, IdentityRole<int>>()
+builder.Services.AddIdentity<User, IdentityRole<int>>()
     .AddEntityFrameworkStores<FeestBeestContext>()
     .AddDefaultTokenProviders();
 
 // Register application services
-builder.Services.AddScoped<IAccountService, AccountService>();
-builder.Services.AddScoped<IBeestjeService, BeestjeService>(); 
-builder.Services.AddScoped<IBoekingService, BoekingService>(); 
+builder.Services.AddScoped< AccountService>();
+builder.Services.AddScoped< ProductService>(); 
+builder.Services.AddScoped< OrderService>(); 
 
 // Add MVC services
 builder.Services.AddControllersWithViews();
@@ -43,6 +43,11 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}"); // Update default route to Home/Index
+    pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.MapControllerRoute(
+    name: "boeking",
+    pattern: "Boeking/{action=Index}/{id?}",
+    defaults: new { controller = "Boeking" });
 
 app.Run();
