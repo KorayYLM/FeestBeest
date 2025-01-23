@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using FeestBeest.Data.Dto;
-using FeestBeest.Data.Dtos;
 using FeestBeest.Data.Models;
 
 namespace FeestBeest.Data.Rules;

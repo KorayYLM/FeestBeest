@@ -1,6 +1,8 @@
-﻿namespace FeestBeest.Data.Dto;
+﻿using FeestBeest.Data.Models;
 
-public class GegevensInvullenDto
+namespace FeestBeest.Data.Dto;
+
+public class ContactInfo
 {
     public int Id { get; set; }
     public DateTime SelectedDate { get; set; }

@@ -1,0 +1,79 @@
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model FeestBeest.Web.Models.OrderViewModel
+
+@{
+    ViewData["Title"] = "Products";
+    ViewData["date"] = Model.OrderFor;
+}
+
+<div class="flex flex-wrap min-h-screen w-screen">
+    <div class="w-full lg:w-1/4 p-3 mb-6 lg:mb-0">
+        <div class="bg-white border border-gray-200 rounded-lg shadow-lg p-4">
+            <h3 class="text-lg font-bold mb-2">Order Details</h3>
+            <p class="text-gray-700 mb-2">Selected Date: @Model.OrderFor.ToString("yyyy-MM-dd")</p>
+            <h4 class="text-lg font-bold mb-2">Items in Basket</h4>
+            <div id="basketItems">
+                @foreach (var product in Model.ProductsOverViewModel.Products.Where(p => p.InBasket))
+                {
+                    <div class="flex items-center mb-4" data-product-id="@product.Id">
+                        <img src="~/Img/Beestjes/@product.Img" alt="@product.Name" class="w-16 h-16 object-cover mr-4"/>
+                        <div>
+                            <p class="text-gray-700">@product.Name</p>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="w-full lg:w-3/4 p-3">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
+            @foreach (var product in Model.ProductsOverViewModel.Products)
+            {
+                <div class="bg-white border border-gray-200 rounded-lg shadow-lg p-4" data-product-id="@product.Id">
+                    <img src="~/Img/Beestjes/@product.Img" class="h-32 w-full object-contain mb-4" alt="Afbeelding van @product.Name"/>
+                    <div class="text-lg font-bold mb-2">@product.Name</div>
+                    <div class="text-gray-700 mb-2">@product.Type</div>
+                    <div class="text-gray-900 font-semibold mb-4">€@product.Price</div>
+                    <div class="flex justify-center">
+                        @if (product.InBasket)
+                        {
+                            <form method="post" asp-action="RemoveFromBasket" asp-controller="Order" class="basket-form">
+                                <input type="hidden" name="productId" value="@product.Id"/>
+                                <input type="hidden" name="date" value="@Model.OrderFor.ToString("yyyy-MM-dd")"/>
+                                <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 w-full">Remove from basket</button>
+                            </form>
+                        }
+                        else
+                        {
+                            <form method="post" asp-action="AddToBasket" asp-controller="Order" class="basket-form">
+                                <input type="hidden" name="productId" value="@product.Id"/>
+                                <input type="hidden" name="date" value="@Model.OrderFor.ToString("yyyy-MM-dd")"/>
+                                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 w-full">Add to basket</button>
+                            </form>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    @if (Model.ProductsOverViewModel.BasketCount > 0)
+    {
+        <form method="get" asp-action="ContactInfo" class="w-full mt-6">
+            <input type="hidden" name="date" value="@Model.OrderFor.ToString("yyyy-MM-dd")"/>
+            <input type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" value="Next step"/>
+        </form>
+    }
+    else
+    {
+        <div class="alert alert-warning w-full mt-6" role="alert">
+            Must select at least 1 product
+        </div>
+    }
+</div>
+
+
+<script>
+    function submitForm() {
+        document.getElementById('filterForm').submit();
+    }
+</script>

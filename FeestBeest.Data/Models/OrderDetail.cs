@@ -1,4 +1,6 @@
-﻿namespace FeestBeest.Data.Models;
+﻿using FeestBeest.Data.Dto;
+
+namespace FeestBeest.Data.Models;
 
 public class OrderDetail
 {

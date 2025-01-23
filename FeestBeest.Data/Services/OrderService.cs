@@ -1,6 +1,5 @@
 ﻿using FeestBeest.Data;
 using FeestBeest.Data.Dto;
-using FeestBeest.Data.Dtos;
 using FeestBeest.Data.Models;
 using FeestBeest.Data.Rules;
 using FeestBeest.Data.Services;
@@ -11,17 +10,17 @@ namespace  FeestBeest.Data.Services;
 public class OrderService
 {
     private readonly FeestBeestContext _context;
-    private readonly UserManager<FeestBeest.Data.Models.User> _userManager;
+    private readonly UserManager<User> _userManager;
     private readonly ProductService _productService;
 
-    public OrderService(FeestBeestContext context, UserManager<FeestBeest.Data.Models.User> userManager, ProductService productService)
+    public OrderService(FeestBeestContext context, UserManager<User> userManager, ProductService productService)
     {
         _context = context;
         _userManager = userManager;
         _productService = productService;
     }
 
-    public (bool, string) CreateOrder(OrderDto orderDto, int? userId = null)
+    public void CreateOrder(OrderDto orderDto, int? userId = null)
     {
         if (orderDto != null)
         {
@@ -35,18 +34,18 @@ public class OrderService
                 OrderFor = orderDto.OrderFor,
                 UserId = userId,
                 TotalPrice = CalculateTotalPrice(orderDto, userId),
-                OrderDetails = orderDto.OrderDetails.Select(x => new OrderDetail()
+                OrderDetails = new List<OrderDetail>
                 {
-                    ProductId = x.ProductId,
-                    Product = _context.Products.FirstOrDefault(p => p.Id == x.ProductId)
-                }).ToList()
+                    new OrderDetail
+                    {
+                        Product = _context.Products.FirstOrDefault(p => p.Id == orderDto.OrderDetails.FirstOrDefault().ProductId)
+                    }
+                }
             };
 
             _context.Orders.Add(order);
             _context.SaveChanges();
-            return (true, "Order created successfully");
         }
-        return (false, "Order creation failed");
     }
 
     private int CalculateTotalPrice(OrderDto orderDto, int? userId)

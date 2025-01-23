@@ -1,4 +1,4 @@
-﻿using FeestBeest.Data.Dtos;
+﻿using FeestBeest.Data.Dto;
 using FeestBeest.Data.Models;
 
 namespace FeestBeest.Data.Rules;

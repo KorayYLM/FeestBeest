@@ -1,6 +1,7 @@
 ﻿using FeestBeest.Data.Dto;
 using System;
 using System.Collections.Generic;
+using FeestBeest.Data.Models;
 
 namespace FeestBeest.Web.Models
 {

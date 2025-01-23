@@ -1,4 +1,5 @@
-﻿using FeestBeest.Data.Models;
+﻿using FeestBeest.Data.Dto;
+using FeestBeest.Data.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +16,7 @@ namespace FeestBeest.Data
         public virtual DbSet<Product> Products { get; set; } = null!;
         public virtual DbSet<Order> Orders { get; set; } = null!;
         public virtual DbSet<OrderDetail> OrderDetails { get; set; } = null!;
+
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -44,18 +46,15 @@ namespace FeestBeest.Data
 
             builder.Entity<OrderDetail>()
                 .HasKey(od => new { od.OrderId, od.ProductId });
-
-            // builder.Entity<OrderDetail>()
-            //     .HasOne<Product>()
-            //     .WithMany()
-            //     .HasForeignKey(od => od.ProductId)
-            //     .OnDelete(DeleteBehavior.Cascade);
+            
 
             builder.Entity<OrderDetail>()
                 .HasOne(od => od.Product)
                 .WithMany()
                 .HasForeignKey(od => od.ProductId)
                 .OnDelete(DeleteBehavior.NoAction);
+            
+            
         }
 
         private static void SeedData(ModelBuilder builder)

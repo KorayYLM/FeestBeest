@@ -1,31 +1,45 @@
-﻿using FeestBeest.Data.Dtos;
+﻿using FeestBeest.Data.Dto;
 using FeestBeest.Data.Models;
 using FeestBeest.Data.Rules;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace FeestBeest.Data.Services  
+namespace FeestBeest.Data.Services
 {
     public class BasketService
     {
         private readonly Basket basket;
-        private readonly UserManager<User> userManager;
-        public BasketService(UserManager<User> userManager)
+        private readonly IServiceProvider serviceProvider;
+        private readonly ILogger<BasketService> logger;
+
+        public BasketService(IServiceProvider serviceProvider, ILogger<BasketService> logger)
         {
-            this.userManager = userManager;
+            this.serviceProvider = serviceProvider;
+            this.logger = logger;
             basket = new Basket();
         }
 
-        public (bool, string) AddToBasket(ProductDto product, int? userId = null)
+        public bool AddToBasket(ProductDto products, int? userId = null)
         {
-            var (checkBasket, result) = CheckBasket(userId, product);
-            if (!checkBasket)
+            logger.LogInformation("Attempting to add product with Id: {ProductId} to basket for user: {UserId}",
+                products.Id, userId);
+
+            var isBasketValid = CheckBasket(userId, products);
+            if (!isBasketValid)
             {
-                return (false, result);
+                logger.LogWarning("CheckBasket failed for product with Id: {ProductId} for user: {UserId}", products.Id,
+                    userId);
+                return false;
             }
 
-            basket.Products.Add(product);
-            product.IsInBasket = true;
-            return (true, "Product added to basket successfully.");
+            basket.Products.Add(products);
+            products.InBasket = true;
+
+            logger.LogInformation(
+                "Product with Id: {ProductId} successfully added to basket for user: {UserId}. IsInBasket: {IsInBasket}",
+                products.Id, userId, products.InBasket);
+            return true;
         }
 
         public void RemoveFromBasket(int productId)
@@ -34,34 +48,42 @@ namespace FeestBeest.Data.Services
             if (product != null)
             {
                 basket.Products.Remove(product);
-                product.IsInBasket = false;
+                product.InBasket = false;
+                logger.LogInformation("Product with Id: {ProductId} removed from basket", productId);
             }
         }
+
         public List<ProductDto> GetBasketProducts()
         {
             return basket.Products;
         }
+
         public void ClearBasket()
         {
             basket.Products.Clear();
         }
+
         public int GetBasketItemCount()
         {
             return basket.Products.Count;
         }
 
-        private (bool, string) CheckBasket(int? userId = null, ProductDto product = null)
+        private bool CheckBasket(int? userId = null, ProductDto product = null)
         {
-            var user = userId != null ? userManager.FindByIdAsync(userId.Value.ToString()).Result : null;
+            using (var scope = serviceProvider.CreateScope())
+            {
+                var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
+                var user = userId != null ? userManager.FindByIdAsync(userId.Value.ToString()).Result : null;
 
-            var (checkProducts, resultProducts) = new CheckOrderProductsRule().CheckProducts(basket, user, product);
-            if (!checkProducts) return (false, resultProducts);
+                var (checkProducts, _) = new CheckOrderProductsRule().CheckProducts(basket, user, product);
+                if (!checkProducts) return false;
 
-            var (checkTogether, resultTogether) = new ProductsNotTogetherRule().CheckProductsTogether(basket, product);
-            if (!checkTogether) return (false, resultTogether);
+                var (checkTogether, _) = new ProductsNotTogetherRule().CheckProductsTogether(basket, product);
+                if (!checkTogether) return false;
 
-            var (check, result) = new CheckAnimalAvailabilityRule().CheckAnimalAvailability(basket, product);
-            return !check ? (false, result) : (true, string.Empty);
+                var (check, _) = new CheckAnimalAvailabilityRule().CheckAnimalAvailability(basket, product);
+                return check;
+            }
         }
     }
 }

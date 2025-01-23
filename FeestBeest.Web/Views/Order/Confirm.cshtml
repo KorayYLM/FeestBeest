@@ -1,19 +1,57 @@
-﻿@page
-@model FeestBeest.Web.Views.Boeking.Confirm
-
+﻿@model FeestBeest.Web.Models.OrderViewModel
 @{
-    Layout = null;
+    ViewData["Title"] = "Products";
+    ViewData["date"] = Model.OrderFor;
+    ViewData["step"] = "Confirmation";
 }
 
-<!DOCTYPE html>
-
-<html>
-<head>
-    <title></title>
-</head>
-<body>
-<div>
-    
+<div class="flex justify-center items-center min-h-screen w-screen bg-gray-100">
+    <div class="w-full max-w-4xl p-4">
+        <form asp-action="ConfirmPost" method="post" class="bg-white shadow-md rounded-lg px-8 pt-6 pb-8 mb-4">
+            <input type="hidden" asp-for="Name"/>
+            <input type="hidden" asp-for="Email"/>
+            <input type="hidden" asp-for="ZipCode"/>
+            <input type="hidden" asp-for="HouseNumber"/>
+            <input type="hidden" asp-for="PhoneNumber"/>
+            <input type="hidden" asp-for="TotalPrice"/>
+            <input type="hidden" asp-for="OrderFor" value="@Model.OrderFor.ToString("yyyy-MM-dd")"/>
+            <h2 class="text-2xl font-bold mb-4 text-center">Confirmation</h2>
+            <p class="text-center mb-4">Order for @Model.OrderFor</p>
+            <h4 class="text-lg font-bold mb-2">Contact Information</h4>
+            <p class="mb-2"><span class="font-semibold">Name:</span> @Model.Name</p>
+            <p class="mb-2"><span class="font-semibold">Email:</span> @Model.Email</p>
+            <p class="mb-2"><span class="font-semibold">Zip Code:</span> @Model.ZipCode</p>
+            <p class="mb-2"><span class="font-semibold">House Number:</span> @Model.HouseNumber</p>
+            <p class="mb-4"><span class="font-semibold">Phone Number:</span> @Model.PhoneNumber</p>
+            <h4 class="text-lg font-bold mb-2">Products</h4>
+            <table class="min-w-full bg-white border border-gray-200 rounded-lg mb-4">
+                <thead>
+                    <tr>
+                        <th class="py-2 px-4 border-b">Name</th>
+                        <th class="py-2 px-4 border-b">Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var product in Model.ProductsOverViewModel.Products)
+                    {
+                        <tr>
+                            <td class="py-2 px-4 border-b">@product.Name</td>
+                            <td class="py-2 px-4 border-b">€@product.Price</td>
+                        </tr>
+                    }
+                    <tr class="font-bold">
+                        <td class="py-2 px-4 border-b">Total without discount</td>
+                        <td class="py-2 px-4 border-b">€@Model.TotalPrice</td>
+                    </tr>
+                    <tr class="font-bold">
+                        <td class="py-2 px-4 border-b">Discount amount</td>
+                        <td class="py-2 px-4 border-b">€@Model.DiscountAmount</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="flex justify-center">
+                <input type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" value="Confirm"/>
+            </div>
+        </form>
+    </div>
 </div>
-</body>
-</html>

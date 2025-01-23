@@ -1,25 +1,26 @@
-﻿using FeestBeest.Data.Models;
+﻿using FeestBeest.Data.Dto;
+using FeestBeest.Data.Models;
 using FeestBeest.Data.Services;
 using FeestBeest.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FeestBeest.Web.Controllers;
 
-public class ProductController(ProductService productService, OrderService orderService) : Controller
+public class ProductController : Controller
 {
+    private readonly ProductService productService;
+    private readonly OrderService orderService;
+
+    public ProductController(ProductService productService, OrderService orderService)
+    {
+        this.productService = productService;
+        this.orderService = orderService;
+    }
+
     [HttpGet]
     public IActionResult Index()
     {
-        var productDtos = productService.GetProducts();
-        var products = productDtos.Select(dto => new Product
-        {
-            Id = dto.Id,
-            Name = dto.Name,
-            Price = dto.Price,
-            Type = dto.Type,
-            Img = dto.Img
-        }).ToList();
-
+        var products = productService.GetProducts();
         var productsOverviewModel = new ProductsOverViewModel { Products = products };
         return View(productsOverviewModel);
     }

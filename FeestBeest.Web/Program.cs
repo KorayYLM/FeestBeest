@@ -3,6 +3,7 @@ using FeestBeest.Data.Models;
 using FeestBeest.Data.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,16 +16,20 @@ builder.Services.AddIdentity<User, IdentityRole<int>>()
     .AddDefaultTokenProviders();
 
 // Register application services
-builder.Services.AddScoped< AccountService>();
-builder.Services.AddScoped< ProductService>(); 
-builder.Services.AddScoped< OrderService>(); 
-builder.Services.AddScoped< BasketService>(); 
-
+builder.Services.AddScoped<AccountService>();
+builder.Services.AddScoped<ProductService>();
+builder.Services.AddScoped<OrderService>();
+builder.Services.AddSingleton<BasketService>();
 
 // Add MVC services
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddHttpContextAccessor(); 
+builder.Services.AddHttpContextAccessor();
+
+// Configure logging
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+builder.Logging.AddDebug();
 
 var app = builder.Build();
 

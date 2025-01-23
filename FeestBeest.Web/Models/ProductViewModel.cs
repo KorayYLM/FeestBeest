@@ -1,5 +1,5 @@
 ﻿
-using FeestBeest.Data.Dtos;
+using FeestBeest.Data.Dto;
 using FeestBeest.Data.Models;
 
 namespace FeestBeest.Web.Models;    
@@ -7,7 +7,7 @@ namespace FeestBeest.Web.Models;
 
 public class ProductViewModel
 {
-    public int Id { get; set; }
+    public int Id { get; set; } 
     public string Name { get; set; } = null!;
     public ProductType Type { get; set; } 
     public int Price { get; set; }

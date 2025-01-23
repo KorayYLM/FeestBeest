@@ -1,5 +1,5 @@
 ﻿using FeestBeest.Data;
-using FeestBeest.Data.Dtos;
+using FeestBeest.Data.Dto;
 using FeestBeest.Data.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -86,7 +86,7 @@ public class ProductService
             product.Img = productDto.Img;
         }
         product.Name = productDto.Name;
-        product.Type = productDto.Type; // Use the enum directly
+        product.Type = productDto.Type; 
         product.Price = productDto.Price;
 
         _context.SaveChanges();

@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using FeestBeest.Data.Dto;
-using FeestBeest.Data.Dtos;
+using FeestBeest.Data.Models;
 using FeestBeest.Web.Models;
+
+namespace FeestBeest.Web.Models;    
 
 public class OrderViewModel
 {
@@ -18,7 +20,7 @@ public class OrderViewModel
     public string ZipCode { get; set; } = null!;
 
     [Required]
-    [StringLength(5)]
+    [StringLength(10)]
     public string HouseNumber { get; set; } = null!;
 
     [Required]
@@ -34,7 +36,7 @@ public class OrderViewModel
     public DateTime Date { get; set; }
 
     public ProductsOverViewModel ProductsOverViewModel { get; set; } = new();
-    public List<Product> Products { get; set; } = new(); // Initialize the Products property
+    public List<Product> Products { get; set; } = new(); 
 
     public int TotalPrice { get; set; }
     public int DiscountAmount { get; set; }
@@ -55,17 +57,11 @@ public class OrderViewModel
             OrderFor = this.OrderFor,
             TotalPrice = this.TotalPrice,
             OrderDetails = this.ProductsOverViewModel.Products
+                .Where(p => p.InBasket)
                 .Select(p => new OrderDetailsDto()
                 {
                     ProductId = p.Id,
-                    Product = new ProductDto
-                    {
-                        Id = p.Id,
-                        Name = p.Name,
-                        Type = p.Type,
-                        Price = p.Price,
-                        Img = p.Img
-                    }
+                    Product = p
                 })
                 .ToList()
         };

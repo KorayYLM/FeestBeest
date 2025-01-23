@@ -1,6 +1,7 @@
-﻿using FeestBeest.Data.Models;
+﻿
+using FeestBeest.Data.Models;
 
-namespace  FeestBeest.Data.Dtos 
+namespace FeestBeest.Data.Dto
 {
     public class ProductDto
     {
@@ -9,7 +10,7 @@ namespace  FeestBeest.Data.Dtos
         public ProductType Type { get; set; }
         public int Price { get; set; }
         public string Img { get; set; }
-        public bool IsInBasket { get; set; }
+        public bool InBasket { get; set; }
 
     }
 }

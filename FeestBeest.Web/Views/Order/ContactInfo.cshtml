@@ -1,0 +1,104 @@
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model FeestBeest.Web.Models.OrderViewModel
+
+@{
+    ViewData["Title"] = "Products";
+    ViewData["date"] = Model.OrderFor;
+    var isSubmitted = Context.Request.Method == "POST" && Context.Request.Form["isSubmitted"] == "true";
+}
+
+<div class="flex justify-center items-center min-h-screen w-screen bg-gray-100">
+    <div class="w-full max-w-4xl p-4">
+        <div class="flex flex-wrap -mx-4">
+            <div class="w-full md:w-2/3 px-4">
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <form asp-action="ContaxtInfoPost" method="post" class="bg-white shadow-md rounded-lg px-8 pt-6 pb-8 mb-4" id="contactForm">
+                        <input type="hidden" asp-for="ProductsOverViewModel.BasketCount"/>
+                        <input type="hidden" asp-for="ProductsOverViewModel.Products"/>
+                        <input type="hidden" asp-for="OrderFor"/>
+                        <input type="hidden" name="skip" value="true"/>
+                        <input type="hidden" id="isSubmitted" name="isSubmitted" value="false"/>
+                        <div class="mb-4">
+                            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full sm:w-auto" type="submit">Skip step</button>
+                        </div>
+                    </form>
+                }
+
+                <h3 class="text-2xl font-bold mb-4 text-center">Enter Your Details</h3>
+                <form asp-action="ContaxtInfoPost" method="post"    class="bg-white shadow-md rounded-lg px-8 pt-6 pb-8 mb-4" id="contactForm">
+                    <input type="hidden" asp-for="ProductsOverViewModel.BasketCount"/>
+                    <input type="hidden" asp-for="ProductsOverViewModel.Products"/>
+                    <input type="hidden" asp-for="OrderFor"/>
+                    <input type="hidden" name="skip" value="false"/>
+                    <input type="hidden" id="isSubmitted" name="isSubmitted" value="false"/>
+                    @if (isSubmitted)
+                    {
+                        <div asp-validation-summary="ModelOnly" class="text-red-500 mb-4"></div>
+                    }
+                    <div class="mb-4">
+                        <label asp-for="Name" class="block text-gray-700 text-sm font-bold mb-2">Name *</label>
+                        <input asp-for="Name" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Name" required/>
+                        @if (isSubmitted)
+                        {
+                            <span asp-validation-for="Name" class="text-red-500 text-xs italic"></span>
+                        }
+                    </div>
+                    <div class="mb-4">
+                        <label asp-for="Email" class="block text-gray-700 text-sm font-bold mb-2">Email *</label>
+                        <input asp-for="Email" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Email" required/>
+                        @if (isSubmitted)
+                        {
+                            <span asp-validation-for="Email" class="text-red-500 text-xs italic"></span>
+                        }
+                    </div>
+                    <div class="mb-4">
+                        <label asp-for="ZipCode" class="block text-gray-700 text-sm font-bold mb-2">ZipCode *</label>
+                        <input asp-for="ZipCode" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" pattern="[0-9]{4}\s?[A-Z]{2}" placeholder="ZipCode" required/>
+                        @if (isSubmitted)
+                        {
+                            <span asp-validation-for="ZipCode" class="text-red-500 text-xs italic"></span>
+                        }
+                    </div>
+                    <div class="mb-4">
+                        <label asp-for="HouseNumber" class="block text-gray-700 text-sm font-bold mb-2">HouseNumber *</label>
+                        <input asp-for="HouseNumber" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="HouseNumber" required/>
+                        @if (isSubmitted)
+                        {
+                            <span asp-validation-for="HouseNumber" class="text-red-500 text-xs italic"></span>
+                        }
+                    </div>
+                    <div class="mb-4">
+                        <label asp-for="PhoneNumber" class="block text-gray-700 text-sm font-bold mb-2">PhoneNumber *</label>
+                        <input asp-for="PhoneNumber" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" pattern="[0-9]{10}" placeholder="PhoneNumber" required/>
+                        @if (isSubmitted)
+                        {
+                            <span asp-validation-for="PhoneNumber" class="text-red-500 text-xs italic"></span>
+                        }
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full sm:w-auto" type="submit">Next step</button>
+                    </div>
+                </form>
+            </div>
+            <div class="w-full md:w-1/3 px-4">
+                @foreach(var product in Model.ProductsOverViewModel.Products)
+                {
+                    <div class="flex flex-col items-center bg-white shadow-md rounded-lg p-4 mb-4">
+                        <img src="~/Images/Icons/@product.Type/@product.Img" alt="@product.Name" class="w-24 h-24 object-contain mb-2"/>
+                        <p class="text-lg font-bold">@product.Name</p>
+                        <p class="text-gray-700">€@product.Price</p>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.getElementById('contactForm').addEventListener('submit', function() {
+            document.getElementById('isSubmitted').value = 'true';
+        });
+    </script>
+}

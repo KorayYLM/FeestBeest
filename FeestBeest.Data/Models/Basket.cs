@@ -1,8 +1,9 @@
-﻿using FeestBeest.Data.Dtos;
+﻿using FeestBeest.Data.Dto;
 
-namespace FeestBeest.Data.Models;
-
-public class Basket
+namespace FeestBeest.Data.Models
 {
-    public List<ProductDto> Products { get; set; } = new List<ProductDto>(); 
+    public class Basket
+    {
+        public List<ProductDto> Products { get; set; } = new List<ProductDto>();
+    }
 }

@@ -1,9 +1,8 @@
 ﻿using System.Security.Claims;
+using FeestBeest.Data.Models;
 using FeestBeest.Data.Services;
 using FeestBeest.Web.Models;
 using Microsoft.AspNetCore.Mvc;
-using FeestBeest.Data.Dtos;
-using FeestBeest.Data.Models;
 
 namespace FeestBeest.Web.Controllers;
 
@@ -14,18 +13,21 @@ public class OrderController : Controller
     private readonly BasketService basketService;
     private readonly OrderService orderService;
     private readonly AccountService accountService;
+    private readonly ILogger<OrderController> logger;
 
-    public OrderController(ProductService productService, BasketService basketService, OrderService orderService, AccountService accountService)
+    public OrderController(ProductService productService, BasketService basketService, OrderService orderService, AccountService accountService, ILogger<OrderController> logger)
     {
         this.productService = productService;
         this.basketService = basketService;
         this.orderService = orderService;
         this.accountService = accountService;
+        this.logger = logger;
     }
 
-    [HttpGet]
+    [HttpGet("")]
     public IActionResult Index(string? message = "")
     {
+        logger.LogInformation("Index action called with message: {Message}", message);
         ViewBag.Message = message;
         basketService.ClearBasket();
 
@@ -37,33 +39,34 @@ public class OrderController : Controller
         return View(model);
     }
 
-    [HttpPost]
+    [HttpPost("index-post")]
     public IActionResult IndexPost(DateOnly date)
     {
+        logger.LogInformation("IndexPost action called with date: {Date}", date);
         if (date < DateOnly.FromDateTime(DateTime.Now))
         {
+            logger.LogWarning("Date is in the past: {Date}", date);
             return View("Index", new OrderViewModel { Date = DateTime.Now });
         }
         return RedirectToAction("Shop", new { date, selectedTypes = new List<ProductType>() });
     }
 
-    [HttpGet("products")]
-    public IActionResult Shop(DateOnly date, List<ProductType>? selectedTypes)
+    [HttpGet("shop")]
+    public IActionResult Shop(DateOnly date, List<ProductType>? selectedTypes, string? result, bool check = true)
     {
-        var productDtos = productService.GetProducts(date, selectedTypes);
-        var products = productDtos.Select(dto => new Product
+        var products = productService.GetProducts(date, selectedTypes);
+        var basketProducts = basketService.GetBasketProducts();
+
+        foreach (var product in products)
         {
-            Id = dto.Id,
-            Name = dto.Name,
-            Price = dto.Price,
-            Type = dto.Type, 
-            Img = dto.Img,
-            IsInBasket = basketService.GetBasketProducts().Any(bp => bp.Id == dto.Id)
-        }).ToList();
+            product.InBasket = basketProducts.Any(bp => bp.Id == product.Id);
+        }
 
         var model = new OrderViewModel()
         {
             OrderFor = date,
+            Check = check,
+            Result = result,
             ProductsOverViewModel = new ProductsOverViewModel
             {
                 Products = products,
@@ -74,38 +77,37 @@ public class OrderController : Controller
         return View(model);
     }
 
-    [HttpGet("contact")]
-    public IActionResult Contact(DateOnly date)
+    [HttpGet("contact-info")]
+    public IActionResult ContactInfo(DateOnly date, OrderViewModel? OVmodel = null)
     {
-        var products = basketService.GetBasketProducts().Select(dto => new Product
-        {
-            Id = dto.Id,
-            Name = dto.Name,
-            Price = dto.Price,
-            Type = dto.Type,
-            Img = dto.Img,
-            IsInBasket = true
-        }).ToList();
+        var model = new OrderViewModel();
 
-        var model = new OrderViewModel()
+        if (OVmodel != null)
         {
-            OrderFor = date,
-            ProductsOverViewModel = new ProductsOverViewModel
-            {
-                Products = products,
-                SelectedTypes = new List<ProductType>(),
-                BasketCount = basketService.GetBasketItemCount()
-            },
+            model.Name = OVmodel.Name;
+            model.Email = OVmodel.Email;
+            model.ZipCode = OVmodel.ZipCode;
+            model.HouseNumber = OVmodel.HouseNumber;
+            model.PhoneNumber = OVmodel.PhoneNumber;
+            model.TotalPrice = OVmodel.TotalPrice;
+            model.DiscountAmount = OVmodel.DiscountAmount;
+        }
+        model.OrderFor = date;
+        model.ProductsOverViewModel = new ProductsOverViewModel
+        {
+            Products = basketService.GetBasketProducts(),
+            SelectedTypes = new List<ProductType>(),
+            BasketCount = basketService.GetBasketItemCount()
         };
         return View(model);
     }
 
-    [HttpPost("contact")]
-    public IActionResult ContactPost(OrderViewModel model, bool skip)
+    [HttpPost("contact-info-post")]
+    public IActionResult ContaxtInfoPost(OrderViewModel model, bool skip)
     {
         if (skip)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? null;
             if (userId != null)
             {
                 var parsedId = int.Parse(userId);
@@ -113,6 +115,7 @@ public class OrderController : Controller
                 model.Name = account.Name;
                 model.Email = account.Email;
                 model.ZipCode = account.ZipCode;
+                model.OrderFor = model.OrderFor;
                 model.HouseNumber = account.HouseNumber;
                 model.PhoneNumber = account.PhoneNumber;
 
@@ -121,127 +124,74 @@ public class OrderController : Controller
             }
         }
 
-        var products = basketService.GetBasketProducts().Select(dto => new Product
-        {
-            Id = dto.Id,
-            Name = dto.Name,
-            Price = dto.Price,
-            Type = dto.Type,
-            Img = dto.Img,
-            IsInBasket = true
-        }).ToList();
-
         model.ProductsOverViewModel = new ProductsOverViewModel
         {
-            Products = products,
+            Products = basketService.GetBasketProducts(),
         };
 
-        return ModelState.IsValid ? RedirectToAction("Confirmation", model) : RedirectToAction("Contact");
+        return ModelState.IsValid ? RedirectToAction("Confirm", model) : RedirectToAction("ContactInfo", new { date = model.OrderFor.ToString("yyyy-MM-dd"), OVmodel = model });
     }
 
-    [HttpGet("confirmation")]
-    public IActionResult Confirmation(OrderViewModel model)
+    [HttpGet("confirm")]
+    public IActionResult Confirm(OrderViewModel model)
     {
-        var products = basketService.GetBasketProducts().Select(dto => new Product
+        model.ProductsOverViewModel = new ProductsOverViewModel     
         {
-            Id = dto.Id,
-            Name = dto.Name,
-            Price = dto.Price,
-            Type = dto.Type,
-            Img = dto.Img,
-            IsInBasket = true
-        }).ToList();
-
-        model.ProductsOverViewModel = new ProductsOverViewModel
-        {
-            Products = products,
+            Products = basketService.GetBasketProducts(),
         };
         model.TotalPrice = model.ProductsOverViewModel.Products.Sum(p => p.Price);
 
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? null;
         var parsedId = userId != null ? int.Parse(userId) : (int?)null;
         model.DiscountAmount = model.TotalPrice * (100 - orderService.DiscountCheckRules(parsedId, model.ToDto())) / 100;
 
         return View(model);
     }
 
-    [HttpPost("confirmation")]
-    public IActionResult ConfirmationPost(OrderViewModel model)
+    [HttpPost("confirm-post")]
+    public IActionResult ConfirmPost(OrderViewModel model)
     {
-        var products = basketService.GetBasketProducts().Select(dto => new Product
-        {
-            Id = dto.Id,
-            Name = dto.Name,
-            Price = dto.Price,
-            Type = dto.Type,
-            Img = dto.Img,
-            IsInBasket = true
-        }).ToList();
-
         model.ProductsOverViewModel = new ProductsOverViewModel
         {
-            Products = products,
+            Products = basketService.GetBasketProducts(),
         };
         model.TotalPrice = model.ProductsOverViewModel.Products.Sum(p => p.Price);
 
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? null;
         var parsedId = userId != null ? int.Parse(userId) : (int?)null;
 
-        var (check, result) = orderService.CreateOrder(model.ToDto(), parsedId);
-        if (check)
-        {
-            basketService.ClearBasket();
-        }
-        model.Check = check;
-        model.Result = result;
-        return RedirectToAction("Confirmation", model); 
+        orderService.CreateOrder(model.ToDto(), parsedId);
+        basketService.ClearBasket();
+
+        return RedirectToAction("Index", new { message = "Order created successfully, you may have paid for more products than expected :)" });
     }
 
-    [HttpPost]
-    [Route("AddToBasket")]
+    [HttpPost("add-to-basket")]
     public IActionResult AddToBasket(int productId, DateOnly date)
     {
         var product = productService.GetProductById(productId);
         if (product != null)
         {
-            basketService.AddToBasket(product);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var parsedId = userId != null ? int.Parse(userId) : (int?)null;
+            var isValid = basketService.AddToBasket(product, parsedId);
+            if (isValid)
+            {
+                product.InBasket = true; 
+            }
+            else
+            {
+                return RedirectToAction("Shop", new { date, check = isValid });
+            }
         }
-        return RedirectToAction("SelectProduct", new { date, selectedTypes = new List<ProductType>() });
+        return RedirectToAction("Shop", new { date });
     }
 
-    [HttpPost]
-    [Route("RemoveFromBasket")]
+    [HttpPost("remove-from-basket")]
     public IActionResult RemoveFromBasket(int productId, DateOnly date)
     {
+        logger.LogInformation("RemoveFromBasket action called with productId: {ProductId} and date: {Date}", productId, date);
         basketService.RemoveFromBasket(productId);
-        return RedirectToAction("SelectProduct", new { date, selectedTypes = new List<ProductType>() });
-    }
-
-    [HttpGet("SelectProduct")]
-    public IActionResult SelectProduct(DateOnly date, List<ProductType>? selectedTypes)
-    {
-        var productDtos = productService.GetProducts(date, selectedTypes);
-        var products = productDtos.Select(dto => new Product
-        {
-            Id = dto.Id,
-            Name = dto.Name,
-            Price = dto.Price,
-            Type = dto.Type,
-            Img = dto.Img,
-            IsInBasket = basketService.GetBasketProducts().Any(bp => bp.Id == dto.Id)
-        }).ToList();
-
-        var model = new OrderViewModel()
-        {
-            OrderFor = date,
-            ProductsOverViewModel = new ProductsOverViewModel
-            {
-                Products = products,
-                SelectedTypes = selectedTypes ?? new List<ProductType>(),
-                BasketCount = basketService.GetBasketItemCount()
-            },
-            Products = products // Populate the Products property
-        };
-        return View(model);
+        return RedirectToAction("Shop", new { date, selectedTypes = new List<ProductType>() });
     }
 }
