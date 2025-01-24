@@ -80,7 +80,11 @@ public class ProductController : Controller
     [HttpPost("{id:int}/edit")]
     public async Task<IActionResult> Edit(int id, OneProductViewModel productViewModel)
     {
-        await HandleProductSave(productViewModel, false, id);
+        if (ModelState.IsValid)
+        {
+            await HandleProductSave(productViewModel, false, id);
+            return RedirectToAction("Index");
+        }
         return View(productViewModel);
     }
 
