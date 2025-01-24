@@ -1,0 +1,55 @@
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model FeestBeest.Web.Models.OrderViewModel
+@{
+    ViewData["Title"] = "Create customer";
+}
+
+<div class="container mx-auto my-8">
+    <div class="flex justify-between items-center pb-4 border-b">
+        <nav aria-label="breadcrumb">
+        </nav>
+    </div>
+
+    <div class="bg-light rounded-3 p-3">
+        <div class="bg-white border rounded-3 p-4 pt-5">
+            <h1 class="text-2xl font-bold text-center">Order details</h1>
+
+            <div class="mx-auto mt-6" style="max-width: 30rem">
+                <div class="mb-3">
+                    <div class="my-2">
+                        <p>Name: @Model.Name</p>
+                    </div>
+                    <div class="my-2">
+                        <p>Email: @Model.Email</p>
+                    </div>
+                    <div class="my-2">
+                        <p>Order for: @Model.OrderFor</p>
+                    </div>
+                    <div class="my-2">
+                        <p>House number: @Model.HouseNumber</p>
+                    </div>
+                    <div class="my-2">
+                        <p>Zip code: @Model.ZipCode</p>
+                    </div>
+                    <div class="my-2">
+                        <ul>
+                            @foreach (var product in Model.ProductsOverViewModel.Products)
+                            {
+                                <li class="mb-2">
+                                    <p>Product: @product.Name</p>
+                                    <p>Price: @product.Price</p>
+                                </li>
+                            }
+                        </ul>
+                        <p>Total: @Model.TotalPrice</p>
+                    </div>
+                </div>
+
+                <div class="flex justify-between pt-2">
+                    <a asp-action="Index" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">Back</a>
+                    <a asp-action="Delete" asp-route-id="@Model.Id" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Delete</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

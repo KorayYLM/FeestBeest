@@ -1,0 +1,40 @@
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model FeestBeest.Web.Models.OrdersOverviewViewModel
+@{
+    ViewData["Title"] = "Products";
+}
+
+<div class="container mx-auto my-8">
+    <div class="flex justify-between items-center pb-4 border-b">
+        <h1 class="text-2xl font-bold">Order Overview</h1>
+    </div>
+
+    <div class="overflow-x-auto mt-6">
+        <table class="min-w-full bg-white border border-gray-200">
+            <thead>
+            <tr>
+                <th class="px-4 py-2 border-b">Name</th>
+                <th class="px-4 py-2 border-b">Email</th>
+                <th class="px-4 py-2 border-b">Order for</th>
+                <th class="px-4 py-2 border-b">Total price</th>
+                <th class="px-4 py-2 border-b">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var order in Model.Orders)
+            {
+                <tr>
+                    <td class="px-4 py-2 border-b">@order.Name</td>
+                    <td class="px-4 py-2 border-b">@order.Email</td>
+                    <td class="px-4 py-2 border-b">@order.OrderFor</td>
+                    <td class="px-4 py-2 border-b">@order.TotalPrice</td>
+                    <td class="px-4 py-2 border-b text-right">
+                        <a asp-action="Details" asp-route-id="@order.Id" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Details</a>
+                        <a asp-action="Delete" asp-route-id="@order.Id" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Delete</a>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>
