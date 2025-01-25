@@ -7,7 +7,7 @@ public class ProductsNotTogetherRule
 {
     public (bool, string) CheckProductsTogether(Basket basket, ProductDto product)
     {
-        var dangerousAnimals = new[] { "leeuw", "ijsbeer" }; // names of animals not types!
+        var dangerousAnimals = new[] { "leeuw", "ijsbeer" }; 
 
         if (dangerousAnimals.Contains(product.Name.ToLower()))
         {

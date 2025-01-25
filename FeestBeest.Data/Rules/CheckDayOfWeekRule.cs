@@ -2,7 +2,7 @@
 
 public class CheckDayOfWeekRule
 {
-    //15% discount on Monday and Tuesday
+    //monday, tuesday 15% discount  
     public int IsDayOfWeek(OrderDto orderDto)
     {
         return orderDto.OrderFor.DayOfWeek == DayOfWeek.Monday || orderDto.OrderFor.DayOfWeek == DayOfWeek.Tuesday ? 15 : 0;

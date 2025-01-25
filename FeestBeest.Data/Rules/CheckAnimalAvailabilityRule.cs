@@ -5,18 +5,16 @@ namespace FeestBeest.Data.Rules;
 
 public class CheckAnimalAvailabilityRule
 {
-    private const string WeekdayOnlyMessage = "Dieren in pak werken alleen doordeweek";
-    private const string TooColdMessage = "Veelste koud";
-    private const string MeltingMessage = "Some People Are Worth Melting For. ~ Ola";
+    private const string WeekdayOnlyMessage = "This product is only available on weekdays"; 
+    private const string TooColdMessage = "Its to cold right now for this product"; 
+    private const string MeltingMessage = "Metlinggg";
 
-    // Check if the animal is available in the current season
     public (bool, string) CheckAnimalAvailability(Basket basket, ProductDto product)
     {
         var currentDate = DateTime.Now;
         var dayOfWeek = currentDate.DayOfWeek;
         var month = currentDate.Month;
 
-        // Check the new product
         if (product.Name.Equals("Pinguïn") && (dayOfWeek == DayOfWeek.Saturday || dayOfWeek == DayOfWeek.Sunday))
         {
             return (false, WeekdayOnlyMessage);
@@ -32,7 +30,6 @@ public class CheckAnimalAvailabilityRule
             return (false, MeltingMessage);
         }
 
-        // Check the products already in the basket
         foreach (var basketProduct in basket.Products)
         {
             if (basketProduct.Name.Equals("Pinguïn") && (dayOfWeek == DayOfWeek.Saturday || dayOfWeek == DayOfWeek.Sunday))

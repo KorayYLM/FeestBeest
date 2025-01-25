@@ -40,7 +40,7 @@
                             <form method="post" asp-action="RemoveFromBasket" asp-controller="Order" class="basket-form">
                                 <input type="hidden" name="productId" value="@product.Id"/>
                                 <input type="hidden" name="date" value="@Model.OrderFor.ToString("yyyy-MM-dd")"/>
-                                <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 w-full">Remove from basket</button>
+                                <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 w-full">Remove product </button>
                             </form>
                         }
                         else

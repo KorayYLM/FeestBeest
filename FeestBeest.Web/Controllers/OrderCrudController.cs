@@ -34,39 +34,26 @@ namespace FeestBeest.Web.Controllers
             return View(model);
         }
 
-        [HttpGet("details/{id}")]
+        [HttpGet("details/{id:int}")]
         public IActionResult Details(int id)
         {
-            var orderDto = orderService.GetOrder(id);
-            if (orderDto == null)
+            var order = orderService.GetOrder(id);
+            var model = new OrderViewModel
             {
-                return NotFound();
-            }
-
-            var orderViewModel = new OrderViewModel
-            {
-                Id = orderDto.Id,
-                Name = orderDto.Name,
-                Email = orderDto.Email,
-                ZipCode = orderDto.ZipCode,
-                HouseNumber = orderDto.HouseNumber,
-                PhoneNumber = orderDto.PhoneNumber,
-                OrderFor = orderDto.OrderFor,
-                TotalPrice = orderDto.TotalPrice,
+                Id = order!.Id,
+                Name = order.Name,
+                Email = order.Email,
+                ZipCode = order.ZipCode,
+                HouseNumber = order.HouseNumber,
+                PhoneNumber = order.PhoneNumber,
+                OrderFor = order.OrderFor,
+                TotalPrice = order.TotalPrice,
                 ProductsOverViewModel = new ProductsOverViewModel
                 {
-                    Products = orderDto.OrderDetails.Select(od => new ProductDto
-                    {
-                        Id = od.Product.Id,
-                        Name = od.Product.Name,
-                        Type = od.Product.Type,
-                        Price = od.Product.Price,
-                        Img = od.Product.Img
-                    }).ToList()
+                    Products = order.OrderDetails.Select(od => od.Product).ToList()
                 }
             };
-
-            return View(orderViewModel);
+            return View(model);
         }
 
         [HttpGet("delete/{id:int}")]

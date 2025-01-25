@@ -13,5 +13,8 @@ namespace FeestBeest.Data.Dto
         public DateOnly OrderFor { get; set; }
         public int TotalPrice { get; set; }
         public List<OrderDetailsDto> OrderDetails { get; set; } = new();
+        
+        
+        
     }
 }

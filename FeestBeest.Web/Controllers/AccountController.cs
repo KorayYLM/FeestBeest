@@ -2,6 +2,7 @@
 using FeestBeest.Data.Services;
 using FeestBeest.Data.Models;
 using FeestBeest.Web.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -88,13 +89,14 @@ namespace FeestBeest.Web.Controllers
             return false;
         }
 
-        // Add the Create action methods
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public IActionResult Create()
         {
             return View();
         }
-
+        
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(AccountViewModel accountViewModel)

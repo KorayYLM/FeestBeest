@@ -2,12 +2,14 @@
 using FeestBeest.Data.Models;
 using FeestBeest.Data.Services;
 using FeestBeest.Web.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FeestBeest.Web.Controllers;
 
+[Authorize(Roles = "Admin")]
 public class ProductController : Controller
-{
+{ 
     private readonly ProductService productService;
     private readonly OrderService orderService;
 
