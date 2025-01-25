@@ -1,4 +1,4 @@
-﻿﻿using System.Text;
+﻿using System.Text;
 using FeestBeest.Data.Dto;
 using FeestBeest.Data.Models;
 using Microsoft.AspNetCore.Identity;
@@ -14,19 +14,7 @@ namespace FeestBeest.Data.Services
             _userManager = userManager;
         }
 
-        public IEnumerable<UserDto> GetAllUsers()
-        {
-            var users = _userManager.Users
-                .OrderBy(user => user.UserName)
-                .ToList();
-
-            var customers = users
-                .Where(user => _userManager.IsInRoleAsync(user, "customer").Result)
-                .Select(ConvertCustomerDto)
-                .ToList();
-            return customers;
-        }
-
+        
         private UserDto ConvertCustomerDto(User user)
         {
             return new UserDto
@@ -86,33 +74,6 @@ namespace FeestBeest.Data.Services
             var user = _userManager.FindByIdAsync(id.ToString()).Result;
             return ConvertCustomerDto(user!);
         }
-
-        public async Task<(bool check, string result)> UpdateUser(int id, UserDto userDto)
-        {
-            var user = await _userManager.FindByIdAsync(id.ToString());
-            if (user == null) return (false, "User not found");
-
-            user.UserName = userDto.Name;
-            user.Email = userDto.Email;
-            user.ZipCode = userDto.ZipCode;
-            user.HouseNumber = userDto.HouseNumber;
-            user.PhoneNumber = userDto.PhoneNumber;
-            user.Rank = userDto.Rank;
-
-            var result = await _userManager.UpdateAsync(user);
-            return result.Succeeded ? (true, "User updated") : (false, "Something went wrong, please try again.");
-        }
-
-        public async Task<bool> DeleteUserAsync(int userId)
-        {
-            var user = await _userManager.FindByIdAsync(userId.ToString());
-            if (user != null)
-            {
-                var result = await _userManager.DeleteAsync(user);
-                return result.Succeeded;
-            }
-
-            return false;
-        }
+        
     }
 }

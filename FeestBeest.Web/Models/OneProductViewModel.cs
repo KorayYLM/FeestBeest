@@ -9,10 +9,11 @@ namespace FeestBeest.Web.Models
         public int Id { get; set; }
 
         [Required]
+        [RegularExpression(@"^[a-zA-Z\s\p{P}]+$", ErrorMessage = "Name can only contain letters and punctuation.")]
         public string Name { get; set; } = null!;
 
         [Required]
-        [Range(1, int.MaxValue)]
+        [Range(1, 10000, ErrorMessage = "Price must be between 1 and 10000.")]
         public int Price { get; set; }
 
         [Required]

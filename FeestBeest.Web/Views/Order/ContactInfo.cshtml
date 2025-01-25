@@ -1,11 +1,15 @@
 ﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
 @model FeestBeest.Web.Models.OrderViewModel
 
+
 @{
     ViewData["Title"] = "Products";
     ViewData["date"] = Model.OrderFor;
     var isSubmitted = Context.Request.Method == "POST" && Context.Request.Form["isSubmitted"] == "true";
 }
+
+@await Html.PartialAsync("Stepper")
+
 
 <div class="flex justify-center items-center min-h-screen w-screen bg-gray-100">
     <div class="w-full max-w-4xl p-4">

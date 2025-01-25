@@ -7,17 +7,15 @@ using FeestBeest.Data.Dto;
 
 namespace FeestBeest.Web.Controllers
 {
-    [Authorize]
+    [Authorize (Roles = "Customer")]   
     [Route("order-crud")]
     public class OrderCrudController : Controller
     {
         private readonly OrderService orderService;
-        private readonly ILogger<OrderCrudController> logger;
 
-        public OrderCrudController(OrderService orderService, ILogger<OrderCrudController> logger)
+        public OrderCrudController(OrderService orderService)
         {
             this.orderService = orderService;
-            this.logger = logger;
         }
 
         [HttpGet]

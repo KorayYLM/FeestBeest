@@ -40,7 +40,7 @@ namespace Tests
 
             // Act & Assert
             var ex = Assert.Throws<ValidationException>(() => ValidateModel(_accountViewModel));
-            Assert.AreEqual("The Email field is not a valid e-mail address.", ex.Message);
+            Assert.AreEqual("Invalid email format.", ex.Message);
         }
 
         private void ValidateModel(object model)

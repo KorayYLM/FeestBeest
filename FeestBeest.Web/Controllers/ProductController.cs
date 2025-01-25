@@ -43,7 +43,7 @@ public class ProductController : Controller
     {
         if (ModelState.IsValid)
         {
-            await HandleProductSave(productViewModel, true);
+            await SaveProduct(productViewModel, true);
             return RedirectToAction("Index");
         }
         return View(productViewModel);
@@ -84,7 +84,7 @@ public class ProductController : Controller
     {
         if (ModelState.IsValid)
         {
-            await HandleProductSave(productViewModel, false, id);
+            await SaveProduct(productViewModel, false, id);
             return RedirectToAction("Index");
         }
         return View(productViewModel);
@@ -98,7 +98,7 @@ public class ProductController : Controller
         return Ok();
     }
 
-    private async Task HandleProductSave(OneProductViewModel productViewModel, bool isCreate, int? id = null)
+    private async Task SaveProduct(OneProductViewModel productViewModel, bool isCreate, int? id = null)
     {
         if (ModelState.IsValid)
         {

@@ -1,6 +1,12 @@
-﻿<!-- Views/Order/Index.cshtml -->
-@using Microsoft.AspNetCore.Mvc.TagHelpers
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
 @model OrderViewModel
+
+@{
+    ViewData["Title"] = "Products";
+    ViewData["date"] = Model.OrderFor;
+}
+
+@await Html.PartialAsync("Stepper")
 
 <div class="flex items-center justify-center min-h-screen w-screen bg-gray-100">
     <form asp-controller="Order" asp-action="AddToBasket" method="post" novalidate class="w-full max-w-md p-6 bg-white rounded-lg shadow-md">

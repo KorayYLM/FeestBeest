@@ -12,39 +12,45 @@
     <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
         <h2 class="text-2xl font-bold mb-6 text-center">Create Beestje</h2>
         <form method="post" class="space-y-4">
-           <div>
+            <div>
                 <label class="block text-sm font-medium text-gray-700" for="Name">Name</label>
                 <input class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                        type="text" id="Name" name="Name" value="@Model.Name" required>
+                <span asp-validation-for="Name" class="text-red-500 text-sm"></span>
             </div>
 
-          <div>
+            <div>
                 <label class="block text-sm font-medium text-gray-700" for="Type">Type</label>
                 <select class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                         id="Type" name="Type" required>
                     @foreach (var type in Model.AvailableTypes)
                     {
-                        <option value="@type" selected="@(type == Model.Type ? "selected" : null)">@type</option>                    }
+                        <option value="@type" selected="@(type == Model.Type ? "selected" : null)">@type</option>
+                    }
                 </select>
+                <span asp-validation-for="Type" class="text-red-500 text-sm"></span>
             </div>
 
-           <div>
+            <div>
                 <label class="block text-sm font-medium text-gray-700" for="Price">Price</label>
                 <input class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                        type="number" step="0.01" id="Price" name="Price" value="@Model.Price" required>
+                <span asp-validation-for="Price" class="text-red-500 text-sm"></span>
             </div>
 
-          <div>
+            <div>
                 <label class="block text-sm font-medium text-gray-700" for="Img">Image URL</label>
                 <select class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
                         id="Img" name="Img" required>
                     @foreach (var img in Model.AvailableImages)
                     {
-                        <option value="@img" selected="@(img == Model.Img ? "selected" : null)">@img</option>                    }
+                        <option value="@img" selected="@(img == Model.Img ? "selected" : null)">@img</option>
+                    }
                 </select>
+                <span asp-validation-for="Img" class="text-red-500 text-sm"></span>
             </div>
 
-\            <div class="flex justify-between items-center">
+            <div class="flex justify-between items-center">
                 <a href="@Url.Action("Index")"
                    class="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600">Cancel</a>
                 <button type="submit"

@@ -1,0 +1,37 @@
+﻿@{
+    var steps = new[] { "Choose date", "Select Products", "Contact information", "Confirmation" };
+    var currentStep = ViewData["step"]?.ToString();
+    var currentIndex = Array.IndexOf(steps, currentStep);
+}
+
+<div class="flex justify-center mb-5" aria-label="Tabs">
+    <div class="flex w-full max-w-4xl">
+        @for (int i = 0; i < steps.Length; i++)
+        {
+            var stepClass = i <= currentIndex ? "stepper-step completed" : "stepper-step";
+            var lineClass = i < currentIndex ? "bg-blue-500" : "bg-gray-200";
+            var isLink = i == 0;
+
+            <div class="flex-1 flex flex-col items-center relative">
+                @if (isLink)
+                {
+                    <a class="flex flex-col items-center w-full py-2 @stepClass" asp-action="@steps[i]" asp-controller="Order">
+                        <div class="w-8 h-8 rounded-full flex items-center justify-center mb-1 border-2 border-gray-300">@((i + 1).ToString())</div>
+                        <div class="text-sm">@steps[i]</div>
+                    </a>
+                }
+                else
+                {
+                    <div class="flex flex-col items-center w-full py-2 @stepClass">
+                        <div class="w-8 h-8 rounded-full flex items-center justify-center mb-1 border-2 border-gray-300">@((i + 1).ToString())</div>
+                        <div class="text-sm">@steps[i]</div>
+                    </div>
+                }
+                @if (i < steps.Length - 1)
+                {
+                    <div class="absolute top-1/2 left-full w-full h-0.5 transform -translate-x-1/2 @lineClass"></div>
+                }
+            </div>
+        }
+    </div>
+</div>

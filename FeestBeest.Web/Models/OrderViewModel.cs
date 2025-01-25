@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using FeestBeest.Data.Dto;
 using FeestBeest.Data.Models;
+using FeestBeest.Data.Rules.ValidationRules;
 using FeestBeest.Web.Models;
 
 namespace FeestBeest.Web.Models;    
@@ -17,7 +18,7 @@ public class OrderViewModel
     public string Email { get; set; } = null!;
 
     [Required]
-    [DataType(DataType.PostalCode)]
+    [PostalCodeRule]
     public string ZipCode { get; set; } = null!;
 
     [Required]
@@ -25,7 +26,7 @@ public class OrderViewModel
     public string HouseNumber { get; set; } = null!;
 
     [Required]
-    [DataType(DataType.PhoneNumber)]
+    [PhoneNumberRule]   
     public string PhoneNumber { get; set; } = null!;
 
     [Required]

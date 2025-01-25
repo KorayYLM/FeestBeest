@@ -2,7 +2,6 @@
 using FeestBeest.Data.Models;
 using FeestBeest.Data.Rules;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace FeestBeest.Data.Services
@@ -11,45 +10,34 @@ namespace FeestBeest.Data.Services
     {
         private readonly Basket basket;
         private readonly IServiceProvider serviceProvider;
-        private readonly ILogger<BasketService> logger;
 
-        public BasketService(IServiceProvider serviceProvider, ILogger<BasketService> logger)
+        public BasketService(IServiceProvider serviceProvider)
         {
             this.serviceProvider = serviceProvider;
-            this.logger = logger;
             basket = new Basket();
         }
 
-        public bool AddToBasket(ProductDto products, int? userId = null)
+        public bool Add(ProductDto products, int? userId = null)
         {
-            logger.LogInformation("Attempting to add product with Id: {ProductId} to basket for user: {UserId}",
-                products.Id, userId);
-
-            var isBasketValid = CheckBasket(userId, products);
+            var isBasketValid = ChechOrderBasket(userId, products);
             if (!isBasketValid)
             {
-                logger.LogWarning("CheckBasket failed for product with Id: {ProductId} for user: {UserId}", products.Id,
-                    userId);
                 return false;
             }
 
             basket.Products.Add(products);
             products.InBasket = true;
 
-            logger.LogInformation(
-                "Product with Id: {ProductId} successfully added to basket for user: {UserId}. IsInBasket: {IsInBasket}",
-                products.Id, userId, products.InBasket);
             return true;
         }
 
-        public void RemoveFromBasket(int productId)
+        public void Remove(int productId)
         {
             var product = basket.Products.FirstOrDefault(p => p.Id == productId);
             if (product != null)
             {
                 basket.Products.Remove(product);
                 product.InBasket = false;
-                logger.LogInformation("Product with Id: {ProductId} removed from basket", productId);
             }
         }
 
@@ -58,17 +46,17 @@ namespace FeestBeest.Data.Services
             return basket.Products;
         }
 
-        public void ClearBasket()
+        public void Clear()
         {
             basket.Products.Clear();
         }
 
-        public int GetBasketItemCount()
+        public int GetBasketCount()
         {
             return basket.Products.Count;
         }
 
-        private bool CheckBasket(int? userId = null, ProductDto product = null)
+        private bool ChechOrderBasket(int? userId = null, ProductDto product = null)
         {
             using (var scope = serviceProvider.CreateScope())
             {

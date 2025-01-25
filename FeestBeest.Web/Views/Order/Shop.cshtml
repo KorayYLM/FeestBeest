@@ -6,6 +6,8 @@
     ViewData["date"] = Model.OrderFor;
 }
 
+@await Html.PartialAsync("Stepper")
+
 <div class="flex flex-wrap min-h-screen w-screen">
     <div class="w-full lg:w-1/4 p-3 mb-6 lg:mb-0">
         <div class="bg-white border border-gray-200 rounded-lg shadow-lg p-4">
@@ -56,21 +58,22 @@
             }
         </div>
     </div>
-    @if (Model.ProductsOverViewModel.BasketCount > 0)
-    {
-        <form method="get" asp-action="ContactInfo" class="w-full mt-6">
-            <input type="hidden" name="date" value="@Model.OrderFor.ToString("yyyy-MM-dd")"/>
-            <input type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" value="Next step"/>
-        </form>
-    }
-    else
-    {
-        <div class="alert alert-warning w-full mt-6" role="alert">
-            Must select at least 1 product
-        </div>
-    }
+    <div class="w-full flex justify-center items-center mt-6">
+        @if (Model.ProductsOverViewModel.BasketCount > 0)
+        {
+            <form method="get" asp-action="ContactInfo" class="w-full max-w-md">
+                <input type="hidden" name="date" value="@Model.OrderFor.ToString("yyyy-MM-dd")"/>
+                <input type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 w-full" value="Next step"/>
+            </form>
+        }
+        else
+        {
+            <div class="alert alert-warning w-full max-w-md text-center" role="alert">
+                Must select at least 1 product
+            </div>
+        }
+    </div>
 </div>
-
 
 <script>
     function submitForm() {

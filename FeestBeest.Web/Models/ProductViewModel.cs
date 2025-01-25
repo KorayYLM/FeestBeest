@@ -1,4 +1,5 @@
 ﻿
+using System.ComponentModel.DataAnnotations;
 using FeestBeest.Data.Dto;
 using FeestBeest.Data.Models;
 
@@ -7,11 +8,17 @@ namespace FeestBeest.Web.Models;
 
 public class ProductViewModel
 {
-    public int Id { get; set; } 
+    public int Id { get; set; }
+
+    [Required]
     public string Name { get; set; } = null!;
-    public ProductType Type { get; set; } 
+
+    public ProductType Type { get; set; }
+
+    [Range(0, 10000)]
     public int Price { get; set; }
-    public string Img { get; set; } = null!;
+
+    [Required] public string Img { get; set; } = null!;
 
     public static ProductViewModel FromDto(ProductDto dto)
     {

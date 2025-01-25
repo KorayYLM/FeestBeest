@@ -112,9 +112,5 @@ public class ProductService
             .Distinct()
             .ToList();
     }
-
-    public List<ProductType> GetAvailableTypes()
-    {
-        return Enum.GetValues(typeof(ProductType)).Cast<ProductType>().ToList();
-    }
+    
 }

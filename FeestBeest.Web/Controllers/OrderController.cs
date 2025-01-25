@@ -26,7 +26,8 @@ public class OrderController : Controller
     public IActionResult Index(string? message = "")
     {
         ViewBag.Message = message;
-        basketService.ClearBasket();
+        basketService.Clear();
+        ViewData["step"] = "Choose date";
 
         var model = new OrderViewModel
         {
@@ -41,6 +42,7 @@ public class OrderController : Controller
     {
         if (date < DateOnly.FromDateTime(DateTime.Now))
         {
+            ViewData["step"] = "Choose date";
             return View("Index", new OrderViewModel { Date = DateTime.Now });
         }
         return RedirectToAction("Shop", new { date, selectedTypes = new List<ProductType>() });
@@ -49,6 +51,7 @@ public class OrderController : Controller
     [HttpGet("shop")]
     public IActionResult Shop(DateOnly date, List<ProductType>? selectedTypes, string? result, bool check = true)
     {
+        ViewData["step"] = "Select Products";
         var products = productService.GetProducts(date, selectedTypes);
         var basketProducts = basketService.GetBasketProducts();
 
@@ -66,7 +69,7 @@ public class OrderController : Controller
             {
                 Products = products,
                 SelectedTypes = selectedTypes ?? new List<ProductType>(),
-                BasketCount = basketService.GetBasketItemCount()
+                BasketCount = basketService.GetBasketCount()
             }
         };
         return View(model);
@@ -75,6 +78,7 @@ public class OrderController : Controller
     [HttpGet("contact-info")]
     public IActionResult ContactInfo(DateOnly date, OrderViewModel? OVmodel = null)
     {
+        ViewData["step"] = "Contact information";
         var model = new OrderViewModel();
 
         if (OVmodel != null)
@@ -92,7 +96,7 @@ public class OrderController : Controller
         {
             Products = basketService.GetBasketProducts(),
             SelectedTypes = new List<ProductType>(),
-            BasketCount = basketService.GetBasketItemCount()
+            BasketCount = basketService.GetBasketCount()
         };
         return View(model);
     }
@@ -100,6 +104,7 @@ public class OrderController : Controller
     [HttpPost("contact-info-post")]
     public IActionResult ContaxtInfoPost(OrderViewModel model, bool skip)
     {
+        ViewData["step"] = "Contact information";
         if (skip)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? null;
@@ -130,6 +135,7 @@ public class OrderController : Controller
     [HttpGet("confirm")]
     public IActionResult Confirm(OrderViewModel model)
     {
+        ViewData["step"] = "Confirmation";
         model.ProductsOverViewModel = new ProductsOverViewModel     
         {
             Products = basketService.GetBasketProducts(),
@@ -156,7 +162,7 @@ public class OrderController : Controller
         var parsedId = userId != null ? int.Parse(userId) : (int?)null;
 
         orderService.CreateOrder(model.ToDto(), parsedId);
-        basketService.ClearBasket();
+        basketService.Clear();
 
         return RedirectToAction("Index", new { message = "Order created successfully" });
     }
@@ -169,7 +175,7 @@ public class OrderController : Controller
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var parsedId = userId != null ? int.Parse(userId) : (int?)null;
-            var isValid = basketService.AddToBasket(product, parsedId);
+            var isValid = basketService.Add(product, parsedId);
             if (isValid)
             {
                 product.InBasket = true; 
@@ -185,7 +191,7 @@ public class OrderController : Controller
     [HttpPost("remove-from-basket")]
     public IActionResult RemoveFromBasket(int productId, DateOnly date)
     {
-        basketService.RemoveFromBasket(productId);
+        basketService.Remove(productId);
         return RedirectToAction("Shop", new { date, selectedTypes = new List<ProductType>() });
     }
 }

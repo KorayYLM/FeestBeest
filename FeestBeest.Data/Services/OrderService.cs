@@ -11,13 +11,11 @@ public class OrderService
 {
     private readonly FeestBeestContext _context;
     private readonly UserManager<User> _userManager;
-    private readonly ProductService _productService;
 
-    public OrderService(FeestBeestContext context, UserManager<User> userManager, ProductService productService)
+    public OrderService(FeestBeestContext context, UserManager<User> userManager )
     {
         _context = context;
         _userManager = userManager;
-        _productService = productService;
     }
 
     public void CreateOrder(OrderDto orderDto, int? userId = null)
@@ -94,11 +92,7 @@ public class OrderService
                 }).ToList()
             });
     }
-
-    public List<OrderDto> GetAllOrders()
-    {
-        return SelectAllOrders().ToList();
-    }
+    
 
     public OrderDto? GetOrder(int id)
     {

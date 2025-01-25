@@ -1,19 +1,18 @@
-﻿
-using FeestBeest.Data.Dto;
+﻿using FeestBeest.Data.Dto;
 using FeestBeest.Data.Models;
 using FeestBeest.Data.Rules;
 using Moq;
 
 namespace Tests
 {
-    public class CheckOrderProductRuleTest
+    public class CheckOrderProductsRuleTest
     {
         private CheckOrderProductsRule _rule;
         private Basket _basket;
         private Mock<User> _userMock;
 
         [SetUp]
-        public void Setup()
+        public void SetUp()
         {
             _rule = new CheckOrderProductsRule();
             _basket = new Basket();
