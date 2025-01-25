@@ -13,21 +13,18 @@ public class OrderController : Controller
     private readonly BasketService basketService;
     private readonly OrderService orderService;
     private readonly AccountService accountService;
-    private readonly ILogger<OrderController> logger;
 
-    public OrderController(ProductService productService, BasketService basketService, OrderService orderService, AccountService accountService, ILogger<OrderController> logger)
+    public OrderController(ProductService productService, BasketService basketService, OrderService orderService, AccountService accountService)
     {
         this.productService = productService;
         this.basketService = basketService;
         this.orderService = orderService;
         this.accountService = accountService;
-        this.logger = logger;
     }
 
     [HttpGet("")]
     public IActionResult Index(string? message = "")
     {
-        logger.LogInformation("Index action called with message: {Message}", message);
         ViewBag.Message = message;
         basketService.ClearBasket();
 
@@ -42,10 +39,8 @@ public class OrderController : Controller
     [HttpPost("index-post")]
     public IActionResult IndexPost(DateOnly date)
     {
-        logger.LogInformation("IndexPost action called with date: {Date}", date);
         if (date < DateOnly.FromDateTime(DateTime.Now))
         {
-            logger.LogWarning("Date is in the past: {Date}", date);
             return View("Index", new OrderViewModel { Date = DateTime.Now });
         }
         return RedirectToAction("Shop", new { date, selectedTypes = new List<ProductType>() });
@@ -163,7 +158,7 @@ public class OrderController : Controller
         orderService.CreateOrder(model.ToDto(), parsedId);
         basketService.ClearBasket();
 
-        return RedirectToAction("Index", new { message = "Order created successfully, you may have paid for more products than expected :)" });
+        return RedirectToAction("Index", new { message = "Order created successfully" });
     }
 
     [HttpPost("add-to-basket")]
@@ -190,7 +185,6 @@ public class OrderController : Controller
     [HttpPost("remove-from-basket")]
     public IActionResult RemoveFromBasket(int productId, DateOnly date)
     {
-        logger.LogInformation("RemoveFromBasket action called with productId: {ProductId} and date: {Date}", productId, date);
         basketService.RemoveFromBasket(productId);
         return RedirectToAction("Shop", new { date, selectedTypes = new List<ProductType>() });
     }
