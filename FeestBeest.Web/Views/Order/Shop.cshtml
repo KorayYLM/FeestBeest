@@ -75,6 +75,13 @@
     </div>
 </div>
 
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="fixed bottom-0 right-0 m-4 p-4 bg-red-500 text-white rounded-lg shadow-lg">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
 <script>
     function submitForm() {
         document.getElementById('filterForm').submit();

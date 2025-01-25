@@ -176,14 +176,12 @@ public class OrderController : Controller
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var parsedId = userId != null ? int.Parse(userId) : (int?)null;
             var isValid = basketService.Add(product, parsedId);
-            if (isValid)
+            if (!isValid)
             {
-                product.InBasket = true; 
-            }
-            else
-            {
+                TempData["ErrorMessage"] = "Validation error: Product cannot be added to the basket.";
                 return RedirectToAction("Shop", new { date, check = isValid });
             }
+            product.InBasket = true;
         }
         return RedirectToAction("Shop", new { date });
     }

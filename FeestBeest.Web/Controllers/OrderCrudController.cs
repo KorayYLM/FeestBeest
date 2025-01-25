@@ -36,9 +36,14 @@ namespace FeestBeest.Web.Controllers
         public IActionResult Details(int id)
         {
             var order = orderService.GetOrder(id);
+            if (order == null)
+            {
+                return NotFound();
+            }
+
             var model = new OrderViewModel
             {
-                Id = order!.Id,
+                Id = order.Id,
                 Name = order.Name,
                 Email = order.Email,
                 ZipCode = order.ZipCode,
@@ -51,6 +56,7 @@ namespace FeestBeest.Web.Controllers
                     Products = order.OrderDetails.Select(od => od.Product).ToList()
                 }
             };
+
             return View(model);
         }
 

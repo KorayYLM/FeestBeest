@@ -17,31 +17,32 @@
             <div class="mx-auto mt-6" style="max-width: 30rem">
                 <div class="mb-3">
                     <div class="my-2">
-                        <p>Name: @Model.Name</p>
+                        <p><strong>Name:</strong> @Model.Name</p>
                     </div>
                     <div class="my-2">
-                        <p>Email: @Model.Email</p>
+                        <p><strong>Email:</strong> @Model.Email</p>
                     </div>
                     <div class="my-2">
-                        <p>Order for: @Model.OrderFor</p>
+                        <p><strong>Order for:</strong> @Model.OrderFor</p>
                     </div>
                     <div class="my-2">
-                        <p>House number: @Model.HouseNumber</p>
+                        <p><strong>House number:</strong> @Model.HouseNumber</p>
                     </div>
                     <div class="my-2">
-                        <p>Zip code: @Model.ZipCode</p>
+                        <p><strong>Zip code:</strong> @Model.ZipCode</p>
                     </div>
                     <div class="my-2">
+                        <h4 class="text-lg font-bold mb-2">Products</h4>
                         <ul>
                             @foreach (var product in Model.ProductsOverViewModel.Products)
                             {
                                 <li class="mb-2">
-                                    <p>Product: @product.Name</p>
-                                    <p>Price: @product.Price</p>
+                                    <p><strong>Product:</strong> @product.Name</p>
+                                    <p><strong>Price:</strong> €@product.Price</p>
                                 </li>
                             }
                         </ul>
-                        <p>Total: @Model.TotalPrice</p>
+                        <p><strong>Total:</strong> €@Model.TotalPrice</p>
                     </div>
                 </div>
 
