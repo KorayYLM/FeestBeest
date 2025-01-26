@@ -15,11 +15,11 @@ builder.Services.AddIdentity<User, IdentityRole<int>>()
     .AddEntityFrameworkStores<FeestBeestContext>()
     .AddDefaultTokenProviders();
 
-// Register application services
-builder.Services.AddScoped<AccountService>();
-builder.Services.AddScoped<ProductService>();
-builder.Services.AddScoped<OrderService>();
-builder.Services.AddSingleton<BasketService>();
+//Services
+builder.Services.AddScoped<AccountService>(); // Scoped because we want to create a new account for each session    
+builder.Services.AddScoped<ProductService>(); // Scoped because we want to create a new product for each session    
+builder.Services.AddScoped<OrderService>(); // Scoped because we want to create a new order for each session    
+builder.Services.AddSingleton<BasketService>(); // Singleton because we want to keep the basket throughout the session  
 
 // Add MVC services
 builder.Services.AddControllersWithViews();
