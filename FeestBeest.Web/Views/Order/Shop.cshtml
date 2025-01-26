@@ -7,6 +7,7 @@
 }
 
 @await Html.PartialAsync("Stepper")
+
 @if (!Model.Check)
 {
     <div class="fixed bottom-0 right-0 m-4 p-4 bg-red-500 text-white rounded-lg shadow-lg">
@@ -33,6 +34,7 @@
             </div>
         </div>
     </div>
+
     <div class="w-full lg:w-3/4 p-3">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
             @foreach (var product in Model.ProductsOverViewModel.Products)
@@ -48,7 +50,7 @@
                             <form method="post" asp-action="RemoveFromBasket" asp-controller="Order" class="basket-form">
                                 <input type="hidden" name="productId" value="@product.Id"/>
                                 <input type="hidden" name="date" value="@Model.OrderFor.ToString("yyyy-MM-dd")"/>
-                                <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 w-full">Remove product </button>
+                                <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 w-full">Remove product</button>
                             </form>
                         }
                         else
@@ -64,6 +66,7 @@
             }
         </div>
     </div>
+
     <div class="w-full flex justify-center items-center mt-6">
         @if (Model.ProductsOverViewModel.BasketCount > 0)
         {

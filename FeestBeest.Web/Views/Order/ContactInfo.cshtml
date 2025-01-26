@@ -1,7 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
 @model FeestBeest.Web.Models.OrderViewModel
 
-
 @{
     ViewData["Title"] = "Products";
     ViewData["date"] = Model.OrderFor;
@@ -10,6 +9,12 @@
 
 @await Html.PartialAsync("Stepper")
 
+@if (!Model.Check)
+{
+    <div class="fixed bottom-0 right-0 m-4 p-4 bg-red-500 text-white rounded-lg shadow-lg">
+        @Model.Result
+    </div>
+}
 
 <div class="flex justify-center items-center min-h-screen w-screen bg-gray-100">
     <div class="w-full max-w-4xl p-4">
@@ -17,7 +22,7 @@
             <div class="w-full md:w-2/3 px-4">
                 @if (User.Identity.IsAuthenticated)
                 {
-                    <form asp-action="ContaxtInfoPost" method="post" class="bg-white shadow-md rounded-lg px-8 pt-6 pb-8 mb-4" id="contactForm">
+                    <form asp-action="ContactInfoPost" method="post" class="bg-white shadow-md rounded-lg px-8 pt-6 pb-8 mb-4" id="contactForm">
                         <input type="hidden" asp-for="ProductsOverViewModel.BasketCount"/>
                         <input type="hidden" asp-for="ProductsOverViewModel.Products"/>
                         <input type="hidden" asp-for="OrderFor"/>
@@ -30,7 +35,7 @@
                 }
 
                 <h3 class="text-2xl font-bold mb-4 text-center">Enter Your Details</h3>
-                <form asp-action="ContaxtInfoPost" method="post" class="bg-white shadow-md rounded-lg px-8 pt-6 pb-8 mb-4" id="contactForm">
+                <form asp-action="ContactInfoPost" method="post" class="bg-white shadow-md rounded-lg px-8 pt-6 pb-8 mb-4" id="contactForm">
                     <input type="hidden" asp-for="ProductsOverViewModel.BasketCount"/>
                     <input type="hidden" asp-for="ProductsOverViewModel.Products"/>
                     <input type="hidden" asp-for="OrderFor"/>
