@@ -17,18 +17,18 @@ namespace FeestBeest.Data.Services
             basket = new Basket();
         }
 
-        public bool Add(ProductDto products, int? userId = null)
+        public (bool, string) Add(ProductDto product, int? userId = null)
         {
-            var isBasketValid = ChechOrderBasket(userId, products);
-            if (!isBasketValid)
+            var (isValid, message) = CheckOrderBasket(userId, product);
+            if (!isValid)
             {
-                return false;
+                return (false, message);
             }
 
-            basket.Products.Add(products);
-            products.InBasket = true;
+            basket.Products.Add(product);
+            product.InBasket = true;
 
-            return true;
+            return (true, "Product added successfully");
         }
 
         public void Remove(int productId)
@@ -56,21 +56,21 @@ namespace FeestBeest.Data.Services
             return basket.Products.Count;
         }
 
-        private bool ChechOrderBasket(int? userId = null, ProductDto product = null)
+        private (bool, string) CheckOrderBasket(int? userId, ProductDto product)
         {
             using (var scope = serviceProvider.CreateScope())
             {
                 var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
-                var user = userId != null ? userManager.FindByIdAsync(userId.Value.ToString()).Result : null;
+                var user = userId.HasValue ? userManager.FindByIdAsync(userId.Value.ToString()).Result : null;
 
-                var (checkProducts, _) = new CheckOrderProductsRule().CheckProducts(basket, user, product);
-                if (!checkProducts) return false;
+                var (checkProducts, productsMessage) = new CheckOrderProductsRule().CheckProducts(basket, user, product);
+                if (!checkProducts) return (false, productsMessage);
 
-                var (checkTogether, _) = new ProductsNotTogetherRule().CheckProductsTogether(basket, product);
-                if (!checkTogether) return false;
+                var (checkTogether, togetherMessage) = new ProductsNotTogetherRule().CheckProductsTogether(basket, product);
+                if (!checkTogether) return (false, togetherMessage);
 
-                var (check, _) = new CheckAnimalAvailabilityRule().CheckAnimalAvailability(basket, product);
-                return check;
+                var (checkAvailability, availabilityMessage) = new CheckAnimalAvailabilityRule().CheckAnimalAvailability(basket, product);
+                return !checkAvailability ? (false, availabilityMessage) : (true, string.Empty);
             }
         }
     }

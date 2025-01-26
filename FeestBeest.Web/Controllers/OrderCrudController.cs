@@ -7,22 +7,22 @@ using FeestBeest.Data.Dto;
 
 namespace FeestBeest.Web.Controllers
 {
-    [Authorize (Roles = "Customer")]   
+    [Authorize(Roles = "Customer")]
     [Route("order-crud")]
     public class OrderCrudController : Controller
     {
-        private readonly OrderService orderService;
+        private readonly OrderService _orderService;
 
         public OrderCrudController(OrderService orderService)
         {
-            this.orderService = orderService;
+            _orderService = orderService;
         }
 
         [HttpGet]
         public IActionResult Index()
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var orders = orderService.GetAllOrderByUserId(int.Parse(userId));
+            var userId = GetUserId();
+            var orders = _orderService.GetAllOrderByUserId(userId);
 
             var model = new OrdersOverviewViewModel
             {
@@ -35,13 +35,32 @@ namespace FeestBeest.Web.Controllers
         [HttpGet("details/{id:int}")]
         public IActionResult Details(int id)
         {
-            var order = orderService.GetOrder(id);
+            var order = _orderService.GetOrder(id);
             if (order == null)
             {
                 return NotFound();
             }
 
-            var model = new OrderViewModel
+            var model = MapOrderToViewModel(order);
+            return View(model);
+        }
+
+        [HttpGet("delete/{id:int}")]
+        public IActionResult Delete(int id)
+        {
+            _orderService.DeleteOrder(id);
+            return RedirectToAction("Index");
+        }
+
+        private int GetUserId()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            return int.Parse(userId);
+        }
+
+        private static OrderViewModel MapOrderToViewModel(OrderDto order)
+        {
+            return new OrderViewModel
             {
                 Id = order.Id,
                 Name = order.Name,
@@ -56,15 +75,6 @@ namespace FeestBeest.Web.Controllers
                     Products = order.OrderDetails.Select(od => od.Product).ToList()
                 }
             };
-
-            return View(model);
-        }
-
-        [HttpGet("delete/{id:int}")]
-        public IActionResult Delete(int id)
-        {
-            orderService.DeleteOrder(id);
-            return RedirectToAction("Index");
         }
     }
 }

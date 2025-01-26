@@ -4,14 +4,14 @@ using System.Collections.Generic;
 
 namespace Tests
 {
-    public class NameContainsRuleTest
+    public class ProductNameContainsUqTest
     {
-        private NameContainsRule _rule;
+        private ProductNameContainsUQ _uq;
 
         [SetUp]
         public void Setup()
         {
-            _rule = new NameContainsRule();
+            _uq = new ProductNameContainsUQ();
         }
 
         [Test]
@@ -26,7 +26,7 @@ namespace Tests
                 }
             };
 
-            var result = _rule.ApplyNameContainsDiscount(orderDto);
+            var result = _uq.ApplyNameContainsDiscount(orderDto);
 
             Assert.AreEqual(10, result); // Unique letters: a, p, l, e, b, n -> 5 unique letters * 2 = 10
         }
@@ -39,7 +39,7 @@ namespace Tests
                 OrderDetails = new List<OrderDetailsDto>()
             };
 
-            var result = _rule.ApplyNameContainsDiscount(orderDto);
+            var result = _uq.ApplyNameContainsDiscount(orderDto);
 
             Assert.AreEqual(0, result);
         }
@@ -56,7 +56,7 @@ namespace Tests
                 }
             };
 
-            var result = _rule.ApplyNameContainsDiscount(orderDto); 
+            var result = _uq.ApplyNameContainsDiscount(orderDto); 
 
             Assert.AreEqual(12, result); // Unique letters: a, p, l, e, i, n -> 6 unique letters * 2 = 12
         }

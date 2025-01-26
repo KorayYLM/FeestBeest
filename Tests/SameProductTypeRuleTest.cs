@@ -7,14 +7,14 @@ using System.Linq;
 
 namespace Tests
 {
-    public class SameTypeRuleTest
+    public class SameProductTypeRuleTest
     {
-        private SameTypeRule _rule;
+        private SameProductTypeRule _rule;
 
         [SetUp]
         public void Setup()
         {
-            _rule = new SameTypeRule();
+            _rule = new SameProductTypeRule();
         }
 
         [Test]

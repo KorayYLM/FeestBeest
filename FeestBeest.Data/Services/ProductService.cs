@@ -17,32 +17,14 @@ public class ProductService
     public ProductDto GetProductById(int id)
     {
         var product = _context.Products.Find(id);
-        if (product == null)
-        {
-            return null;
-        }
-
-        return new ProductDto
-        {
-            Id = product.Id,
-            Name = product.Name,
-            Type = product.Type, 
-            Price = product.Price,
-            Img = product.Img
-        };
+        return product == null ? null : MapProductToDto(product);
     }
 
     public List<ProductDto> GetProducts(DateOnly? date = null, List<ProductType>? selectedTypes = null)
     {
         var products = _context.Products
-            .Select(product => new ProductDto
-            {
-                Id = product.Id,
-                Name = product.Name,
-                Type = product.Type, 
-                Price = product.Price,
-                Img = product.Img
-            }).ToList();
+            .Select(product => MapProductToDto(product))
+            .ToList();
 
         if (date != null)
         {
@@ -66,13 +48,7 @@ public class ProductService
 
     public (bool, string) CreateProduct(ProductDto productDto)
     {
-        var product = new Product
-        {
-            Name = productDto.Name,
-            Type = productDto.Type, 
-            Price = productDto.Price,
-            Img = productDto.Img
-        };
+        var product = MapDtoToProduct(productDto);
         _context.Products.Add(product);
         _context.SaveChanges();
         return (true, "Product created");
@@ -81,14 +57,9 @@ public class ProductService
     public (bool, string) UpdateProduct(int id, ProductDto productDto)
     {
         var product = _context.Products.Find(id);
-        if (product.Type != productDto.Type)
-        {
-            product.Img = productDto.Img;
-        }
-        product.Name = productDto.Name;
-        product.Type = productDto.Type; 
-        product.Price = productDto.Price;
+        if (product == null) return (false, "Product not found");
 
+        UpdateProductFromDto(product, productDto);
         _context.SaveChanges();
         return (true, "Product updated");
     }
@@ -96,10 +67,7 @@ public class ProductService
     public async Task DeleteBeestjeAsync(int id)
     {
         var beestje = await _context.Products.FindAsync(id);
-        if (beestje == null)
-        {
-            return;
-        }
+        if (beestje == null) return;
 
         _context.Products.Remove(beestje);
         await _context.SaveChangesAsync();
@@ -112,5 +80,38 @@ public class ProductService
             .Distinct()
             .ToList();
     }
-    
+
+    private static ProductDto MapProductToDto(Product product)
+    {
+        return new ProductDto
+        {
+            Id = product.Id,
+            Name = product.Name,
+            Type = product.Type,
+            Price = product.Price,
+            Img = product.Img
+        };
+    }
+
+    private static Product MapDtoToProduct(ProductDto productDto)
+    {
+        return new Product
+        {
+            Name = productDto.Name,
+            Type = productDto.Type,
+            Price = productDto.Price,
+            Img = productDto.Img
+        };
+    }
+
+    private static void UpdateProductFromDto(Product product, ProductDto productDto)
+    {
+        product.Name = productDto.Name;
+        product.Type = productDto.Type;
+        product.Price = productDto.Price;
+        if (product.Type != productDto.Type)
+        {
+            product.Img = productDto.Img;
+        }
+    }
 }

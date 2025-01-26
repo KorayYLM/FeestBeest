@@ -7,6 +7,12 @@
 }
 
 @await Html.PartialAsync("Stepper")
+@if (!Model.Check)
+{
+    <div class="fixed bottom-0 right-0 m-4 p-4 bg-red-500 text-white rounded-lg shadow-lg">
+        @Model.Result
+    </div>
+}
 
 <div class="flex flex-wrap min-h-screen w-screen">
     <div class="w-full lg:w-1/4 p-3 mb-6 lg:mb-0">

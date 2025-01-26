@@ -2,9 +2,15 @@
 
 public class CheckDayOfWeekRule
 {
-    //monday, tuesday 15% discount  
+    private const int DiscountPercentage = 15;
+
     public int IsDayOfWeek(OrderDto orderDto)
     {
-        return orderDto.OrderFor.DayOfWeek == DayOfWeek.Monday || orderDto.OrderFor.DayOfWeek == DayOfWeek.Tuesday ? 15 : 0;
+        return IsDiscountDay(orderDto.OrderFor.DayOfWeek) ? DiscountPercentage : 0;
+    }
+
+    private bool IsDiscountDay(DayOfWeek dayOfWeek)
+    {
+        return dayOfWeek == DayOfWeek.Monday || dayOfWeek == DayOfWeek.Tuesday;
     }
 }

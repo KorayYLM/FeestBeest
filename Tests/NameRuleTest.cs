@@ -6,14 +6,14 @@ using System.Collections.Generic;
 
 namespace Tests
 {
-    public class CheckNameRuleTest
+    public class NameRuleTest
     {
-        private CheckNameRule _checkNameRule;
+        private NameRule _nameRule;
 
         [SetUp]
         public void Setup()
         {
-            _checkNameRule = new CheckNameRule();
+            _nameRule = new NameRule();
         }
 
         [Test]
@@ -29,7 +29,7 @@ namespace Tests
             };
 
             // Act
-            var result = _checkNameRule.CheckForName(orderDto);
+            var result = _nameRule.CheckForName(orderDto);
 
             // Assert
             Assert.IsTrue(result == 50 || result == 0);
@@ -48,7 +48,7 @@ namespace Tests
             };
 
             // Act
-            var result = _checkNameRule.CheckForName(orderDto);
+            var result = _nameRule.CheckForName(orderDto);
 
             // Assert
             Assert.AreEqual(0, result);

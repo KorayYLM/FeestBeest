@@ -37,28 +37,36 @@ namespace FeestBeest.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid) return View(model);
+
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user == null)
             {
-                var user = await _userManager.FindByEmailAsync(model.Email);
-                if (user != null)
-                {
-                    var result = await _signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, lockoutOnFailure: false);
-                    if (result.Succeeded)
-                    {
-                        if (await _userManager.IsInRoleAsync(user, "Customer"))
-                        {
-                            return RedirectToAction("Index", "Order");
-                        }
-                        if (await _userManager.IsInRoleAsync(user, "Admin"))
-                        {
-                            return RedirectToAction("Index", "Home");
-                        }
-                        throw new InvalidOperationException("Invalid account role");
-                    }
-                }
                 ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                return View(model);
             }
+
+            var result = await _signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, lockoutOnFailure: false);
+            if (result.Succeeded)
+            {
+                return await RedirectToRoleBasedAction(user);
+            }
+
+            ModelState.AddModelError(string.Empty, "Invalid login attempt.");
             return View(model);
+        }
+
+        private async Task<IActionResult> RedirectToRoleBasedAction(User user)
+        {
+            if (await _userManager.IsInRoleAsync(user, "Customer"))
+            {
+                return RedirectToAction("Index", "Order");
+            }
+            if (await _userManager.IsInRoleAsync(user, "Admin"))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            throw new InvalidOperationException("Invalid account role");
         }
 
         [HttpPost]
@@ -72,12 +80,10 @@ namespace FeestBeest.Web.Controllers
         public async Task<bool> DeleteUserAsync(int userId)
         {
             var user = await _userManager.FindByIdAsync(userId.ToString());
-            if (user != null)
-            {
-                var result = await _userManager.DeleteAsync(user);
-                return result.Succeeded;
-            }
-            return false;
+            if (user == null) return false;
+
+            var result = await _userManager.DeleteAsync(user);
+            return result.Succeeded;
         }
 
         [Authorize(Roles = "Admin")]
@@ -92,25 +98,30 @@ namespace FeestBeest.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(AccountViewModel accountViewModel)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid) return View(accountViewModel);
+
+            var userDto = MapAccountViewModelToUserDto(accountViewModel);
+            var (success, message) = await _accountService.CreateUser(userDto);
+            if (success)
             {
-                var userDto = new UserDto
-                {
-                    Name = accountViewModel.Name,
-                    Email = accountViewModel.Email,
-                    Rank = accountViewModel.Rank,
-                    HouseNumber = accountViewModel.HouseNumber,
-                    PhoneNumber = accountViewModel.PhoneNumber,
-                    ZipCode = accountViewModel.ZipCode
-                };
-                var (success, message) = await _accountService.CreateUser(userDto);
-                if (success)
-                {
-                    return RedirectToAction("ShowPassword", new { password = message });
-                }
-                ModelState.AddModelError(string.Empty, message);
+                return RedirectToAction("ShowPassword", new { password = message });
             }
+
+            ModelState.AddModelError(string.Empty, message);
             return View(accountViewModel);
+        }
+
+        private static UserDto MapAccountViewModelToUserDto(AccountViewModel accountViewModel)
+        {
+            return new UserDto
+            {
+                Name = accountViewModel.Name,
+                Email = accountViewModel.Email,
+                Rank = accountViewModel.Rank,
+                HouseNumber = accountViewModel.HouseNumber,
+                PhoneNumber = accountViewModel.PhoneNumber,
+                ZipCode = accountViewModel.ZipCode
+            };
         }
 
         public IActionResult ShowPassword(string password)

@@ -5,30 +5,45 @@ namespace FeestBeest.Data.Rules;
 
 public class ProductsNotTogetherRule
 {
+    private static readonly string[] Animals = { "leeuw", "ijsbeer" };
+    private const string ErrorMessage = "Nom Nom Nom";
+
     public (bool, string) CheckProductsTogether(Basket basket, ProductDto product)
     {
-        var dangerousAnimals = new[] { "leeuw", "ijsbeer" }; 
-
-        if (dangerousAnimals.Contains(product.Name.ToLower()))
+        if (IsAnimal(product))
         {
-            foreach (var product2 in basket.Products)
+            if (ContainsFarmProduct(basket))
             {
-                if (product2.Type.ToString() == ProductType.FARM.ToString())
-                {
-                    return (false, "Nom Nom Nom");
-                }
+                return (false, ErrorMessage);
             }
         }
-        else if (product.Type.ToString() == ProductType.FARM.ToString())
+        else if (IsFarmProduct(product))
         {
-            foreach (var product2 in basket.Products)
+            if (ContainsAnimal(basket))
             {
-                if (dangerousAnimals.Contains(product2.Name.ToLower()))
-                {
-                    return (false, "Nom Nom Nom");
-                }
+                return (false, ErrorMessage);
             }
         }
         return (true, string.Empty);
+    }
+
+    private bool IsAnimal(ProductDto product)
+    {
+        return Animals.Contains(product.Name.ToLower());
+    }
+
+    private bool IsFarmProduct(ProductDto product)
+    {
+        return product.Type == ProductType.FARM;
+    }
+
+    private bool ContainsAnimal(Basket basket)
+    {
+        return basket.Products.Any(p => Animals.Contains(p.Name.ToLower()));
+    }
+
+    private bool ContainsFarmProduct(Basket basket)
+    {
+        return basket.Products.Any(p => p.Type == ProductType.FARM);
     }
 }

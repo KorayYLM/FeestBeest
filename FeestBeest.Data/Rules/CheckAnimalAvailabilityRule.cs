@@ -5,9 +5,9 @@ namespace FeestBeest.Data.Rules;
 
 public class CheckAnimalAvailabilityRule
 {
-    private const string WeekdayOnlyMessage = "This product is only available on weekdays"; 
-    private const string TooColdMessage = "Its to cold right now for this product"; 
-    private const string MeltingMessage = "Metlinggg";
+    private const string WeekDayMess = "This product is only available on weekdays"; 
+    private const string ColdMess = "Its to cold right now for this product"; 
+    private const string MeltMess = "Metlinggg";
 
     public (bool, string) CheckAnimalAvailability(Basket basket, ProductDto product)
     {
@@ -15,39 +15,59 @@ public class CheckAnimalAvailabilityRule
         var dayOfWeek = currentDate.DayOfWeek;
         var month = currentDate.Month;
 
-        if (product.Name.Equals("Pinguïn") && (dayOfWeek == DayOfWeek.Saturday || dayOfWeek == DayOfWeek.Sunday))
+        if (!IsProductAvailable(product, dayOfWeek, month))
         {
-            return (false, WeekdayOnlyMessage);
+            return (false, GetAvailabilityMessage(product, dayOfWeek, month));
         }
 
-        if (product.Type.ToString() == ProductType.DESERT.ToString() && (month >= 10 || month <= 2))
+        foreach (var productInBasket in basket.Products)
         {
-            return (false, TooColdMessage);
-        }
-
-        if (product.Type.ToString() == ProductType.SNOW.ToString() && (month >= 6 && month <= 8))
-        {
-            return (false, MeltingMessage);
-        }
-
-        foreach (var basketProduct in basket.Products)
-        {
-            if (basketProduct.Name.Equals("Pinguïn") && (dayOfWeek == DayOfWeek.Saturday || dayOfWeek == DayOfWeek.Sunday))
+            if (!IsProductAvailable(productInBasket, dayOfWeek, month))
             {
-                return (false, WeekdayOnlyMessage);
-            }
-
-            if (basketProduct.Type.ToString() == ProductType.DESERT.ToString() && (month >= 10 || month <= 2))
-            {
-                return (false, TooColdMessage);
-            }
-
-            if (basketProduct.Type.ToString() == ProductType.SNOW.ToString() && (month >= 6 && month <= 8))
-            {
-                return (false, MeltingMessage);
+                return (false, GetAvailabilityMessage(productInBasket, dayOfWeek, month));
             }
         }
 
         return (true, string.Empty);
+    }
+
+    private bool IsProductAvailable(ProductDto product, DayOfWeek dayOfWeek, int month)
+    {
+        if (product.Name.Equals("Pinguïn") && (dayOfWeek == DayOfWeek.Saturday || dayOfWeek == DayOfWeek.Sunday))
+        {
+            return false;
+        }
+
+        if (product.Type.ToString() == ProductType.DESERT.ToString() && (month >= 10 || month <= 2))
+        {
+            return false;
+        }
+
+        if (product.Type.ToString() == ProductType.SNOW.ToString() && (month >= 6 && month <= 8))
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    private string GetAvailabilityMessage(ProductDto product, DayOfWeek dayOfWeek, int month)
+    {
+        if (product.Name.Equals("Pinguïn") && (dayOfWeek == DayOfWeek.Saturday || dayOfWeek == DayOfWeek.Sunday))
+        {
+            return WeekDayMess;
+        }
+
+        if (product.Type.ToString() == ProductType.DESERT.ToString() && (month >= 10 || month <= 2))
+        {
+            return ColdMess;
+        }
+
+        if (product.Type.ToString() == ProductType.SNOW.ToString() && (month >= 6 && month <= 8))
+        {
+            return MeltMess;
+        }
+
+        return string.Empty;
     }
 }

@@ -14,7 +14,6 @@ namespace FeestBeest.Data.Services
             _userManager = userManager;
         }
 
-        
         private UserDto ConvertCustomerDto(User user)
         {
             return new UserDto
@@ -59,9 +58,10 @@ namespace FeestBeest.Data.Services
 
         private static string PasswordGenerator()
         {
-            var password = new StringBuilder();
+            const int passwordLength = 8;
+            var password = new StringBuilder(passwordLength);
             var random = new Random();
-            for (var i = 0; i < 8; i++)
+            for (var i = 0; i < passwordLength; i++)
             {
                 password.Append((char)random.Next(33, 126));
             }
@@ -74,6 +74,5 @@ namespace FeestBeest.Data.Services
             var user = _userManager.FindByIdAsync(id.ToString()).Result;
             return ConvertCustomerDto(user!);
         }
-        
     }
 }
