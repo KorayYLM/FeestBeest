@@ -144,8 +144,7 @@ public class OrderController : Controller
 
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? null;
         var parsedId = userId != null ? int.Parse(userId) : (int?)null;
-        model.DiscountAmount = model.TotalPrice * (100 - orderService.DiscountCheckRules(parsedId, model.ToDto())) / 100;
-
+        model.DiscountAmount = model.TotalPrice * orderService.DiscountCheckRules(parsedId, model.ToDto()) / 100;
         return View(model);
     }
 

@@ -56,7 +56,7 @@ namespace Tests
                 }
             };
 
-            var result = _rule.ApplyNameContainsDiscount(orderDto);
+            var result = _rule.ApplyNameContainsDiscount(orderDto); 
 
             Assert.AreEqual(12, result); // Unique letters: a, p, l, e, i, n -> 6 unique letters * 2 = 12
         }

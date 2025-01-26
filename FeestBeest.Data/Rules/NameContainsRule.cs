@@ -1,5 +1,4 @@
-﻿ 
-
+﻿
 using FeestBeest.Data.Dto;
 
 public class NameContainsRule

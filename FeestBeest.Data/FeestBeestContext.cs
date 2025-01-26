@@ -109,25 +109,25 @@ namespace FeestBeest.Data
             );
 
             builder.Entity<Product>().HasData(
-                new Product { Id = 1, Name = "Aap", Type = ProductType.JUNGLE, Price = 2000, Img = "monkey.png" },
-                new Product { Id = 2, Name = "Olifant", Type = ProductType.JUNGLE, Price = 3000, Img = "elephant.png" },
-                new Product { Id = 3, Name = "Zebra", Type = ProductType.JUNGLE, Price = 2500, Img = "zebra.png" },
-                new Product { Id = 4, Name = "Leeuw", Type = ProductType.JUNGLE, Price = 3500, Img = "lion.png" },
-                new Product { Id = 5, Name = "Hond", Type = ProductType.FARM, Price = 1000, Img = "dog.png" },
-                new Product { Id = 6, Name = "Ezel", Type = ProductType.FARM, Price = 1500, Img = "donkey.png" },
-                new Product { Id = 7, Name = "Koe", Type = ProductType.FARM, Price = 2000, Img = "cow.png" },
-                new Product { Id = 8, Name = "Eend", Type = ProductType.FARM, Price = 500, Img = "duck.png" },
-                new Product { Id = 9, Name = "Kuiken", Type = ProductType.FARM, Price = 250, Img = "chicken.png" },
-                new Product { Id = 10, Name = "Pinguïn", Type = ProductType.SNOW, Price = 2000, Img = "animal.png" },
+                new Product { Id = 1, Name = "Aap", Type = ProductType.JUNGLE, Price = 50, Img = "monkey.png" },
+                new Product { Id = 2, Name = "Olifant", Type = ProductType.JUNGLE, Price = 50, Img = "elephant.png" },
+                new Product { Id = 3, Name = "Zebra", Type = ProductType.JUNGLE, Price = 50, Img = "zebra.png" },
+                new Product { Id = 4, Name = "Leeuw", Type = ProductType.JUNGLE, Price = 50, Img = "lion.png" },
+                new Product { Id = 5, Name = "Hond", Type = ProductType.FARM, Price = 30, Img = "dog.png" },
+                new Product { Id = 6, Name = "Ezel", Type = ProductType.FARM, Price = 30, Img = "donkey.png" },
+                new Product { Id = 7, Name = "Koe", Type = ProductType.FARM, Price = 30, Img = "cow.png" },
+                new Product { Id = 8, Name = "Eend", Type = ProductType.FARM, Price = 30, Img = "duck.png" },
+                new Product { Id = 9, Name = "Kuiken", Type = ProductType.FARM, Price = 30, Img = "chicken.png" },
+                new Product { Id = 10, Name = "Pinguïn", Type = ProductType.SNOW, Price = 80, Img = "animal.png" },
                 new Product
                 {
-                    Id = 11, Name = "IJsbeer", Type = ProductType.SNOW, Price = 3000, Img = "polar-bear.png"
+                    Id = 11, Name = "IJsbeer", Type = ProductType.SNOW, Price = 80, Img = "polar-bear.png"
                 },
-                new Product { Id = 12, Name = "Zeehond", Type = ProductType.SNOW, Price = 2500, Img = "seal.png" },
-                new Product { Id = 13, Name = "Kameel", Type = ProductType.DESERT, Price = 2000, Img = "camel.png" },
-                new Product { Id = 14, Name = "Slang", Type = ProductType.DESERT, Price = 1500, Img = "snake.png" },
-                new Product { Id = 15, Name = "T-Rex", Type = ProductType.VIP, Price = 5000, Img = "dinosaur.png" },
-                new Product { Id = 16, Name = "Unicorn", Type = ProductType.VIP, Price = 5000, Img = "unicorn.png" }
+                new Product { Id = 12, Name = "Zeehond", Type = ProductType.SNOW, Price = 80, Img = "seal.png" },
+                new Product { Id = 13, Name = "Kameel", Type = ProductType.DESERT, Price = 100, Img = "camel.png" },
+                new Product { Id = 14, Name = "Slang", Type = ProductType.DESERT, Price = 100, Img = "snake.png" },
+                new Product { Id = 15, Name = "T-Rex", Type = ProductType.VIP, Price = 150, Img = "dinosaur.png" },
+                new Product { Id = 16, Name = "Unicorn", Type = ProductType.VIP, Price = 150, Img = "unicorn.png" }
             );
         }
     }
