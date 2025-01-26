@@ -44,6 +44,8 @@ public class ProductController : Controller
         if (ModelState.IsValid)
         {
             await SaveProduct(productViewModel, true);
+            TempData["SuccessMessage"] = "Product created";
+
             return RedirectToAction("Index");
         }
         return View(productViewModel);
@@ -85,6 +87,8 @@ public class ProductController : Controller
         if (ModelState.IsValid)
         {
             await SaveProduct(productViewModel, false, id);
+            TempData["SuccessMessage"] = "Product edited";
+
             return RedirectToAction("Index");
         }
         return View(productViewModel);
